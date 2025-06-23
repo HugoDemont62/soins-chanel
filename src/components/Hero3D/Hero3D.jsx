@@ -11,6 +11,7 @@ const Hero3D = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
+  const [debugInfo, setDebugInfo] = useState('Initialisation...');
 
   // Variables pour la rotation
   const rotationVelocity = useRef({ x: 0, y: 0 });
@@ -20,60 +21,114 @@ const Hero3D = () => {
   useEffect(() => {
     if (!mountRef.current) return;
 
-    // Charger Three.js et GLTFLoader dynamiquement depuis CDN
+    let isComponentMounted = true;
+
+    const updateDebugInfo = (info) => {
+      if (isComponentMounted) {
+        setDebugInfo(info);
+      }
+    };
+
+    const updateLoadingState = (loading) => {
+      if (isComponentMounted) {
+        setIsLoading(loading);
+      }
+    };
+
+    const updateErrorState = (error) => {
+      if (isComponentMounted) {
+        setLoadError(error);
+      }
+    };
+
+    // Quel est le nom exact de ton fichier ? Change ça :
+    const MODEL_PATH = '/model.glb'; // ← CHANGE ÇA PAR TON NOM DE FICHIER EXACT
+
     const loadThreeJS = async () => {
-      // Vérifier si Three.js est déjà chargé
+      updateDebugInfo('Chargement de Three.js...');
+
       if (window.THREE) {
+        updateDebugInfo('Three.js déjà chargé');
         await loadGLTFLoader();
-        initScene();
+        await initScene();
         return;
       }
 
-      // Charger Three.js depuis CDN
-      const script = document.createElement('script');
-      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-      script.onload = async () => {
-        console.log('Three.js loaded successfully');
+      try {
+        await new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+          script.onload = () => {
+            console.log('Three.js loaded successfully');
+            updateDebugInfo('Three.js chargé');
+            resolve();
+          };
+          script.onerror = () => {
+            console.error('Failed to load Three.js');
+            reject(new Error('Failed to load Three.js'));
+          };
+          document.head.appendChild(script);
+        });
+
         await loadGLTFLoader();
-        initScene();
-      };
-      script.onerror = () => {
-        console.error('Failed to load Three.js');
-        setLoadError(true);
-        showFallbackCube();
-      };
-      document.head.appendChild(script);
+        await initScene();
+      } catch (error) {
+        console.error('Error loading Three.js:', error);
+        updateDebugInfo('Erreur: Impossible de charger Three.js');
+        updateErrorState(true);
+        updateLoadingState(false);
+      }
     };
 
-    // Charger GLTFLoader
     const loadGLTFLoader = () => {
       return new Promise((resolve, reject) => {
+        updateDebugInfo('Chargement GLTFLoader...');
+
+        // Vérifier si GLTFLoader est déjà disponible
         if (window.THREE && window.THREE.GLTFLoader) {
           resolve();
           return;
         }
 
         const script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/GLTFLoader.js';
+        script.src = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js';
         script.onload = () => {
           console.log('GLTFLoader loaded successfully');
+          updateDebugInfo('GLTFLoader chargé');
           resolve();
         };
         script.onerror = () => {
           console.error('Failed to load GLTFLoader');
-          reject();
+          updateDebugInfo('Erreur GLTFLoader, essai d\'une autre source...');
+
+          // Essayer une autre source
+          const script2 = document.createElement('script');
+          script2.src = 'https://unpkg.com/three@0.128.0/examples/js/loaders/GLTFLoader.js';
+          script2.onload = () => {
+            console.log('GLTFLoader loaded from unpkg');
+            updateDebugInfo('GLTFLoader chargé (unpkg)');
+            resolve();
+          };
+          script2.onerror = () => {
+            console.error('Failed to load GLTFLoader from both sources');
+            reject(new Error('Failed to load GLTFLoader'));
+          };
+          document.head.appendChild(script2);
         };
         document.head.appendChild(script);
       });
     };
 
-    const initScene = () => {
+    const initScene = async () => {
       const THREE = window.THREE;
       if (!THREE) {
-        setLoadError(true);
-        showFallbackCube();
+        updateDebugInfo('Erreur: Three.js non disponible');
+        updateErrorState(true);
+        updateLoadingState(false);
         return;
       }
+
+      updateDebugInfo('Initialisation de la scène 3D...');
 
       // Configuration de la scène
       const scene = new THREE.Scene();
@@ -96,70 +151,21 @@ const Hero3D = () => {
       });
       rendererRef.current = renderer;
       renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setClearColor(0x000000, 0); // Transparent
+      renderer.setClearColor(0x000000, 0);
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      // Améliorer le rendu pour les modèles GLTF
       renderer.outputEncoding = THREE.sRGBEncoding;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1;
-      mountRef.current.appendChild(renderer.domElement);
 
-      // Chargement du modèle 3D
-      const loader = new THREE.GLTFLoader();
+      if (mountRef.current && isComponentMounted) {
+        mountRef.current.appendChild(renderer.domElement);
+      }
 
-      // Tu dois remplacer 'model.glb' par le nom exact de ton fichier dans public/
-      const modelPath = '/model.glb'; // ou '/model.gltf' selon ton fichier
-
-      loader.load(
-        modelPath,
-        (gltf) => {
-          console.log('Modèle 3D chargé avec succès');
-          const model = gltf.scene;
-          modelRef.current = model;
-
-          // Centrer le modèle
-          const box = new THREE.Box3().setFromObject(model);
-          const center = box.getCenter(new THREE.Vector3());
-          model.position.sub(center);
-
-          // Ajuster la taille du modèle
-          const size = box.getSize(new THREE.Vector3());
-          const maxSize = Math.max(size.x, size.y, size.z);
-          const scale = 2 / maxSize; // Ajuster cette valeur selon la taille souhaitée
-          model.scale.setScalar(scale);
-
-          // Configurer les ombres pour le modèle
-          model.traverse((child) => {
-            if (child.isMesh) {
-              child.castShadow = true;
-              child.receiveShadow = true;
-
-              // Améliorer les matériaux si nécessaire
-              if (child.material) {
-                child.material.envMapIntensity = 1;
-                child.material.needsUpdate = true;
-              }
-            }
-          });
-
-          scene.add(model);
-          setIsLoading(false);
-          console.log('Modèle ajouté à la scène');
-        },
-        (progress) => {
-          console.log('Progression du chargement:', (progress.loaded / progress.total * 100) + '%');
-        },
-        (error) => {
-          console.error('Erreur lors du chargement du modèle:', error);
-          setLoadError(true);
-          setIsLoading(false);
-          // Créer un cube de fallback en cas d'erreur
-          createFallbackCube(scene, THREE);
-        }
-      );
-
-      // Ajout de lumières optimisées pour le modèle 3D
-      const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+      // Configuration des lumières optimisées pour GLTF
+      const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
       scene.add(ambientLight);
 
       const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
@@ -167,40 +173,127 @@ const Hero3D = () => {
       directionalLight.castShadow = true;
       directionalLight.shadow.mapSize.width = 2048;
       directionalLight.shadow.mapSize.height = 2048;
-      directionalLight.shadow.camera.near = 0.5;
-      directionalLight.shadow.camera.far = 50;
       scene.add(directionalLight);
 
-      // Lumière de remplissage
-      const fillLight = new THREE.DirectionalLight(0x87ceeb, 0.3);
+      const fillLight = new THREE.DirectionalLight(0x87ceeb, 0.4);
       fillLight.position.set(-5, 0, -5);
       scene.add(fillLight);
 
-      // Lumière d'accent dorée
-      const accentLight = new THREE.PointLight(0xD4AF37, 0.5, 10);
+      const accentLight = new THREE.PointLight(0xD4AF37, 0.6, 10);
       accentLight.position.set(2, 2, 2);
       scene.add(accentLight);
 
-      // Environnement HDR simple
+      // Environnement simple pour de meilleures réflections
       const pmremGenerator = new THREE.PMREMGenerator(renderer);
-      scene.environment = pmremGenerator.fromScene(new THREE.RoomEnvironment(), 0.04).texture;
 
-      // Variables pour l'inertie et la sensibilité
+      // Créer un environnement basique au lieu de RoomEnvironment
+      const envScene = new THREE.Scene();
+      const envGeometry = new THREE.SphereGeometry(100, 32, 16);
+      const envMaterial = new THREE.MeshBasicMaterial({
+        color: 0x87ceeb,
+        side: THREE.BackSide
+      });
+      const envMesh = new THREE.Mesh(envGeometry, envMaterial);
+      envScene.add(envMesh);
+
+      scene.environment = pmremGenerator.fromScene(envScene, 0.04).texture;
+      pmremGenerator.dispose();
+
+      // Charger le modèle GLTF
+      await loadGLTFModel(scene, THREE);
+
+      setupControls(renderer);
+      animate(renderer, scene, camera);
+    };
+
+    const loadGLTFModel = (scene, THREE) => {
+      return new Promise((resolve, reject) => {
+        updateDebugInfo(`Chargement du modèle: ${MODEL_PATH}`);
+
+        if (!THREE.GLTFLoader) {
+          updateDebugInfo('GLTFLoader non disponible');
+          updateErrorState(true);
+          updateLoadingState(false);
+          reject(new Error('GLTFLoader not available'));
+          return;
+        }
+
+        const loader = new THREE.GLTFLoader();
+
+        loader.load(
+          MODEL_PATH,
+          (gltf) => {
+            console.log('Modèle GLTF chargé avec succès:', gltf);
+            updateDebugInfo('Modèle chargé avec succès !');
+
+            const model = gltf.scene;
+            modelRef.current = model;
+
+            // Centrer et redimensionner le modèle
+            const box = new THREE.Box3().setFromObject(model);
+            const center = box.getCenter(new THREE.Vector3());
+            const size = box.getSize(new THREE.Vector3());
+
+            model.position.sub(center);
+
+            // Redimensionner pour que le modèle soit visible
+            const maxSize = Math.max(size.x, size.y, size.z);
+            const scale = 3 / maxSize; // Ajuste cette valeur si le modèle est trop grand/petit
+            model.scale.setScalar(scale);
+
+            console.log('Modèle info:', {
+              originalSize: maxSize,
+              scale: scale,
+              children: model.children.length
+            });
+
+            // Configurer les matériaux et ombres
+            model.traverse((child) => {
+              if (child.isMesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+
+                if (child.material) {
+                  child.material.envMapIntensity = 1;
+                  child.material.needsUpdate = true;
+                }
+              }
+            });
+
+            scene.add(model);
+            updateLoadingState(false);
+            updateDebugInfo('Modèle ajouté à la scène');
+            resolve();
+          },
+          (progress) => {
+            const percent = Math.round((progress.loaded / progress.total) * 100);
+            updateDebugInfo(`Chargement: ${percent}%`);
+            console.log('Loading progress:', percent + '%');
+          },
+          (error) => {
+            console.error('Erreur lors du chargement du modèle:', error);
+            updateDebugInfo(`Erreur: ${error.message}`);
+            updateErrorState(true);
+            updateLoadingState(false);
+            reject(error);
+          }
+        );
+      });
+    };
+
+    const setupControls = (renderer) => {
       const ROTATION_SENSITIVITY = 0.008;
-      const INERTIA_DAMPING = 0.95;
-      const MIN_VELOCITY = 0.001;
 
-      // Gestion de la souris pour rotation 360°
       const handleMouseDown = (event) => {
         isMouseDown.current = true;
-        setIsDragging(true);
+        if (isComponentMounted) {
+          setIsDragging(true);
+        }
 
         const clientX = event.clientX || (event.touches && event.touches[0].clientX);
         const clientY = event.clientY || (event.touches && event.touches[0].clientY);
 
         lastMousePosition.current = { x: clientX, y: clientY };
-
-        // Arrêter l'inertie quand l'utilisateur reprend le contrôle
         rotationVelocity.current = { x: 0, y: 0 };
       };
 
@@ -215,11 +308,9 @@ const Hero3D = () => {
           y: clientY - lastMousePosition.current.y
         };
 
-        // Appliquer la rotation directement avec une meilleure sensibilité
         modelRef.current.rotation.y += deltaMove.x * ROTATION_SENSITIVITY;
         modelRef.current.rotation.x += deltaMove.y * ROTATION_SENSITIVITY;
 
-        // Stocker la vélocité pour l'inertie
         rotationVelocity.current.x = deltaMove.y * ROTATION_SENSITIVITY;
         rotationVelocity.current.y = deltaMove.x * ROTATION_SENSITIVITY;
 
@@ -228,18 +319,16 @@ const Hero3D = () => {
 
       const handleMouseUp = () => {
         isMouseDown.current = false;
-        setIsDragging(false);
+        if (isComponentMounted) {
+          setIsDragging(false);
+        }
       };
 
-      // Support tactile pour mobile
       const handleTouchStart = (event) => {
         event.preventDefault();
         if (event.touches.length === 1) {
           const touch = event.touches[0];
-          handleMouseDown({
-            clientX: touch.clientX,
-            clientY: touch.clientY
-          });
+          handleMouseDown({ clientX: touch.clientX, clientY: touch.clientY });
         }
       };
 
@@ -247,10 +336,7 @@ const Hero3D = () => {
         event.preventDefault();
         if (event.touches.length === 1) {
           const touch = event.touches[0];
-          handleMouseMove({
-            clientX: touch.clientX,
-            clientY: touch.clientY
-          });
+          handleMouseMove({ clientX: touch.clientX, clientY: touch.clientY });
         }
       };
 
@@ -259,155 +345,84 @@ const Hero3D = () => {
         handleMouseUp();
       };
 
-      // Gestion du redimensionnement
       const handleResize = () => {
+        if (!cameraRef.current || !renderer) return;
+
         const width = window.innerWidth;
         const height = window.innerHeight;
-
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
+        cameraRef.current.aspect = width / height;
+        cameraRef.current.updateProjectionMatrix();
         renderer.setSize(width, height);
       };
 
-      // Animation loop avec inertie
-      const animate = () => {
-        requestAnimationFrame(animate);
+      const canvas = renderer.domElement;
+      if (canvas) {
+        canvas.addEventListener('mousedown', handleMouseDown);
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
+        canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+        canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+        canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+        canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+        window.addEventListener('resize', handleResize);
+
+        window.cleanupThreeJS = () => {
+          if (!isComponentMounted) return;
+
+          canvas.removeEventListener('mousedown', handleMouseDown);
+          window.removeEventListener('mousemove', handleMouseMove);
+          window.removeEventListener('mouseup', handleMouseUp);
+          canvas.removeEventListener('touchstart', handleTouchStart);
+          canvas.removeEventListener('touchmove', handleTouchMove);
+          canvas.removeEventListener('touchend', handleTouchEnd);
+          window.removeEventListener('resize', handleResize);
+
+          if (mountRef.current && renderer.domElement && mountRef.current.contains(renderer.domElement)) {
+            mountRef.current.removeChild(renderer.domElement);
+          }
+
+          renderer.dispose();
+        };
+      }
+    };
+
+    const animate = (renderer, scene, camera) => {
+      const INERTIA_DAMPING = 0.95;
+      const MIN_VELOCITY = 0.001;
+
+      const animateLoop = () => {
+        if (!isComponentMounted) return;
+
+        requestAnimationFrame(animateLoop);
 
         if (modelRef.current) {
-          // Si l'utilisateur ne fait pas de drag, appliquer l'inertie
           if (!isMouseDown.current) {
-            // Appliquer l'inertie
             modelRef.current.rotation.x += rotationVelocity.current.x;
             modelRef.current.rotation.y += rotationVelocity.current.y;
 
-            // Amortir la vélocité
             rotationVelocity.current.x *= INERTIA_DAMPING;
             rotationVelocity.current.y *= INERTIA_DAMPING;
 
-            // Arrêter l'inertie si la vitesse est trop faible
             if (Math.abs(rotationVelocity.current.x) < MIN_VELOCITY &&
               Math.abs(rotationVelocity.current.y) < MIN_VELOCITY) {
               rotationVelocity.current.x = 0;
               rotationVelocity.current.y = 0;
-            }
-
-            // Rotation automatique subtile si aucune inertie
-            if (rotationVelocity.current.x === 0 && rotationVelocity.current.y === 0) {
               modelRef.current.rotation.y += 0.002;
             }
           }
         }
 
-        renderer.render(scene, camera);
-      };
-
-      // Event listeners
-      const canvas = renderer.domElement;
-
-      canvas.addEventListener('mousedown', handleMouseDown);
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
-
-      canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
-      canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
-      canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
-
-      canvas.addEventListener('contextmenu', (e) => e.preventDefault());
-      canvas.addEventListener('selectstart', (e) => e.preventDefault());
-
-      window.addEventListener('resize', handleResize);
-
-      // Démarrer l'animation
-      animate();
-
-      // Cleanup function
-      window.cleanupThreeJS = () => {
-        canvas.removeEventListener('mousedown', handleMouseDown);
-        canvas.removeEventListener('touchstart', handleTouchStart);
-
-        window.removeEventListener('mousemove', handleMouseMove);
-        canvas.removeEventListener('touchmove', handleTouchMove);
-
-        window.removeEventListener('mouseup', handleMouseUp);
-        canvas.removeEventListener('touchend', handleTouchEnd);
-
-        canvas.removeEventListener('contextmenu', (e) => e.preventDefault());
-        canvas.removeEventListener('selectstart', (e) => e.preventDefault());
-
-        window.removeEventListener('resize', handleResize);
-
-        if (mountRef.current && renderer.domElement) {
-          mountRef.current.removeChild(renderer.domElement);
+        if (renderer && scene && camera) {
+          renderer.render(scene, camera);
         }
-
-        renderer.dispose();
-        pmremGenerator.dispose();
       };
-    };
-
-    // Fonction pour créer un cube de fallback en cas d'erreur
-    const createFallbackCube = (scene, THREE) => {
-      const geometry = new THREE.BoxGeometry(2.5, 2.5, 2.5);
-      const material = new THREE.MeshPhysicalMaterial({
-        color: 0xD4AF37,
-        roughness: 0.1,
-        metalness: 0.9,
-        clearcoat: 1.0,
-        clearcoatRoughness: 0.05,
-      });
-
-      const cube = new THREE.Mesh(geometry, material);
-      modelRef.current = cube;
-      cube.position.set(0, 0, 0);
-      cube.castShadow = true;
-      cube.receiveShadow = true;
-      scene.add(cube);
-      setIsLoading(false);
-    };
-
-    const showFallbackCube = () => {
-      const fallbackCube = document.createElement('div');
-      fallbackCube.className = 'fallback-cube';
-      fallbackCube.innerHTML = `
-        <div style="
-          width: 200px;
-          height: 200px;
-          background: linear-gradient(135deg, #D4AF37, #B8860B);
-          border-radius: 20px;
-          box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          font-family: 'Playfair Display', serif;
-          font-size: 24px;
-          font-weight: 600;
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          animation: floatFallback 3s ease-in-out infinite;
-        ">
-          ${loadError ? 'ERREUR DE CHARGEMENT' : 'CHANEL'}
-        </div>
-        <style>
-          @keyframes floatFallback {
-            0%, 100% { transform: translate(-50%, -50%) translateY(0px) rotate(0deg); }
-            50% { transform: translate(-50%, -50%) translateY(-20px) rotate(5deg); }
-          }
-        </style>
-      `;
-
-      if (mountRef.current) {
-        mountRef.current.appendChild(fallbackCube);
-      }
-      setIsLoading(false);
+      animateLoop();
     };
 
     loadThreeJS();
 
-    // Cleanup
     return () => {
+      isComponentMounted = false;
       if (window.cleanupThreeJS) {
         window.cleanupThreeJS();
       }
@@ -416,26 +431,26 @@ const Hero3D = () => {
 
   return (
     <section className={`hero-3d ${isDragging ? 'dragging' : ''}`}>
-      {/* Container 3D */}
       <div ref={mountRef} className="threejs-container" />
 
-      {/* Indicateur de chargement */}
       {isLoading && (
         <div className="loading-indicator">
           <div className="loading-spinner"></div>
-          <p>Chargement du modèle 3D...</p>
+          <p>{debugInfo}</p>
         </div>
       )}
 
-      {/* Message d'erreur */}
       {loadError && (
         <div className="error-message">
           <p>Impossible de charger le modèle 3D</p>
-          <small>Vérifiez que le fichier existe dans public/</small>
+          <small>{debugInfo}</small>
+          <br />
+          <small style={{display: 'block', marginTop: '8px'}}>
+            Vérifiez que votre fichier est dans public/ et change MODEL_PATH ligne 29
+          </small>
         </div>
       )}
 
-      {/* Indicateur de scroll avec flèche */}
       <div className="scroll-indicator">
         <div className="scroll-arrow-down">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -444,7 +459,6 @@ const Hero3D = () => {
         </div>
       </div>
 
-      {/* Contrôle du son en bas à droite */}
       <SoundControl />
     </section>
   );
