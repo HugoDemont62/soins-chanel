@@ -487,6 +487,80 @@
     }
 }
 
+/* Logo Chanel en haut de page */
+.chanel-logo-header {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    opacity: 0;
+    animation: fadeInLogo 1.5s ease 0.5s forwards;
+}
+
+.chanel-logo-img {
+    height: 60px;
+    width: auto;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+    transition: all 0.3s ease;
+}
+
+.chanel-logo-img:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes fadeInLogo {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Statut de préchargement */
+.preload-status {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    z-index: 10;
+    opacity: 0.8;
+}
+
+.preload-status p {
+    margin: 0;
+}
+
+/* Responsive pour le logo */
+@media (max-width: 768px) {
+    .chanel-logo-header {
+        top: 30px;
+    }
+
+    .chanel-logo-img {
+        height: 50px;
+    }
+}
+
+@media (max-width: 480px) {
+    .chanel-logo-header {
+        top: 20px;
+    }
+
+    .chanel-logo-img {
+        height: 40px;
+    }
+}
+
 /* Amélioration des performances pour les appareils tactiles */
 .threejs-container {
     -webkit-touch-callout: none;
