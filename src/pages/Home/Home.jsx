@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Hero3D from '../../components/Hero3D/Hero3D.jsx';
-import {Loader} from '@react-three/drei';
+import Loader from '../../components/Loader/Loader.jsx'; // Import corrigé
 import TextSection from '../../components/TextSection/TextSection.jsx';
 import BottomNavbar from '../../components/BottomNavbar/BottomNavbar.jsx';
 import './Home.css';
