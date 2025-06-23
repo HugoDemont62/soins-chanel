@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import SoundControl from '../SoundControl/SoundControl.jsx';
 import './Hero3D.css';
 
 const Hero3D = () => {
@@ -7,6 +8,9 @@ const Hero3D = () => {
   const rendererRef = useRef(null);
   const cubeRef = useRef(null);
   const cameraRef = useRef(null);
+  const cloudsRef = useRef([]);
+  const [isDragging, setIsDragging] = useState(false);
+  const [previousMousePosition, setPreviousMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     if (!mountRef.current) return;
@@ -28,7 +32,6 @@ const Hero3D = () => {
       };
       script.onerror = () => {
         console.error('Failed to load Three.js');
-        // Fallback: afficher un carré CSS simple
         showFallbackCube();
       };
       document.head.appendChild(script);
@@ -53,7 +56,7 @@ const Hero3D = () => {
         1000
       );
       cameraRef.current = camera;
-      camera.position.z = 5;
+      camera.position.set(0, 0, 5);
 
       // Configuration du renderer
       const renderer = new THREE.WebGLRenderer({
@@ -63,45 +66,141 @@ const Hero3D = () => {
       rendererRef.current = renderer;
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.setClearColor(0x000000, 0); // Transparent
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       mountRef.current.appendChild(renderer.domElement);
 
-      // Création du cube avec texture dorée
+      // Création d'un cube simple au centre
       const geometry = new THREE.BoxGeometry(2, 2, 2);
-      const material = new THREE.MeshPhongMaterial({
+      const material = new THREE.MeshPhysicalMaterial({
         color: 0xD4AF37, // Or Chanel
-        shininess: 100,
-        specular: 0x222222
+        roughness: 0.1,
+        metalness: 0.8,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.1
       });
 
       const cube = new THREE.Mesh(geometry, material);
       cubeRef.current = cube;
+      cube.position.set(0, 0, 0); // Centré
+      cube.castShadow = true;
       scene.add(cube);
 
+      // Création des nuages en arrière-plan
+      const createCloud = (x, y, z, scale = 1) => {
+        const cloudGroup = new THREE.Group();
+
+        // Créer plusieurs sphères pour former un nuage
+        for (let i = 0; i < 6; i++) {
+          const cloudGeometry = new THREE.SphereGeometry(0.5 + Math.random() * 0.3, 16, 16);
+          const cloudMaterial = new THREE.MeshLambertMaterial({
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.7
+          });
+          const cloudPart = new THREE.Mesh(cloudGeometry, cloudMaterial);
+
+          // Position aléatoire dans le nuage
+          cloudPart.position.set(
+            (Math.random() - 0.5) * 2,
+            (Math.random() - 0.5),
+            (Math.random() - 0.5) * 2
+          );
+          cloudGroup.add(cloudPart);
+        }
+
+        cloudGroup.position.set(x, y, z);
+        cloudGroup.scale.setScalar(scale);
+        return cloudGroup;
+      };
+
+      // Ajouter plusieurs nuages en arrière-plan
+      const clouds = [];
+      clouds.push(createCloud(-10, 4, -8, 1.5));
+      clouds.push(createCloud(-8, -3, -10, 1.2));
+      clouds.push(createCloud(10, 3, -8, 1.3));
+      clouds.push(createCloud(8, -2, -12, 1.1));
+      clouds.push(createCloud(-6, 6, -6, 0.8));
+      clouds.push(createCloud(6, -4, -9, 0.9));
+
+      clouds.forEach(cloud => {
+        scene.add(cloud);
+        cloudsRef.current.push(cloud);
+      });
+
       // Ajout de lumières
-      const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+      const ambientLight = new THREE.AmbientLight(0x87ceeb, 0.6);
       scene.add(ambientLight);
 
       const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-      directionalLight.position.set(5, 5, 5);
+      directionalLight.position.set(5, 10, 5);
+      directionalLight.castShadow = true;
       scene.add(directionalLight);
 
-      const pointLight = new THREE.PointLight(0xD4AF37, 0.5);
-      pointLight.position.set(-5, -5, 5);
+      const pointLight = new THREE.PointLight(0x87ceeb, 0.5);
+      pointLight.position.set(-5, 5, 5);
       scene.add(pointLight);
 
-      // Variables pour l'interaction souris
-      let mouseX = 0;
-      let mouseY = 0;
-      let targetRotationX = 0;
-      let targetRotationY = 0;
+      // Variables pour l'interaction 360°
+      let isMouseDown = false;
 
-      // Gestion de la souris
+      // Gestion de la souris pour rotation 360°
+      const handleMouseDown = (event) => {
+        isMouseDown = true;
+        setIsDragging(true);
+        setPreviousMousePosition({
+          x: event.clientX,
+          y: event.clientY
+        });
+      };
+
       const handleMouseMove = (event) => {
-        mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-        mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        if (isMouseDown && cube) {
+          const deltaMove = {
+            x: event.clientX - previousMousePosition.x,
+            y: event.clientY - previousMousePosition.y
+          };
 
-        targetRotationX = mouseY * 0.3;
-        targetRotationY = mouseX * 0.3;
+          // Rotation complète 360° sur les deux axes
+          cube.rotation.y += deltaMove.x * 0.0001;
+          cube.rotation.x += deltaMove.y * 0.0001;
+
+          setPreviousMousePosition({
+            x: event.clientX,
+            y: event.clientY
+          });
+        }
+      };
+
+      const handleMouseUp = () => {
+        isMouseDown = false;
+        setIsDragging(false);
+      };
+
+      // Support tactile pour mobile
+      const handleTouchStart = (event) => {
+        if (event.touches.length === 1) {
+          const touch = event.touches[0];
+          handleMouseDown({
+            clientX: touch.clientX,
+            clientY: touch.clientY
+          });
+        }
+      };
+
+      const handleTouchMove = (event) => {
+        if (event.touches.length === 1) {
+          event.preventDefault();
+          const touch = event.touches[0];
+          handleMouseMove({
+            clientX: touch.clientX,
+            clientY: touch.clientY
+          });
+        }
+      };
+
+      const handleTouchEnd = () => {
+        handleMouseUp();
       };
 
       // Gestion du redimensionnement
@@ -118,25 +217,33 @@ const Hero3D = () => {
       const animate = () => {
         requestAnimationFrame(animate);
 
-        if (cube) {
-          // Rotation automatique
-          cube.rotation.x += 0.005;
-          cube.rotation.y += 0.005;
+        // Animation des nuages (mouvement lent)
+        cloudsRef.current.forEach((cloud, index) => {
+          cloud.position.x += Math.sin(Date.now() * 0.0005 + index) * 0.0002;
+          cloud.position.y += Math.cos(Date.now() * 0.0003 + index) * 0.0001;
+          cloud.rotation.y += 0.0001;
+        });
 
-          // Interaction souris (interpolation douce)
-          cube.rotation.x += (targetRotationX - cube.rotation.x) * 0.05;
-          cube.rotation.y += (targetRotationY - cube.rotation.y) * 0.05;
-
-          // Effet de respiration (scale)
-          const scale = 1 + Math.sin(Date.now() * 0.001) * 0.1;
-          cube.scale.set(scale, scale, scale);
+        // Rotation automatique subtile du cube quand pas de drag
+        if (!isMouseDown && cube) {
+          cube.rotation.y += 0.0003;
+          cube.rotation.x += 0.0001;
         }
 
         renderer.render(scene, camera);
       };
 
       // Event listeners
+      const canvas = renderer.domElement;
+      canvas.addEventListener('mousedown', handleMouseDown);
+      canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+
       window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+      window.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener('touchend', handleTouchEnd);
+
       window.addEventListener('resize', handleResize);
 
       // Démarrer l'animation
@@ -144,7 +251,15 @@ const Hero3D = () => {
 
       // Cleanup function
       window.cleanupThreeJS = () => {
+        canvas.removeEventListener('mousedown', handleMouseDown);
+        canvas.removeEventListener('touchstart', handleTouchStart);
+
         window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('touchmove', handleTouchMove);
+
+        window.removeEventListener('mouseup', handleMouseUp);
+        window.removeEventListener('touchend', handleTouchEnd);
+
         window.removeEventListener('resize', handleResize);
 
         if (mountRef.current && renderer.domElement) {
@@ -161,22 +276,13 @@ const Hero3D = () => {
       // Créer un cube CSS en fallback
       const fallbackCube = document.createElement('div');
       fallbackCube.className = 'fallback-cube';
-      fallbackCube.innerHTML = `
-        <div class="cube-face cube-front"></div>
-        <div class="cube-face cube-back"></div>
-        <div class="cube-face cube-right"></div>
-        <div class="cube-face cube-left"></div>
-        <div class="cube-face cube-top"></div>
-        <div class="cube-face cube-bottom"></div>
-      `;
 
       if (mountRef.current) {
         mountRef.current.appendChild(fallbackCube);
       }
     };
 
-    loadThreeJS();
-
+    loadThreeJS()
     // Cleanup
     return () => {
       if (window.cleanupThreeJS) {
@@ -187,24 +293,20 @@ const Hero3D = () => {
 
   return (
     <section className="hero-3d">
+      {/* Container 3D */}
       <div ref={mountRef} className="threejs-container" />
 
-      <div className="hero-content">
-        <div className="hero-text">
-          <h1 className="hero-title">
-            L'Art du
-            <span className="hero-title-accent">Soin</span>
-          </h1>
-          <p className="hero-subtitle">
-            Découvrez l'excellence des soins Chanel
-          </p>
+      {/* Indicateur de scroll avec flèche */}
+      <div className="scroll-indicator">
+        <div className="scroll-arrow-down">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 10L12 15L17 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </div>
       </div>
 
-      <div className="scroll-indicator">
-        <div className="scroll-arrow"></div>
-        <span>Scroll</span>
-      </div>
+      {/* Contrôle du son en bas à droite */}
+      <SoundControl />
     </section>
   );
 };

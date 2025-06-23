@@ -6,7 +6,6 @@ import { gsap } from 'gsap';
 import CustomCursor from './components/CustomPages/CustomCursor.jsx';
 import Loader from './components/Loader/Loader.jsx';
 import PageTransition from './components/CustomPages/PageTransition.jsx';
-import Navigation from './components/CustomPages/Navigation.jsx';
 
 // Pages
 import Home from './pages/Home/Home.jsx';
@@ -32,7 +31,7 @@ function RouteChangeHandler({ setIsTransitioning }) {
 
 function AppContent() {
   // const [isLoading, setIsLoading] = useState(true);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  // const [isTransitioning, setIsTransitioning] = useState(false);
   const location = useLocation();
 
   // Gestion du loader initial
@@ -75,10 +74,7 @@ function AppContent() {
       {/*)}*/}
 
       {/* Handler pour les changements de route */}
-      <RouteChangeHandler setIsTransitioning={setIsTransitioning} />
-
-      {/* Navigation */}
-      <Navigation />
+      {/*<RouteChangeHandler setIsTransitioning={setIsTransitioning} />*/}
 
       {/* Contenu principal avec transitions */}
       <PageTransition pathname={location.pathname}>
