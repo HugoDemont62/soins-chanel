@@ -1,6 +1,7 @@
+// Fichier: src/pages/Home/Home.jsx
 import { useEffect, useState } from 'react';
 import Hero3D from '../../components/Hero3D/Hero3D.jsx';
-import Loader from '../../components/Loader/Loader.jsx'; // Import corrigé
+import Loader from '../../components/Loader/Loader.jsx';
 import TextSection from '../../components/TextSection/TextSection.jsx';
 import BottomNavbar from '../../components/BottomNavbar/BottomNavbar.jsx';
 import './Home.css';
@@ -26,20 +27,34 @@ const Home = () => {
   }, [isLoading]);
 
   if (isLoading) {
-    return <Loader onComplete={handleLoaderComplete} />;
+    return (
+      <>
+        <Loader onComplete={handleLoaderComplete} />
+        {/* Navbar même pendant le loading (optionnel) */}
+        <BottomNavbar />
+      </>
+    );
   }
 
   return (
-    <div className="home-page">
-      {/* Hero Section avec objet 3D */}
-      <Hero3D />
+    <>
+      {/* Contenu principal de la page */}
+      <div className="home-page">
+        {/* Hero Section avec objet 3D */}
+        <Hero3D />
 
-      {/* Section avec texte animé */}
-      <TextSection />
+        {/* Section avec texte animé */}
+        <TextSection />
 
-      {/* Navigation en bas */}
+        {/* Tu peux ajouter d'autres sections ici */}
+        <div style={{ height: '100vh', background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <h2>Section pour tester le scroll</h2>
+        </div>
+      </div>
+
+      {/* Navigation TOUJOURS en bas - IMPORTANT: En dehors du conteneur principal */}
       <BottomNavbar />
-    </div>
+    </>
   );
 };
 

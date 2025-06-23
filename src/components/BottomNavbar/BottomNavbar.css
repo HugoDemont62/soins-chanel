@@ -1,16 +1,20 @@
-.bottom-navbar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    padding: 0;
-    /* Flou gaussien en arrière-plan */
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.1);
+/* Fichier: src/components/BottomNavbar/BottomNavbar.css */
+
+/* Conteneur portal - sera ajouté directement au body */
+#bottom-navbar-portal {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100vw !important;
+    z-index: 999999 !important;
+    pointer-events: none; /* Les enfants réactiveront les events */
+}
+
+/* Navbar interne */
+.bottom-navbar-inner {
+    width: 100%;
+    pointer-events: all !important;
 }
 
 .navbar-container {
@@ -20,12 +24,19 @@
     max-width: 100%;
     margin: 0 auto;
     padding: 16px 20px;
+
     /* Arrière-plan avec flou plus prononcé */
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(30px);
     -webkit-backdrop-filter: blur(30px);
     border-radius: 0;
     border-top: 1px solid rgba(255, 255, 255, 0.3);
+
+    /* Empêcher le débordement */
+    box-sizing: border-box;
+    width: 100%;
+    height: auto;
+    min-height: 60px;
 }
 
 .navbar-item {
@@ -41,11 +52,21 @@
     white-space: nowrap;
     text-align: center;
     min-width: 80px;
+
     /* Flou d'arrière-plan pour chaque élément */
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
+
+    /* Empêcher la sélection de texte */
+    user-select: none;
+    -webkit-user-select: none;
+
+    /* S'assurer qu'ils soient cliquables */
+    pointer-events: all;
+    cursor: pointer;
+    display: block;
 }
 
 .navbar-logo {
@@ -58,6 +79,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+
     /* Flou spécial pour le logo */
     background-color: rgba(212, 175, 55, 0.1);
     backdrop-filter: blur(15px);
@@ -122,7 +144,7 @@
 }
 
 /* Animation d'apparition avec effet de flou */
-.bottom-navbar {
+.bottom-navbar-inner {
     animation: slideUpWithBlur 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
@@ -130,14 +152,10 @@
     from {
         transform: translateY(100%);
         opacity: 0;
-        backdrop-filter: blur(0px);
-        -webkit-backdrop-filter: blur(0px);
     }
     to {
         transform: translateY(0);
         opacity: 1;
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
     }
 }
 
@@ -165,6 +183,7 @@
         padding: 12px 16px;
         backdrop-filter: blur(25px);
         -webkit-backdrop-filter: blur(25px);
+        min-height: 55px;
     }
 
     .navbar-item {
@@ -188,6 +207,7 @@
         justify-content: space-between;
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
+        min-height: 50px;
     }
 
     .navbar-item {
@@ -207,7 +227,7 @@
 
 /* Effet de glassmorphism plus prononcé sur desktop */
 @media (min-width: 1024px) {
-    .bottom-navbar {
+    .bottom-navbar-inner {
         background: rgba(255, 255, 255, 0.08);
         backdrop-filter: blur(40px);
         -webkit-backdrop-filter: blur(40px);
@@ -219,6 +239,7 @@
         -webkit-backdrop-filter: blur(50px);
         padding: 20px 40px;
         border-top: 1px solid rgba(255, 255, 255, 0.4);
+        min-height: 70px;
     }
 
     .navbar-item {
@@ -234,15 +255,15 @@
 
 /* Support des navigateurs sans backdrop-filter */
 @supports not (backdrop-filter: blur(1px)) {
-    .bottom-navbar {
-        background: rgba(255, 255, 255, 0.9);
+    .bottom-navbar-inner {
+        background: rgba(255, 255, 255, 0.9) !important;
     }
 
     .navbar-container {
-        background: rgba(255, 255, 255, 0.95);
+        background: rgba(255, 255, 255, 0.95) !important;
     }
 
     .navbar-item {
-        background: rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.8) !important;
     }
 }
