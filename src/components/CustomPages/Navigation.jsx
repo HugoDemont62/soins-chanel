@@ -133,7 +133,7 @@ const Navigation = () => {
       >
         <div className="container mx-auto px-6 py-8">
           <div className="flex flex-col space-y-6">
-            {navItems.map((item, index) => (
+            {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}

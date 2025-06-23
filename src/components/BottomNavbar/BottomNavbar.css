@@ -1,0 +1,152 @@
+.bottom-navbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0;
+}
+
+.navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, rgba(245, 242, 232, 0.9) 0%, rgba(255, 255, 255, 0.9) 100%);
+    border-radius: 24px 24px 0 0;
+}
+
+.navbar-item {
+    color: #000000;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 12px 16px;
+    border-radius: 20px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    white-space: nowrap;
+    text-align: center;
+    min-width: 80px;
+}
+
+.navbar-logo {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.125rem;
+    letter-spacing: 0.05em;
+    color: #000000;
+    background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.navbar-item:hover {
+    background: rgba(212, 175, 55, 0.1);
+    transform: translateY(-2px);
+    color: #D4AF37;
+}
+
+.navbar-item.active {
+    background: rgba(212, 175, 55, 0.15);
+    color: #D4AF37;
+    font-weight: 600;
+}
+
+.navbar-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 2px;
+    background: #D4AF37;
+    border-radius: 2px;
+}
+
+.navbar-logo:hover {
+    background: linear-gradient(135deg, #B8860B 0%, #D4AF37 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transform: translateY(-2px) scale(1.05);
+}
+
+.navbar-logo.active {
+    background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Animation d'apparition */
+.bottom-navbar {
+    animation: slideUpFromBottom 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes slideUpFromBottom {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .navbar-container {
+        padding: 12px 16px;
+    }
+
+    .navbar-item {
+        font-size: 0.8rem;
+        padding: 10px 12px;
+        min-width: 70px;
+    }
+
+    .navbar-logo {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-container {
+        padding: 10px 12px;
+        justify-content: space-between;
+    }
+
+    .navbar-item {
+        font-size: 0.75rem;
+        padding: 8px 10px;
+        min-width: 60px;
+    }
+
+    .navbar-logo {
+        font-size: 0.9rem;
+    }
+}
+
+/* Effet de glassmorphism plus prononcé sur desktop */
+@media (min-width: 1024px) {
+    .bottom-navbar {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(40px);
+    }
+
+    .navbar-container {
+        background: linear-gradient(135deg, rgba(245, 242, 232, 0.8) 0%, rgba(255, 255, 255, 0.8) 100%);
+        border-radius: 32px 32px 0 0;
+        padding: 20px 40px;
+    }
+}
