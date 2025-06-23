@@ -6,19 +6,25 @@ const Hero3D = () => {
   const mountRef = useRef(null);
   const sceneRef = useRef(null);
   const rendererRef = useRef(null);
-  const cubeRef = useRef(null);
+  const modelRef = useRef(null);
   const cameraRef = useRef(null);
-  const cloudsRef = useRef([]);
   const [isDragging, setIsDragging] = useState(false);
-  const [previousMousePosition, setPreviousMousePosition] = useState({ x: 0, y: 0 });
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+
+  // Variables pour la rotation
+  const rotationVelocity = useRef({ x: 0, y: 0 });
+  const isMouseDown = useRef(false);
+  const lastMousePosition = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     if (!mountRef.current) return;
 
-    // Charger Three.js dynamiquement depuis CDN
+    // Charger Three.js et GLTFLoader dynamiquement depuis CDN
     const loadThreeJS = async () => {
       // Vérifier si Three.js est déjà chargé
       if (window.THREE) {
+        await loadGLTFLoader();
         initScene();
         return;
       }
@@ -26,20 +32,45 @@ const Hero3D = () => {
       // Charger Three.js depuis CDN
       const script = document.createElement('script');
       script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-      script.onload = () => {
+      script.onload = async () => {
         console.log('Three.js loaded successfully');
+        await loadGLTFLoader();
         initScene();
       };
       script.onerror = () => {
         console.error('Failed to load Three.js');
+        setLoadError(true);
         showFallbackCube();
       };
       document.head.appendChild(script);
     };
 
+    // Charger GLTFLoader
+    const loadGLTFLoader = () => {
+      return new Promise((resolve, reject) => {
+        if (window.THREE && window.THREE.GLTFLoader) {
+          resolve();
+          return;
+        }
+
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/GLTFLoader.js';
+        script.onload = () => {
+          console.log('GLTFLoader loaded successfully');
+          resolve();
+        };
+        script.onerror = () => {
+          console.error('Failed to load GLTFLoader');
+          reject();
+        };
+        document.head.appendChild(script);
+      });
+    };
+
     const initScene = () => {
       const THREE = window.THREE;
       if (!THREE) {
+        setLoadError(true);
         showFallbackCube();
         return;
       }
@@ -68,117 +99,141 @@ const Hero3D = () => {
       renderer.setClearColor(0x000000, 0); // Transparent
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.outputEncoding = THREE.sRGBEncoding;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1;
       mountRef.current.appendChild(renderer.domElement);
 
-      // Création d'un cube simple au centre
-      const geometry = new THREE.BoxGeometry(2, 2, 2);
-      const material = new THREE.MeshPhysicalMaterial({
-        color: 0xD4AF37, // Or Chanel
-        roughness: 0.1,
-        metalness: 0.8,
-        clearcoat: 1.0,
-        clearcoatRoughness: 0.1
-      });
+      // Chargement du modèle 3D
+      const loader = new THREE.GLTFLoader();
 
-      const cube = new THREE.Mesh(geometry, material);
-      cubeRef.current = cube;
-      cube.position.set(0, 0, 0); // Centré
-      cube.castShadow = true;
-      scene.add(cube);
+      // Tu dois remplacer 'model.glb' par le nom exact de ton fichier dans public/
+      const modelPath = '/model.glb'; // ou '/model.gltf' selon ton fichier
 
-      // Création des nuages en arrière-plan
-      const createCloud = (x, y, z, scale = 1) => {
-        const cloudGroup = new THREE.Group();
+      loader.load(
+        modelPath,
+        (gltf) => {
+          console.log('Modèle 3D chargé avec succès');
+          const model = gltf.scene;
+          modelRef.current = model;
 
-        // Créer plusieurs sphères pour former un nuage
-        for (let i = 0; i < 6; i++) {
-          const cloudGeometry = new THREE.SphereGeometry(0.5 + Math.random() * 0.3, 16, 16);
-          const cloudMaterial = new THREE.MeshLambertMaterial({
-            color: 0xffffff,
-            transparent: true,
-            opacity: 0.7
+          // Centrer le modèle
+          const box = new THREE.Box3().setFromObject(model);
+          const center = box.getCenter(new THREE.Vector3());
+          model.position.sub(center);
+
+          // Ajuster la taille du modèle
+          const size = box.getSize(new THREE.Vector3());
+          const maxSize = Math.max(size.x, size.y, size.z);
+          const scale = 2 / maxSize; // Ajuster cette valeur selon la taille souhaitée
+          model.scale.setScalar(scale);
+
+          // Configurer les ombres pour le modèle
+          model.traverse((child) => {
+            if (child.isMesh) {
+              child.castShadow = true;
+              child.receiveShadow = true;
+
+              // Améliorer les matériaux si nécessaire
+              if (child.material) {
+                child.material.envMapIntensity = 1;
+                child.material.needsUpdate = true;
+              }
+            }
           });
-          const cloudPart = new THREE.Mesh(cloudGeometry, cloudMaterial);
 
-          // Position aléatoire dans le nuage
-          cloudPart.position.set(
-            (Math.random() - 0.5) * 2,
-            (Math.random() - 0.5),
-            (Math.random() - 0.5) * 2
-          );
-          cloudGroup.add(cloudPart);
+          scene.add(model);
+          setIsLoading(false);
+          console.log('Modèle ajouté à la scène');
+        },
+        (progress) => {
+          console.log('Progression du chargement:', (progress.loaded / progress.total * 100) + '%');
+        },
+        (error) => {
+          console.error('Erreur lors du chargement du modèle:', error);
+          setLoadError(true);
+          setIsLoading(false);
+          // Créer un cube de fallback en cas d'erreur
+          createFallbackCube(scene, THREE);
         }
+      );
 
-        cloudGroup.position.set(x, y, z);
-        cloudGroup.scale.setScalar(scale);
-        return cloudGroup;
-      };
-
-      // Ajouter plusieurs nuages en arrière-plan
-      const clouds = [];
-      clouds.push(createCloud(-10, 4, -8, 1.5));
-      clouds.push(createCloud(-8, -3, -10, 1.2));
-      clouds.push(createCloud(10, 3, -8, 1.3));
-      clouds.push(createCloud(8, -2, -12, 1.1));
-      clouds.push(createCloud(-6, 6, -6, 0.8));
-      clouds.push(createCloud(6, -4, -9, 0.9));
-
-      clouds.forEach(cloud => {
-        scene.add(cloud);
-        cloudsRef.current.push(cloud);
-      });
-
-      // Ajout de lumières
-      const ambientLight = new THREE.AmbientLight(0x87ceeb, 0.6);
+      // Ajout de lumières optimisées pour le modèle 3D
+      const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
       scene.add(ambientLight);
 
-      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-      directionalLight.position.set(5, 10, 5);
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+      directionalLight.position.set(10, 10, 5);
       directionalLight.castShadow = true;
+      directionalLight.shadow.mapSize.width = 2048;
+      directionalLight.shadow.mapSize.height = 2048;
+      directionalLight.shadow.camera.near = 0.5;
+      directionalLight.shadow.camera.far = 50;
       scene.add(directionalLight);
 
-      const pointLight = new THREE.PointLight(0x87ceeb, 0.5);
-      pointLight.position.set(-5, 5, 5);
-      scene.add(pointLight);
+      // Lumière de remplissage
+      const fillLight = new THREE.DirectionalLight(0x87ceeb, 0.3);
+      fillLight.position.set(-5, 0, -5);
+      scene.add(fillLight);
 
-      // Variables pour l'interaction 360°
-      let isMouseDown = false;
+      // Lumière d'accent dorée
+      const accentLight = new THREE.PointLight(0xD4AF37, 0.5, 10);
+      accentLight.position.set(2, 2, 2);
+      scene.add(accentLight);
+
+      // Environnement HDR simple
+      const pmremGenerator = new THREE.PMREMGenerator(renderer);
+      scene.environment = pmremGenerator.fromScene(new THREE.RoomEnvironment(), 0.04).texture;
+
+      // Variables pour l'inertie et la sensibilité
+      const ROTATION_SENSITIVITY = 0.008;
+      const INERTIA_DAMPING = 0.95;
+      const MIN_VELOCITY = 0.001;
 
       // Gestion de la souris pour rotation 360°
       const handleMouseDown = (event) => {
-        isMouseDown = true;
+        isMouseDown.current = true;
         setIsDragging(true);
-        setPreviousMousePosition({
-          x: event.clientX,
-          y: event.clientY
-        });
+
+        const clientX = event.clientX || (event.touches && event.touches[0].clientX);
+        const clientY = event.clientY || (event.touches && event.touches[0].clientY);
+
+        lastMousePosition.current = { x: clientX, y: clientY };
+
+        // Arrêter l'inertie quand l'utilisateur reprend le contrôle
+        rotationVelocity.current = { x: 0, y: 0 };
       };
 
       const handleMouseMove = (event) => {
-        if (isMouseDown && cube) {
-          const deltaMove = {
-            x: event.clientX - previousMousePosition.x,
-            y: event.clientY - previousMousePosition.y
-          };
+        if (!isMouseDown.current || !modelRef.current) return;
 
-          // Rotation complète 360° sur les deux axes
-          cube.rotation.y += deltaMove.x * 0.0001;
-          cube.rotation.x += deltaMove.y * 0.0001;
+        const clientX = event.clientX || (event.touches && event.touches[0].clientX);
+        const clientY = event.clientY || (event.touches && event.touches[0].clientY);
 
-          setPreviousMousePosition({
-            x: event.clientX,
-            y: event.clientY
-          });
-        }
+        const deltaMove = {
+          x: clientX - lastMousePosition.current.x,
+          y: clientY - lastMousePosition.current.y
+        };
+
+        // Appliquer la rotation directement avec une meilleure sensibilité
+        modelRef.current.rotation.y += deltaMove.x * ROTATION_SENSITIVITY;
+        modelRef.current.rotation.x += deltaMove.y * ROTATION_SENSITIVITY;
+
+        // Stocker la vélocité pour l'inertie
+        rotationVelocity.current.x = deltaMove.y * ROTATION_SENSITIVITY;
+        rotationVelocity.current.y = deltaMove.x * ROTATION_SENSITIVITY;
+
+        lastMousePosition.current = { x: clientX, y: clientY };
       };
 
       const handleMouseUp = () => {
-        isMouseDown = false;
+        isMouseDown.current = false;
         setIsDragging(false);
       };
 
       // Support tactile pour mobile
       const handleTouchStart = (event) => {
+        event.preventDefault();
         if (event.touches.length === 1) {
           const touch = event.touches[0];
           handleMouseDown({
@@ -189,8 +244,8 @@ const Hero3D = () => {
       };
 
       const handleTouchMove = (event) => {
+        event.preventDefault();
         if (event.touches.length === 1) {
-          event.preventDefault();
           const touch = event.touches[0];
           handleMouseMove({
             clientX: touch.clientX,
@@ -199,7 +254,8 @@ const Hero3D = () => {
         }
       };
 
-      const handleTouchEnd = () => {
+      const handleTouchEnd = (event) => {
+        event.preventDefault();
         handleMouseUp();
       };
 
@@ -213,21 +269,33 @@ const Hero3D = () => {
         renderer.setSize(width, height);
       };
 
-      // Animation loop
+      // Animation loop avec inertie
       const animate = () => {
         requestAnimationFrame(animate);
 
-        // Animation des nuages (mouvement lent)
-        cloudsRef.current.forEach((cloud, index) => {
-          cloud.position.x += Math.sin(Date.now() * 0.0005 + index) * 0.0002;
-          cloud.position.y += Math.cos(Date.now() * 0.0003 + index) * 0.0001;
-          cloud.rotation.y += 0.0001;
-        });
+        if (modelRef.current) {
+          // Si l'utilisateur ne fait pas de drag, appliquer l'inertie
+          if (!isMouseDown.current) {
+            // Appliquer l'inertie
+            modelRef.current.rotation.x += rotationVelocity.current.x;
+            modelRef.current.rotation.y += rotationVelocity.current.y;
 
-        // Rotation automatique subtile du cube quand pas de drag
-        if (!isMouseDown && cube) {
-          cube.rotation.y += 0.0003;
-          cube.rotation.x += 0.0001;
+            // Amortir la vélocité
+            rotationVelocity.current.x *= INERTIA_DAMPING;
+            rotationVelocity.current.y *= INERTIA_DAMPING;
+
+            // Arrêter l'inertie si la vitesse est trop faible
+            if (Math.abs(rotationVelocity.current.x) < MIN_VELOCITY &&
+              Math.abs(rotationVelocity.current.y) < MIN_VELOCITY) {
+              rotationVelocity.current.x = 0;
+              rotationVelocity.current.y = 0;
+            }
+
+            // Rotation automatique subtile si aucune inertie
+            if (rotationVelocity.current.x === 0 && rotationVelocity.current.y === 0) {
+              modelRef.current.rotation.y += 0.002;
+            }
+          }
         }
 
         renderer.render(scene, camera);
@@ -235,14 +303,17 @@ const Hero3D = () => {
 
       // Event listeners
       const canvas = renderer.domElement;
+
       canvas.addEventListener('mousedown', handleMouseDown);
-      canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
-
       window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('touchmove', handleTouchMove, { passive: false });
-
       window.addEventListener('mouseup', handleMouseUp);
-      window.addEventListener('touchend', handleTouchEnd);
+
+      canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+      canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+      canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+
+      canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+      canvas.addEventListener('selectstart', (e) => e.preventDefault());
 
       window.addEventListener('resize', handleResize);
 
@@ -255,10 +326,13 @@ const Hero3D = () => {
         canvas.removeEventListener('touchstart', handleTouchStart);
 
         window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('touchmove', handleTouchMove);
+        canvas.removeEventListener('touchmove', handleTouchMove);
 
         window.removeEventListener('mouseup', handleMouseUp);
-        window.removeEventListener('touchend', handleTouchEnd);
+        canvas.removeEventListener('touchend', handleTouchEnd);
+
+        canvas.removeEventListener('contextmenu', (e) => e.preventDefault());
+        canvas.removeEventListener('selectstart', (e) => e.preventDefault());
 
         window.removeEventListener('resize', handleResize);
 
@@ -267,22 +341,71 @@ const Hero3D = () => {
         }
 
         renderer.dispose();
-        geometry.dispose();
-        material.dispose();
+        pmremGenerator.dispose();
       };
     };
 
+    // Fonction pour créer un cube de fallback en cas d'erreur
+    const createFallbackCube = (scene, THREE) => {
+      const geometry = new THREE.BoxGeometry(2.5, 2.5, 2.5);
+      const material = new THREE.MeshPhysicalMaterial({
+        color: 0xD4AF37,
+        roughness: 0.1,
+        metalness: 0.9,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.05,
+      });
+
+      const cube = new THREE.Mesh(geometry, material);
+      modelRef.current = cube;
+      cube.position.set(0, 0, 0);
+      cube.castShadow = true;
+      cube.receiveShadow = true;
+      scene.add(cube);
+      setIsLoading(false);
+    };
+
     const showFallbackCube = () => {
-      // Créer un cube CSS en fallback
       const fallbackCube = document.createElement('div');
       fallbackCube.className = 'fallback-cube';
+      fallbackCube.innerHTML = `
+        <div style="
+          width: 200px;
+          height: 200px;
+          background: linear-gradient(135deg, #D4AF37, #B8860B);
+          border-radius: 20px;
+          box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-family: 'Playfair Display', serif;
+          font-size: 24px;
+          font-weight: 600;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          animation: floatFallback 3s ease-in-out infinite;
+        ">
+          ${loadError ? 'ERREUR DE CHARGEMENT' : 'CHANEL'}
+        </div>
+        <style>
+          @keyframes floatFallback {
+            0%, 100% { transform: translate(-50%, -50%) translateY(0px) rotate(0deg); }
+            50% { transform: translate(-50%, -50%) translateY(-20px) rotate(5deg); }
+          }
+        </style>
+      `;
 
       if (mountRef.current) {
         mountRef.current.appendChild(fallbackCube);
       }
+      setIsLoading(false);
     };
 
-    loadThreeJS()
+    loadThreeJS();
+
     // Cleanup
     return () => {
       if (window.cleanupThreeJS) {
@@ -292,9 +415,25 @@ const Hero3D = () => {
   }, []);
 
   return (
-    <section className="hero-3d">
+    <section className={`hero-3d ${isDragging ? 'dragging' : ''}`}>
       {/* Container 3D */}
       <div ref={mountRef} className="threejs-container" />
+
+      {/* Indicateur de chargement */}
+      {isLoading && (
+        <div className="loading-indicator">
+          <div className="loading-spinner"></div>
+          <p>Chargement du modèle 3D...</p>
+        </div>
+      )}
+
+      {/* Message d'erreur */}
+      {loadError && (
+        <div className="error-message">
+          <p>Impossible de charger le modèle 3D</p>
+          <small>Vérifiez que le fichier existe dans public/</small>
+        </div>
+      )}
 
       {/* Indicateur de scroll avec flèche */}
       <div className="scroll-indicator">

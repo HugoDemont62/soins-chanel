@@ -10,9 +10,8 @@ const Loader = ({ onComplete, isPageTransition = false }) => {
   useEffect(() => {
     const loader = loaderRef.current;
     const logo = logoRef.current;
-    const progressBar = progressBarRef.current;
 
-    if (!loader || !logo || !progressBar) return;
+    if (!loader || !logo) return;
 
     // Animation d'entrée du logo
     const logoAnimation = () => {
@@ -39,9 +38,6 @@ const Loader = ({ onComplete, isPageTransition = false }) => {
       const newProgress = Math.min((currentStep / steps) * 100, 100);
       setProgress(newProgress);
 
-      // Animation de la barre de progression
-      progressBar.style.width = `${newProgress}%`;
-
       if (newProgress >= 100) {
         clearInterval(progressInterval);
 
@@ -67,16 +63,6 @@ const Loader = ({ onComplete, isPageTransition = false }) => {
       {/* Logo Chanel */}
       <div ref={logoRef} className="chanel-logo">
         <div>CHANEL</div>
-      </div>
-
-      {/* Texte Chanel */}
-      <div className="chanel-text">
-        {isPageTransition ? 'CHANEL' : 'CHANEL SOINS'}
-      </div>
-
-      {/* Barre de progression */}
-      <div className="loader-progress">
-        <div ref={progressBarRef} className="loader-progress-bar" />
       </div>
 
       {/* Pourcentage */}

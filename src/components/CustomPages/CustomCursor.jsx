@@ -126,7 +126,6 @@ const CustomCursor = () => {
       {/* Curseur principal */}
       <div
         ref={cursorRef}
-        className="cursor fixed top-0 left-0 w-5 h-5 bg-chanel-black rounded-full pointer-events-none z-[9999] mix-blend-difference"
         style={{
           position: 'fixed',
           top: 0,
@@ -144,7 +143,6 @@ const CustomCursor = () => {
       {/* Point central (optionnel pour un effet plus sophistiqué) */}
       <div
         ref={cursorDotRef}
-        className="fixed top-0 left-0 w-1 h-1 bg-chanel-white rounded-full pointer-events-none z-[10000]"
         style={{
           position: 'fixed',
           top: 0,
@@ -162,4 +160,3 @@ const CustomCursor = () => {
   );
 };
 
-export default CustomCursor;

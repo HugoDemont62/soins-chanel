@@ -77,11 +77,9 @@
     font-family: var(--font-primary);
     background-color: var(--color-chanel-white);
     color: var(--color-chanel-black);
-    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    cursor: none; /* Hide default cursor for custom cursor */
     overflow-x: hidden;
   }
 

@@ -1,9 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { gsap } from 'gsap';
 
 // Components
-import CustomCursor from './components/CustomPages/CustomCursor.jsx';
 import Loader from './components/Loader/Loader.jsx';
 import PageTransition from './components/CustomPages/PageTransition.jsx';
 
