@@ -1,7 +1,7 @@
 .hero-3d {
     position: relative;
     width: 100vw;
-    height: 95vh;
+    height: 100vh;
     overflow: hidden;
     cursor: grab;
     user-select: none; /* Empêcher la sélection de texte */
@@ -120,7 +120,7 @@
     filter: drop-shadow(0 4px 20px rgba(255, 255, 255, 0.3));
 }
 
-/* Indicateur de scroll avec flèche vers le bas */
+/* Indicateur de scroll avec texte et flèche */
 .scroll-indicator {
     position: absolute;
     bottom: 40px;
@@ -129,19 +129,31 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: #333333;
+    color: #FFFFFF;
     z-index: 2;
     opacity: 0;
     animation: fadeIn 1s ease 2s forwards;
     pointer-events: none;
 }
 
+.scroll-text {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #FFFFFF;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin: 0 0 12px 0;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    opacity: 0.9;
+}
+
 .scroll-arrow-down {
     width: 32px;
     height: 32px;
-    color: #333333;
+    color: #FFFFFF;
     animation: bounceDown 2s infinite;
-    margin-bottom: 8px;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
 }
 
 .scroll-arrow-down svg {
@@ -380,6 +392,20 @@
         text-align: center;
     }
 
+    .scroll-indicator {
+        bottom: 120px;
+    }
+
+    .scroll-text {
+        font-size: 0.7rem;
+        letter-spacing: 0.15em;
+    }
+
+    .scroll-arrow-down {
+        width: 28px;
+        height: 28px;
+    }
+
     .sound-control {
         bottom: 30px;
         right: 30px;
@@ -455,6 +481,21 @@
     .hero-bottom-text p {
         font-size: 0.75rem;
         line-height: 1.4;
+    }
+
+    .scroll-indicator {
+        bottom: 100px;
+    }
+
+    .scroll-text {
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        margin-bottom: 8px;
+    }
+
+    .scroll-arrow-down {
+        width: 24px;
+        height: 24px;
     }
 
     .sound-control {

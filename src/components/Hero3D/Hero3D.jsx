@@ -1,5 +1,7 @@
 // Fichier: src/components/Hero3D/Hero3D.jsx
 import { useEffect, useRef, useState } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SoundControl from '../SoundControl/SoundControl.jsx';
 import './Hero3D.css';
 
@@ -12,9 +14,20 @@ const Hero3D = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [isModelReady, setIsModelReady] = useState(false);
   const mousePosition = useRef({ x: 0, y: 0 });
+
+  // Refs pour tous les nuages
   const cloud1Ref = useRef(null);
   const cloud2Ref = useRef(null);
   const cloud3Ref = useRef(null);
+  const cloud4Ref = useRef(null);
+  const cloud5Ref = useRef(null);
+  const cloud6Ref = useRef(null);
+  const cloud7Ref = useRef(null);
+  const cloud8Ref = useRef(null);
+
+  // Refs pour les éléments principaux
+  const threejsContainerRef = useRef(null);
+  const heroMainTextRef = useRef(null);
 
   // Variables pour la rotation
   const rotationVelocity = useRef({ x: 0, y: 0 });
@@ -29,6 +42,76 @@ const Hero3D = () => {
 
   // Cache pour le modèle préchargé
   const preloadedModel = useRef(null);
+
+  // Enregistrer ScrollTrigger
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+  }, []);
+
+  // Animation de scroll avec GSAP
+  useEffect(() => {
+    if (!isModelReady) return;
+
+    // Attendre que les refs soient disponibles
+    const timer = setTimeout(() => {
+      // Timeline pour l'animation de scroll
+      gsap.set([threejsContainerRef.current, heroMainTextRef.current], { opacity: 1, scale: 1, y: 0 });
+
+      ScrollTrigger.create({
+        trigger: ".hero-3d",
+        start: "top top",
+        end: "200% top", // Durée plus longue
+        scrub: 1,
+        onUpdate: (self) => {
+          const progress = self.progress;
+
+          // Faire disparaître l'objet 3D progressivement
+          if (threejsContainerRef.current) {
+            gsap.set(threejsContainerRef.current, {
+              opacity: 1 - progress,
+              scale: 1 - (progress * 0.3)
+            });
+          }
+
+          // Faire disparaître le texte principal
+          if (heroMainTextRef.current) {
+            gsap.set(heroMainTextRef.current, {
+              opacity: 1 - progress,
+              y: progress * -100
+            });
+          }
+
+          // Bloquer les nuages progressivement
+          const clouds = [
+            cloud1Ref.current,
+            cloud2Ref.current,
+            cloud3Ref.current,
+            cloud4Ref.current,
+            cloud5Ref.current,
+            cloud6Ref.current,
+            cloud7Ref.current,
+            cloud8Ref.current
+          ];
+
+          clouds.forEach((cloud, index) => {
+            if (cloud) {
+              // Les nuages se figent progressivement
+              const cloudProgress = Math.min(progress * 1.5, 1);
+              gsap.set(cloud, {
+                opacity: 0.3 + (cloudProgress * 0.7), // Deviennent plus opaques
+                scale: 1 + (cloudProgress * 0.2) // Grandissent légèrement
+              });
+            }
+          });
+        }
+      });
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    };
+  }, [isModelReady]);
 
   useEffect(() => {
     let isComponentMounted = true;
@@ -89,15 +172,21 @@ const Hero3D = () => {
 
         mousePosition.current = { x, y };
 
-        // Mouvement des nuages avec différentes vitesses
-        if (cloud1Ref.current) {
-          cloud1Ref.current.style.transform = `translate(${x * 25}px, ${y * 18}px)`;
-        }
-        if (cloud2Ref.current) {
-          cloud2Ref.current.style.transform = `translate(${x * -20}px, ${y * 12}px)`;
-        }
-        if (cloud3Ref.current) {
-          cloud3Ref.current.style.transform = `translate(${x * 15}px, ${y * -25}px)`;
+        // Mouvement des nuages avec différentes vitesses (seulement si pas en scroll)
+        const scrollY = window.scrollY;
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollProgress = Math.min(scrollY / (maxScroll * 0.5), 1);
+
+        if (scrollProgress < 0.8) { // Arrêter le mouvement souris quand on commence à scroller
+          if (cloud1Ref.current) {
+            cloud1Ref.current.style.transform = `translate(${x * 25}px, ${y * 18}px)`;
+          }
+          if (cloud2Ref.current) {
+            cloud2Ref.current.style.transform = `translate(${x * -20}px, ${y * 12}px)`;
+          }
+          if (cloud3Ref.current) {
+            cloud3Ref.current.style.transform = `translate(${x * 15}px, ${y * -25}px)`;
+          }
         }
 
         // Mouvement de l'objet 3D seulement si on ne drag pas
@@ -454,21 +543,26 @@ const Hero3D = () => {
   };
 
   return (
-    <>
-      {/* Nuages flottants */}
+    <section className={`hero-3d ${isDragging ? 'dragging' : ''}`}>
+      {/* Logo Chanel en haut au centre */}
+      <div className="chanel-logo-header">
+        <img src="/Chanel-Logo.png" alt="CHANEL" className="chanel-logo-img" data-cursor="hover" />
+      </div>
+
+      {/* Nuages flottants - agrandis pour couvrir tout l'écran */}
       <div
         ref={cloud1Ref}
         className="floating-cloud cloud-1"
         style={{
           position: 'absolute',
-          top: '0%',
+          top: '-10%',
           left: '-15%',
           zIndex: 0,
-          opacity: 0.6,
+          opacity: 0.8,
           transition: 'transform 0.1s ease-out'
         }}
       >
-        <img src="/cloud.png" alt="" style={{ width: '2000px', height: 'auto' }} />
+        <img src="/cloud.png" alt="" style={{ width: '800px', height: 'auto' }} />
       </div>
 
       <div
@@ -476,14 +570,14 @@ const Hero3D = () => {
         className="floating-cloud cloud-2"
         style={{
           position: 'absolute',
-          top: '-10%',
-          right: '0%',
-          zIndex: 4,
-          opacity: 0.6,
+          top: '-5%',
+          right: '-20%',
+          zIndex: 0,
+          opacity: 0.7,
           transition: 'transform 0.15s ease-out'
         }}
       >
-        <img src="/cloud.png" alt="" style={{ width: '1000px', height: 'auto' }} />
+        <img src="/cloud.png" alt="" style={{ width: '900px', height: 'auto' }} />
       </div>
 
       <div
@@ -491,59 +585,128 @@ const Hero3D = () => {
         className="floating-cloud cloud-3"
         style={{
           position: 'absolute',
-          top: '30%',
-          right: '5%',
+          bottom: '-10%',
+          left: '-20%',
+          zIndex: 0,
+          opacity: 0.6,
+          transition: 'transform 0.12s ease-out'
+        }}
+      >
+        <img src="/cloud.png" alt="" style={{ width: '850px', height: 'auto' }} />
+      </div>
+
+      <div
+        ref={cloud4Ref}
+        className="floating-cloud cloud-4"
+        style={{
+          position: 'absolute',
+          bottom: '-15%',
+          right: '-10%',
           zIndex: 0,
           opacity: 0.5,
-          transition: 'transform 0.12s ease-out'
+          transition: 'transform 0.14s ease-out'
+        }}
+      >
+        <img src="/cloud.png" alt="" style={{ width: '750px', height: 'auto' }} />
+      </div>
+
+      <div
+        ref={cloud5Ref}
+        className="floating-cloud cloud-5"
+        style={{
+          position: 'absolute',
+          top: '30%',
+          left: '-25%',
+          zIndex: 0,
+          opacity: 0.4,
+          transition: 'transform 0.13s ease-out'
+        }}
+      >
+        <img src="/cloud.png" alt="" style={{ width: '700px', height: 'auto' }} />
+      </div>
+
+      <div
+        ref={cloud6Ref}
+        className="floating-cloud cloud-6"
+        style={{
+          position: 'absolute',
+          top: '50%',
+          right: '-25%',
+          zIndex: 0,
+          opacity: 0.5,
+          transition: 'transform 0.11s ease-out'
         }}
       >
         <img src="/cloud.png" alt="" style={{ width: '800px', height: 'auto' }} />
       </div>
-      <section className={`hero-3d ${isDragging ? 'dragging' : ''}`}>
-        {/* Logo Chanel en haut au centre */}
-        <div className="chanel-logo-header">
-          <img src="/Chanel-Logo.png" alt="CHANEL" className="chanel-logo-img" data-cursor="hover" />
-        </div>
 
+      <div
+        ref={cloud7Ref}
+        className="floating-cloud cloud-7"
+        style={{
+          position: 'absolute',
+          top: '70%',
+          left: '20%',
+          zIndex: 0,
+          opacity: 0.3,
+          transition: 'transform 0.16s ease-out'
+        }}
+      >
+        <img src="/cloud.png" alt="" style={{ width: '600px', height: 'auto' }} />
+      </div>
 
+      <div
+        ref={cloud8Ref}
+        className="floating-cloud cloud-8"
+        style={{
+          position: 'absolute',
+          top: '10%',
+          left: '60%',
+          zIndex: 0,
+          opacity: 0.4,
+          transition: 'transform 0.18s ease-out'
+        }}
+      >
+        <img src="/cloud.png" alt="" style={{ width: '650px', height: 'auto' }} />
+      </div>
 
-        {/* Texte principal derrière l'objet */}
-        <div className="hero-main-text">
-          <h1 className="hero-title-main">L'art du soin, selon</h1>
-          <h1 className="hero-title-brand">CHANEL</h1>
-        </div>
+      {/* Texte principal derrière l'objet */}
+      <div ref={heroMainTextRef} className="hero-main-text">
+        <h1 className="hero-title-main">L'art du soin, selon</h1>
+        <h1 className="hero-title-brand">CHANEL</h1>
+      </div>
 
-        {/* Container 3D */}
-        <div ref={mountRef} className="threejs-container" />
+      {/* Container 3D */}
+      <div ref={threejsContainerRef} className="threejs-container">
+        <div ref={mountRef} />
+      </div>
 
-        {/* Fallback si Three.js ne charge pas */}
-        {!isModelReady && (
-          <div className="fallback-cube">
-            <div className="bottle-body">
-              <div className="bottle-cap"></div>
-              <div className="bottle-label">CHANEL</div>
-            </div>
+      {/* Fallback si Three.js ne charge pas */}
+      {!isModelReady && (
+        <div className="fallback-cube">
+          <div className="bottle-body">
+            <div className="bottle-cap"></div>
+            <div className="bottle-label">CHANEL</div>
           </div>
-        )}
-
-        {/* Texte en bas à droite */}
-        <div className="hero-bottom-text">
-          <p>Des formules d'exception. Une expertise sur mesure. Explorez une nouvelle vision du soin du visage, où la science rencontre la sensorialité, et chaque geste sublime l'essentiel.</p>
         </div>
+      )}
 
-        <div className="scroll-indicator">
-          <div className="scroll-arrow-down">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7 10L12 15L17 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
+      {/* Texte en bas à droite */}
+      <div className="hero-bottom-text">
+        <p>Des formules d'exception. Une expertise sur mesure. Explorez une nouvelle vision du soin du visage, où la science rencontre la sensorialité, et chaque geste sublime l'essentiel.</p>
+      </div>
+
+      <div className="scroll-indicator">
+        <p className="scroll-text">SCROLL TO DISCOVER</p>
+        <div className="scroll-arrow-down">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 10L12 15L17 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </div>
+      </div>
 
-        <SoundControl />
-      </section>
-    </>
-
+      <SoundControl />
+    </section>
   );
 };
 
