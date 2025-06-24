@@ -4,9 +4,9 @@
     position: relative;
     height: 150vh; /* Section plus haute pour permettre le parallax */
     overflow: hidden;
+    background: linear-gradient(135deg, #87ceeb 0%, #e0f6ff 50%, #ffffff 100%);
     padding: 80px 0;
     border-top: 1px solid rgba(0, 0, 0, 0.05);
-    background: linear-gradient(135deg, #87ceeb 0%, #e0f6ff 50%, #ffffff 100%);
 }
 
 /* Header de la section */
@@ -15,15 +15,14 @@
     z-index: 10;
     text-align: center;
     margin-bottom: 100px;
-    padding: 0 40px;
     color: white;
+    padding: 0 40px;
 }
 
 .parallax-title {
     font-family: 'ABChanel Corpo', 'Playfair Display', serif;
     font-size: 4rem;
     font-weight: 400;
-    color: #000000;
     margin-bottom: 24px;
     letter-spacing: -0.02em;
     line-height: 1.1;
@@ -37,7 +36,6 @@
     font-size: 1.25rem;
     font-weight: 300;
     max-width: 600px;
-    color: white;
     margin: 0 auto;
     line-height: 1.6;
     opacity: 0;
@@ -87,10 +85,8 @@
 .image-wrapper {
     position: relative;
     overflow: hidden;
-    border-radius: 16px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: none; /* Utilise le curseur personnalisé */
 }
 
 .image-wrapper:hover {
@@ -133,6 +129,18 @@
 
 .center-image:hover {
     filter: brightness(1.05) contrast(1.15) saturate(1.15);
+}
+
+/* Nuages flottants - Mêmes styles que Hero3D */
+.floating-cloud {
+    pointer-events: none;
+    user-select: none;
+    will-change: transform;
+}
+
+.floating-cloud img {
+    display: block;
+    filter: drop-shadow(0 4px 20px rgba(255, 255, 255, 0.3));
 }
 
 /* Overlay décoratif */
@@ -236,6 +244,22 @@
         min-height: 250px;
         max-height: 360px;
     }
+
+    .floating-cloud.cloud-1 img {
+        width: 600px;
+    }
+
+    .floating-cloud.cloud-2 img {
+        width: 500px;
+    }
+
+    .floating-cloud.cloud-3 img {
+        width: 480px;
+    }
+
+    .floating-cloud.cloud-4 img {
+        width: 550px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -272,9 +296,6 @@
         padding-top: 0;
     }
 
-    .image-wrapper {
-        border-radius: 12px;
-    }
 
     .parallax-image {
         min-height: 180px;
@@ -296,6 +317,22 @@
 
     .overlay-text {
         font-size: 6rem;
+    }
+
+    .floating-cloud.cloud-1 img {
+        width: 450px;
+    }
+
+    .floating-cloud.cloud-2 img {
+        width: 400px;
+    }
+
+    .floating-cloud.cloud-3 img {
+        width: 380px;
+    }
+
+    .floating-cloud.cloud-4 img {
+        width: 420px;
     }
 }
 
@@ -330,6 +367,22 @@
     .overlay-text {
         font-size: 4rem;
     }
+
+    .floating-cloud.cloud-1 img {
+        width: 350px;
+    }
+
+    .floating-cloud.cloud-2 img {
+        width: 320px;
+    }
+
+    .floating-cloud.cloud-3 img {
+        width: 300px;
+    }
+
+    .floating-cloud.cloud-4 img {
+        width: 340px;
+    }
 }
 
 /* Optimisations pour les appareils avec performances réduites */
@@ -362,4 +415,12 @@
     contain: layout style paint;
     content-visibility: auto;
     contain-intrinsic-size: 300px;
+}
+
+.science-section {
+    color: white;
+}
+
+.science-section .science-title {
+    font-family: 'ABChanel Corpo', 'Open Sans', sans-serif;
 }
