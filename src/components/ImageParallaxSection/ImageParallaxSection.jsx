@@ -265,7 +265,7 @@ const ImageParallaxSection = () => {
           </div>
 
           <div className="science-block">
-            <h3 className="science-title">UNE APPROCHE DU SOIN GLOBALE ET SENSORIELLE.</h3>
+            <h3 className="science-title2 science-title">UNE APPROCHE DU SOIN GLOBALE ET SENSORIELLE.</h3>
             <p className="science-text">
               Chez CHANEL, l'efficacité s'exprime dans la justesse du geste, la précision des textures et l'élégance du résultat. Chaque formule est pensée comme une expérience : pour la peau, pour le temps, pour soi.
             </p>

@@ -419,8 +419,23 @@
 
 .science-section {
     color: white;
+    width: 50%;
+    display: flex;
 }
 
 .science-section .science-title {
     font-family: 'ABChanel Corpo', 'Open Sans', sans-serif;
+}
+
+.science-section .science-container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.science-block {
+    border-radius: 8px;
+    padding: 20px;
+    flex: 1;
+    transition: background 0.3s ease;
 }
