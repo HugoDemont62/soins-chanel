@@ -1,20 +1,9 @@
-/* Fichier: src/components/BottomNavbar/BottomNavbar.css */
-
-/* Conteneur portal - sera ajouté directement au body */
-#bottom-navbar-portal {
-    position: fixed !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    width: 100vw !important;
-    z-index: 999999 !important;
-    pointer-events: none; /* Les enfants réactiveront les events */
-}
-
-/* Navbar interne */
-.bottom-navbar-inner {
-    width: 100%;
-    pointer-events: all !important;
+.navbar-center {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 1rem;
 }
 
 .navbar-container {
@@ -26,11 +15,10 @@
     padding: 16px 20px;
 
     /* Arrière-plan avec flou plus prononcé */
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border-radius: 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(170, 170, 170, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 50px;
 
     /* Empêcher le débordement */
     box-sizing: border-box;
@@ -53,12 +41,6 @@
     text-align: center;
     min-width: 80px;
 
-    /* Flou d'arrière-plan pour chaque élément */
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-
     /* Empêcher la sélection de texte */
     user-select: none;
     -webkit-user-select: none;
@@ -67,203 +49,4 @@
     pointer-events: all;
     cursor: pointer;
     display: block;
-}
-
-.navbar-logo {
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
-    font-size: 1.125rem;
-    letter-spacing: 0.05em;
-    color: #000000;
-    background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-
-    /* Flou spécial pour le logo */
-    background-color: rgba(212, 175, 55, 0.1);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(212, 175, 55, 0.3);
-}
-
-.navbar-item:hover {
-    background: rgba(212, 175, 55, 0.2);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    transform: translateY(-2px);
-    color: #D4AF37;
-    border-color: rgba(212, 175, 55, 0.4);
-    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15);
-}
-
-.navbar-item.active {
-    background: rgba(212, 175, 55, 0.25);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    color: #D4AF37;
-    font-weight: 600;
-    border-color: rgba(212, 175, 55, 0.5);
-    box-shadow: 0 2px 15px rgba(212, 175, 55, 0.2);
-}
-
-.navbar-item.active::after {
-    content: '';
-    position: absolute;
-    bottom: 4px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 20px;
-    height: 2px;
-    background: #D4AF37;
-    border-radius: 2px;
-    box-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
-}
-
-.navbar-logo:hover {
-    background: linear-gradient(135deg, #B8860B 0%, #D4AF37 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    transform: translateY(-2px) scale(1.05);
-    background-color: rgba(212, 175, 55, 0.2);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border-color: rgba(212, 175, 55, 0.5);
-    box-shadow: 0 4px 25px rgba(212, 175, 55, 0.2);
-}
-
-.navbar-logo.active {
-    background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    background-color: rgba(212, 175, 55, 0.25);
-    backdrop-filter: blur(35px);
-    -webkit-backdrop-filter: blur(35px);
-}
-
-/* Animation d'apparition avec effet de flou */
-.bottom-navbar-inner {
-    animation: slideUpWithBlur 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-@keyframes slideUpWithBlur {
-    from {
-        transform: translateY(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-/* Effet de glassmorphism avancé */
-.navbar-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.2) 0%,
-            rgba(255, 255, 255, 0.05) 50%,
-            rgba(255, 255, 255, 0.1) 100%
-    );
-    border-radius: inherit;
-    z-index: -1;
-}
-
-/* Responsive avec maintien du flou */
-@media (max-width: 768px) {
-    .navbar-container {
-        padding: 12px 16px;
-        backdrop-filter: blur(25px);
-        -webkit-backdrop-filter: blur(25px);
-        min-height: 55px;
-    }
-
-    .navbar-item {
-        font-size: 0.8rem;
-        padding: 10px 12px;
-        min-width: 70px;
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-    }
-
-    .navbar-logo {
-        font-size: 1rem;
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-    }
-}
-
-@media (max-width: 480px) {
-    .navbar-container {
-        padding: 10px 12px;
-        justify-content: space-between;
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        min-height: 50px;
-    }
-
-    .navbar-item {
-        font-size: 0.75rem;
-        padding: 8px 10px;
-        min-width: 60px;
-        backdrop-filter: blur(6px);
-        -webkit-backdrop-filter: blur(6px);
-    }
-
-    .navbar-logo {
-        font-size: 0.9rem;
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-    }
-}
-
-/* Effet de glassmorphism plus prononcé sur desktop */
-@media (min-width: 1024px) {
-    .bottom-navbar-inner {
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(40px);
-        -webkit-backdrop-filter: blur(40px);
-    }
-
-    .navbar-container {
-        background: rgba(255, 255, 255, 0.12);
-        backdrop-filter: blur(50px);
-        -webkit-backdrop-filter: blur(50px);
-        padding: 20px 40px;
-        border-top: 1px solid rgba(255, 255, 255, 0.4);
-        min-height: 70px;
-    }
-
-    .navbar-item {
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-    }
-
-    .navbar-logo {
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-    }
-}
-
-/* Support des navigateurs sans backdrop-filter */
-@supports not (backdrop-filter: blur(1px)) {
-    .bottom-navbar-inner {
-        background: rgba(255, 255, 255, 0.9) !important;
-    }
-
-    .navbar-container {
-        background: rgba(255, 255, 255, 0.95) !important;
-    }
-
-    .navbar-item {
-        background: rgba(255, 255, 255, 0.8) !important;
-    }
 }
