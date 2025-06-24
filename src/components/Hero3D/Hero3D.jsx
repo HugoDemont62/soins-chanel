@@ -1,3 +1,4 @@
+// Fichier: src/components/Hero3D/Hero3D.jsx
 import { useEffect, useRef, useState } from 'react';
 import SoundControl from '../SoundControl/SoundControl.jsx';
 import './Hero3D.css';
@@ -292,6 +293,9 @@ const Hero3D = () => {
 
       lastMousePosition.current = { x: clientX, y: clientY };
       rotationVelocity.current = { x: 0, y: 0 };
+
+      // Signaler au curseur qu'on est en train de drag
+      document.body.setAttribute('data-cursor-state', 'dragging');
     };
 
     const handleMouseMove = (event) => {
@@ -317,6 +321,9 @@ const Hero3D = () => {
     const handleMouseUp = () => {
       isMouseDown.current = false;
       setIsDragging(false);
+
+      // Signaler au curseur qu'on a fini de drag
+      document.body.removeAttribute('data-cursor-state');
     };
 
     const handleTouchStart = (event) => {
@@ -351,6 +358,10 @@ const Hero3D = () => {
     };
 
     const canvas = renderer.domElement;
+
+    // Marquer le canvas avec un attribut pour le curseur
+    canvas.setAttribute('data-cursor', 'drag');
+
     canvas.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
@@ -410,14 +421,19 @@ const Hero3D = () => {
     <section className={`hero-3d ${isDragging ? 'dragging' : ''}`}>
       {/* Logo Chanel en haut au centre */}
       <div className="chanel-logo-header">
-        <img src="/Chanel-Logo.png" alt="CHANEL" className="chanel-logo-img" />
+        <img src="/Chanel-Logo.png" alt="CHANEL" className="chanel-logo-img" data-cursor="hover" />
       </div>
 
       <div ref={mountRef} className="threejs-container" />
 
+
+      {/* Fallback si Three.js ne charge pas */}
       {!isModelReady && (
-        <div className="preload-status">
-          <p>🚀 Préchargement du modèle 3D...</p>
+        <div className="fallback-cube">
+          <div className="bottle-body">
+            <div className="bottle-cap"></div>
+            <div className="bottle-label">CHANEL</div>
+          </div>
         </div>
       )}
 

@@ -1,3 +1,5 @@
+/* Fichier: src/index.css */
+
 /* Import des fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
@@ -81,6 +83,20 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
+    /* Cacher le curseur par défaut */
+    cursor: none;
+  }
+
+  /* Cacher le curseur sur tous les éléments par défaut */
+  * {
+    cursor: none !important;
+  }
+
+  /* Réactiver le curseur pour les éléments de formulaire sur mobile */
+  @media (hover: none) and (pointer: coarse) {
+    body, * {
+      cursor: auto !important;
+    }
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -98,41 +114,81 @@
 
   button {
     font-family: inherit;
-    cursor: none;
   }
 
   img {
     max-width: 100%;
     height: auto;
   }
+
+  /* Sélection de texte personnalisée */
+  ::selection {
+    background: var(--color-chanel-gold);
+    color: var(--color-chanel-white);
+  }
+
+  ::-moz-selection {
+    background: var(--color-chanel-gold);
+    color: var(--color-chanel-white);
+  }
 }
 
-/* Custom cursor styles */
-.cursor {
-  position: fixed;
+/* Styles pour les éléments interactifs avec le curseur */
+[data-cursor="hover"] {
+  position: relative;
+}
+
+[data-cursor="hover"]:hover {
+  transform: translateY(-2px);
+  transition: transform 0.3s ease;
+}
+
+[data-cursor="drag"] {
+  position: relative;
+}
+
+[data-cursor="text"]:hover {
+  transform: scale(1.02);
+  transition: transform 0.3s ease;
+}
+
+/* Animations pour les mots interactifs */
+.text-word {
+  position: relative;
+}
+
+.text-word:hover {
+  animation: textWordHover 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes textWordHover {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-8px) scale(1.1); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+/* Amélioration de la navbar avec curseur */
+.navbar-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.navbar-item::before {
+  content: '';
+  position: absolute;
   top: 0;
-  left: 0;
-  width: 20px;
-  height: 20px;
-  background-color: var(--color-chanel-black);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: difference;
-  transition: transform 0.2s ease, scale 0.2s ease;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
+  transition: left 0.5s ease;
 }
 
-.cursor.cursor-hover {
-  transform: scale(2);
-  background-color: var(--color-chanel-gold);
-  mix-blend-mode: normal;
+.navbar-item:hover::before {
+  left: 100%;
 }
 
-.cursor.cursor-hidden {
-  opacity: 0;
-}
-
-/* Loader styles */
+/* Loader styles améliorés */
 .loader-overlay {
   position: fixed;
   top: 0;
@@ -193,6 +249,54 @@
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
+/* Animations pour le contenu quand le curseur survole */
+.hero-content:hover .hero-title {
+  animation: subtleGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes subtleGlow {
+  from {
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+  }
+  to {
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.6), 0 0 30px rgba(212, 175, 55, 0.4);
+  }
+}
+
+/* Effet de survol pour le logo Chanel */
+.chanel-logo-img {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chanel-logo-img:hover {
+  transform: scale(1.1) rotate(5deg);
+  filter: drop-shadow(0 8px 32px rgba(212, 175, 55, 0.4));
+}
+
+/* Améliorations pour le sound control */
+.sound-control {
+  position: relative;
+  overflow: hidden;
+}
+
+.sound-control::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: all 0.4s ease;
+  border-radius: 50%;
+}
+
+.sound-control:hover::before {
+  width: 120px;
+  height: 120px;
+}
+
 /* Utility classes */
 @layer utilities {
   .text-elegant {
@@ -210,6 +314,28 @@
   .gradient-gold {
     background: linear-gradient(135deg, var(--color-chanel-gold) 0%, #B8860B 100%);
   }
+
+  .cursor-hover {
+    cursor: none !important;
+  }
+
+  .cursor-drag {
+    cursor: none !important;
+  }
+
+  .cursor-text {
+    cursor: none !important;
+  }
+}
+
+/* Indicateurs visuels pour l'état du curseur */
+body[data-cursor-state="dragging"] {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body[data-cursor-state="dragging"] .hero-content {
+  pointer-events: none;
 }
 
 /* Responsive design */
@@ -218,15 +344,59 @@
     font-size: 14px;
   }
 
-  .cursor {
-    display: none;
+  /* Réactiver le curseur normal sur mobile */
+  body, * {
+    cursor: auto !important;
   }
 
-  body {
-    cursor: auto;
+  /* Désactiver les effets de hover sur mobile */
+  .text-word:hover,
+  .chanel-logo-img:hover,
+  .navbar-item:hover::before,
+  .sound-control:hover::before {
+    animation: none;
+    transform: none;
+    filter: none;
+    left: -100%;
+    width: 0;
+    height: 0;
   }
+}
 
-  button {
-    cursor: pointer;
+@media (max-width: 480px) {
+  .hero-content:hover .hero-title {
+    animation: none;
+    text-shadow: none;
   }
+}
+
+/* Loading states pour les éléments interactifs */
+.loading-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Amélioration des performances */
+.threejs-container,
+.hero-3d,
+.custom-cursor {
+  will-change: transform;
+}
+
+/* Préfixes pour la compatibilité */
+.hero-3d {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }

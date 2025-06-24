@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import {useEffect, useState} from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
 // Components
 import Loader from './components/Loader/Loader.jsx';
 import PageTransition from './components/CustomPages/PageTransition.jsx';
+import CustomCursor from './components/CustomPages/CustomCursor.jsx';
 
 // Pages
 import Home from './pages/Home/Home.jsx';
@@ -28,51 +29,49 @@ function RouteChangeHandler({ setIsTransitioning }) {
 }
 
 function AppContent() {
-  // const [isLoading, setIsLoading] = useState(true);
-  // const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const location = useLocation();
 
-  // Gestion du loader initial
-  // const handleLoaderComplete = () => {
-  //   setIsLoading(false);
-  //
-  //   // Animation d'entrée du contenu principal
-  //   gsap.fromTo('body',
-  //     { overflow: 'hidden' },
-  //     { overflow: 'auto', duration: 0.1 }
-  //   );
-  // };
+  const handleLoaderComplete = () => {
+    setIsLoading(false);
 
-  // Désactiver le scroll pendant le chargement
-  // useEffect(() => {
-  //   if (isLoading) {
-  //     document.body.style.overflow = 'hidden';
-  //   } else {
-  //     document.body.style.overflow = 'auto';
-  //   }
-  //
-  //   return () => {
-  //     document.body.style.overflow = 'auto';
-  //   };
-  // }, [isLoading]);
+    // Animation d'entrée du contenu principal
+    gsap.fromTo('body',
+      { overflow: 'hidden' },
+      { overflow: 'auto', duration: 0.1 }
+    );
+  };
+
+  useEffect(() => {
+    if (isLoading) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isLoading]);
 
   return (
     <>
       {/* Curseur personnalisé */}
-      {/*<CustomCursor />*/}
+      <CustomCursor />
 
       {/* Loader initial */}
-      {/*{isLoading && (*/}
-      {/*  <Loader onComplete={handleLoaderComplete} />*/}
-      {/*)}*/}
+      {isLoading && (
+        <Loader onComplete={handleLoaderComplete} />
+      )}
 
       {/* Loader de transition */}
-      {/*{isTransitioning && !isLoading && (*/}
-      {/*  <Loader onComplete={() => {}} isPageTransition={true} />*/}
-      {/*)}*/}
+      {isTransitioning && !isLoading && (
+        <Loader onComplete={() => {}} isPageTransition={true} />
+      )}
 
       {/* Handler pour les changements de route */}
-      {/*<RouteChangeHandler setIsTransitioning={setIsTransitioning} />*/}
+      <RouteChangeHandler setIsTransitioning={setIsTransitioning} />
 
       {/* Contenu principal avec transitions */}
       <PageTransition pathname={location.pathname}>

@@ -1,3 +1,4 @@
+// Fichier: src/components/BottomNavbar/BottomNavbar.jsx
 import {Link, useLocation} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import {createPortal} from 'react-dom';
@@ -40,6 +41,7 @@ const BottomNavbar = () => {
             className={`navbar-item ${item.isLogo ? 'navbar-logo' : ''} ${
               location.pathname === item.path ? 'active' : ''
             }`}
+            data-cursor="hover"
             onClick={(e) => {
               console.log(`Navigation vers: ${item.path}`);
             }}
