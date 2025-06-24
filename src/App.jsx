@@ -1,5 +1,7 @@
-import {useEffect, useState} from 'react';
+// Fichier: src/App.jsx
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { gsap } from 'gsap';
 
 // Components
 import Loader from './components/Loader/Loader.jsx';
@@ -29,31 +31,33 @@ function RouteChangeHandler({ setIsTransitioning }) {
 }
 
 function AppContent() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  // const [isLoading, setIsLoading] = useState(true);
+  // const [isTransitioning, setIsTransitioning] = useState(false);
   const location = useLocation();
 
-  const handleLoaderComplete = () => {
-    setIsLoading(false);
+  // Gestion du loader initial
+  // const handleLoaderComplete = () => {
+  //   setIsLoading(false);
+  //
+  //   // Animation d'entrée du contenu principal
+  //   gsap.fromTo('body',
+  //     { overflow: 'hidden' },
+  //     { overflow: 'auto', duration: 0.1 }
+  //   );
+  // };
 
-    // Animation d'entrée du contenu principal
-    gsap.fromTo('body',
-      { overflow: 'hidden' },
-      { overflow: 'auto', duration: 0.1 }
-    );
-  };
-
-  useEffect(() => {
-    if (isLoading) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
-
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, [isLoading]);
+  // Désactiver le scroll pendant le chargement
+  // useEffect(() => {
+  //   if (isLoading) {
+  //     document.body.style.overflow = 'hidden';
+  //   } else {
+  //     document.body.style.overflow = 'auto';
+  //   }
+  //
+  //   return () => {
+  //     document.body.style.overflow = 'auto';
+  //   };
+  // }, [isLoading]);
 
   return (
     <>
@@ -61,24 +65,24 @@ function AppContent() {
       <CustomCursor />
 
       {/* Loader initial */}
-      {isLoading && (
-        <Loader onComplete={handleLoaderComplete} />
-      )}
+      {/*{isLoading && (*/}
+      {/*  <Loader onComplete={handleLoaderComplete} />*/}
+      {/*)}*/}
 
       {/* Loader de transition */}
-      {isTransitioning && !isLoading && (
-        <Loader onComplete={() => {}} isPageTransition={true} />
-      )}
+      {/*{isTransitioning && !isLoading && (*/}
+      {/*  <Loader onComplete={() => {}} isPageTransition={true} />*/}
+      {/*)}*/}
 
       {/* Handler pour les changements de route */}
-      <RouteChangeHandler setIsTransitioning={setIsTransitioning} />
+      {/*<RouteChangeHandler setIsTransitioning={setIsTransitioning} />*/}
 
       {/* Contenu principal avec transitions */}
       <PageTransition pathname={location.pathname}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/products" element={<Products />} />
-          </Routes>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/products" element={<Products />} />
+        </Routes>
       </PageTransition>
 
       {/* Footer */}

@@ -40,13 +40,9 @@ const Home = () => {
         <Hero3D />
 
         <TextSection />
-
-        <div style={{ height: '100vh', background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <h2>Section pour tester le scroll</h2>
-        </div>
       </div>
 
-      <BottomNavbar />
+      {/*<BottomNavbar />*/}
     </>
   );
 };

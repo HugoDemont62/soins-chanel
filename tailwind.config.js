@@ -28,8 +28,26 @@ export default {
         }
       },
       fontFamily: {
-        'inter': ['Inter', 'system-ui', 'sans-serif'],
+        // Fonts principales
+        'primary': ['Open Sans', 'system-ui', 'sans-serif'],
         'elegant': ['Playfair Display', 'serif'],
+
+        // Fonts Chanel personnalisées
+        'chanel': ['ABChanel Corpo', 'Open Sans', 'sans-serif'],
+        'chanel-pb': ['ABChanel PB', 'Open Sans', 'sans-serif'],
+
+        // Aliases pour compatibilité
+        'inter': ['Open Sans', 'system-ui', 'sans-serif'],
+        'sans': ['Open Sans', 'system-ui', 'sans-serif'],
+      },
+      fontWeight: {
+        'extralight': 200,
+        'light': 300,
+        'normal': 400,
+        'medium': 500,
+        'semibold': 600,
+        'bold': 700,
+        'extrabold': 800,
       },
       animation: {
         'fadeInUp': 'fadeInUp 1s ease forwards',

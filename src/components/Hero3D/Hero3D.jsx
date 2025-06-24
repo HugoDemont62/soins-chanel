@@ -11,6 +11,10 @@ const Hero3D = () => {
   const cameraRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isModelReady, setIsModelReady] = useState(false);
+  const mousePosition = useRef({ x: 0, y: 0 });
+  const cloud1Ref = useRef(null);
+  const cloud2Ref = useRef(null);
+  const cloud3Ref = useRef(null);
 
   // Variables pour la rotation
   const rotationVelocity = useRef({ x: 0, y: 0 });
@@ -74,6 +78,38 @@ const Hero3D = () => {
         window.cleanupThreeJS();
       }
     };
+  }, []);
+
+  // Effet pour le mouvement de la souris
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!isMouseDown.current) {
+        const x = (e.clientX / window.innerWidth) * 2 - 1;
+        const y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+        mousePosition.current = { x, y };
+
+        // Mouvement des nuages avec différentes vitesses
+        if (cloud1Ref.current) {
+          cloud1Ref.current.style.transform = `translate(${x * 25}px, ${y * 18}px)`;
+        }
+        if (cloud2Ref.current) {
+          cloud2Ref.current.style.transform = `translate(${x * -20}px, ${y * 12}px)`;
+        }
+        if (cloud3Ref.current) {
+          cloud3Ref.current.style.transform = `translate(${x * 15}px, ${y * -25}px)`;
+        }
+
+        // Mouvement de l'objet 3D seulement si on ne drag pas
+        if (modelRef.current) {
+          modelRef.current.rotation.y = x * 0.2;
+          modelRef.current.rotation.x = y * 0.1;
+        }
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   // Effet séparé pour initialiser la scène quand le composant devient visible
@@ -397,17 +433,17 @@ const Hero3D = () => {
 
       if (modelRef.current) {
         if (!isMouseDown.current) {
-          modelRef.current.rotation.x += rotationVelocity.current.x;
-          modelRef.current.rotation.y += rotationVelocity.current.y;
+          // Appliquer l'inertie seulement si on drag
+          if (Math.abs(rotationVelocity.current.x) > MIN_VELOCITY ||
+            Math.abs(rotationVelocity.current.y) > MIN_VELOCITY) {
+            modelRef.current.rotation.x += rotationVelocity.current.x;
+            modelRef.current.rotation.y += rotationVelocity.current.y;
 
-          rotationVelocity.current.x *= INERTIA_DAMPING;
-          rotationVelocity.current.y *= INERTIA_DAMPING;
-
-          if (Math.abs(rotationVelocity.current.x) < MIN_VELOCITY &&
-            Math.abs(rotationVelocity.current.y) < MIN_VELOCITY) {
+            rotationVelocity.current.x *= INERTIA_DAMPING;
+            rotationVelocity.current.y *= INERTIA_DAMPING;
+          } else {
             rotationVelocity.current.x = 0;
             rotationVelocity.current.y = 0;
-            modelRef.current.rotation.y += 0.002;
           }
         }
       }
@@ -418,35 +454,96 @@ const Hero3D = () => {
   };
 
   return (
-    <section className={`hero-3d ${isDragging ? 'dragging' : ''}`}>
-      {/* Logo Chanel en haut au centre */}
-      <div className="chanel-logo-header">
-        <img src="/Chanel-Logo.png" alt="CHANEL" className="chanel-logo-img" data-cursor="hover" />
+    <>
+      {/* Nuages flottants */}
+      <div
+        ref={cloud1Ref}
+        className="floating-cloud cloud-1"
+        style={{
+          position: 'absolute',
+          top: '0%',
+          left: '-15%',
+          zIndex: 0,
+          opacity: 0.6,
+          transition: 'transform 0.1s ease-out'
+        }}
+      >
+        <img src="/cloud.png" alt="" style={{ width: '2000px', height: 'auto' }} />
       </div>
 
-      <div ref={mountRef} className="threejs-container" />
+      <div
+        ref={cloud2Ref}
+        className="floating-cloud cloud-2"
+        style={{
+          position: 'absolute',
+          top: '-10%',
+          right: '0%',
+          zIndex: 4,
+          opacity: 0.6,
+          transition: 'transform 0.15s ease-out'
+        }}
+      >
+        <img src="/cloud.png" alt="" style={{ width: '1000px', height: 'auto' }} />
+      </div>
+
+      <div
+        ref={cloud3Ref}
+        className="floating-cloud cloud-3"
+        style={{
+          position: 'absolute',
+          top: '30%',
+          right: '5%',
+          zIndex: 0,
+          opacity: 0.5,
+          transition: 'transform 0.12s ease-out'
+        }}
+      >
+        <img src="/cloud.png" alt="" style={{ width: '800px', height: 'auto' }} />
+      </div>
+      <section className={`hero-3d ${isDragging ? 'dragging' : ''}`}>
+        {/* Logo Chanel en haut au centre */}
+        <div className="chanel-logo-header">
+          <img src="/Chanel-Logo.png" alt="CHANEL" className="chanel-logo-img" data-cursor="hover" />
+        </div>
 
 
-      {/* Fallback si Three.js ne charge pas */}
-      {!isModelReady && (
-        <div className="fallback-cube">
-          <div className="bottle-body">
-            <div className="bottle-cap"></div>
-            <div className="bottle-label">CHANEL</div>
+
+        {/* Texte principal derrière l'objet */}
+        <div className="hero-main-text">
+          <h1 className="hero-title-main">L'art du soin, selon</h1>
+          <h1 className="hero-title-brand">CHANEL</h1>
+        </div>
+
+        {/* Container 3D */}
+        <div ref={mountRef} className="threejs-container" />
+
+        {/* Fallback si Three.js ne charge pas */}
+        {!isModelReady && (
+          <div className="fallback-cube">
+            <div className="bottle-body">
+              <div className="bottle-cap"></div>
+              <div className="bottle-label">CHANEL</div>
+            </div>
+          </div>
+        )}
+
+        {/* Texte en bas à droite */}
+        <div className="hero-bottom-text">
+          <p>Des formules d'exception. Une expertise sur mesure. Explorez une nouvelle vision du soin du visage, où la science rencontre la sensorialité, et chaque geste sublime l'essentiel.</p>
+        </div>
+
+        <div className="scroll-indicator">
+          <div className="scroll-arrow-down">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 10L12 15L17 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </div>
         </div>
-      )}
 
-      <div className="scroll-indicator">
-        <div className="scroll-arrow-down">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M7 10L12 15L17 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </div>
-      </div>
+        <SoundControl />
+      </section>
+    </>
 
-      <SoundControl />
-    </section>
   );
 };
 
