@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
+import { useLenis } from './hooks/useLenis';
 
 // Components
 import Loader from './components/Loader/Loader.jsx';
@@ -32,6 +33,14 @@ function RouteChangeHandler({ setIsTransitioning }) {
 
 function AppContent() {
   const location = useLocation();
+
+  // Initialiser Lenis pour le smooth scroll
+  const { lenis, scrollTo } = useLenis();
+
+  // Exposer scrollTo globalement si nécessaire
+  useEffect(() => {
+    window.scrollToSmooth = scrollTo;
+  }, [scrollTo]);
 
   return (
     <>

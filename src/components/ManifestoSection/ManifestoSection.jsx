@@ -8,11 +8,13 @@ const ManifestoSection = () => {
   const sectionRef = useRef(null);
   const textRef = useRef(null);
   const lettersRef = useRef([]);
+  const manifestoContainerRef = useRef(null); // AJOUT du ref manquant
 
-  // Refs pour les images de modèles seulement
+  // Refs pour les images de modèles (4 maintenant)
   const model1Ref = useRef(null);
   const model2Ref = useRef(null);
   const model3Ref = useRef(null);
+  const model4Ref = useRef(null);
 
   // Le texte exact du manifesto
   const manifestoText = "CHANEL RÉVÈLE UNE VISION SINGULIÈRE DE LA BEAUTÉ, OÙ LA SCIENCE RENCONTRE L'ÉLÉGANCE.";
@@ -25,227 +27,203 @@ const ManifestoSection = () => {
 
     if (!section || !textElement) return;
 
-    // Fonction pour diviser le texte en lettres
+    // Fonction pour diviser le texte en lettres (comme dans ton exemple)
     const splitTextIntoLetters = (element) => {
       const text = element.textContent;
+      const words = text.split(' ');
       element.innerHTML = '';
 
-      const letters = [];
+      words.forEach((word, wordIndex) => {
+        const wordSpan = document.createElement('span');
+        wordSpan.className = 'word';
+        wordSpan.style.display = 'inline-block';
+        wordSpan.style.marginRight = '0.3em';
 
-      for (let i = 0; i < text.length; i++) {
-        const char = text[i];
-        const span = document.createElement('span');
-
-        if (char === ' ') {
-          span.innerHTML = '&nbsp;';
-          span.className = 'letter-space';
-        } else {
+        for (let i = 0; i < word.length; i++) {
+          const char = word[i];
+          const span = document.createElement('span');
           span.textContent = char;
           span.className = 'letter';
+          wordSpan.appendChild(span);
         }
 
-        letters.push(span);
-        element.appendChild(span);
-      }
+        element.appendChild(wordSpan);
+      });
 
-      return letters;
+      return element.querySelectorAll('.letter');
     };
 
     // Diviser le texte en lettres
     const letters = splitTextIntoLetters(textElement);
     lettersRef.current = letters;
-
-    // Animation des images - SUPER SMOOTH comme Ghanendra Sahu
-    const setupModelsAnimation = () => {
-      // Modèle 1 - Mouvement smooth et lent
-      if (model1Ref.current) {
-        gsap.set(model1Ref.current, {
-          y: 150,
-          x: -80,
-          rotation: -8,
-          opacity: 0
-        });
-
-        // Apparition douce
-        gsap.to(model1Ref.current, {
-          opacity: 1,
-          duration: 2,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 95%",
-            once: true
-          }
-        });
-
-        // Parallax smooth et subtil
-        gsap.fromTo(model1Ref.current,
-          { y: 150, x: -80, rotation: -8 },
-          {
-            y: -150,
-            x: 80,
-            rotation: 5,
-            ease: "none",
-            scrollTrigger: {
-              trigger: section,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 3, // Plus lent = plus smooth
-              invalidateOnRefresh: true
-            }
-          }
-        );
-      }
-
-      // Modèle 2 - Mouvement vertical smooth
-      if (model2Ref.current) {
-        gsap.set(model2Ref.current, {
-          y: 200,
-          x: 60,
-          rotation: 12,
-          opacity: 0
-        });
-
-        gsap.to(model2Ref.current, {
-          opacity: 1,
-          duration: 2.5,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 90%",
-            once: true
-          }
-        });
-
-        // Parallax très smooth
-        gsap.fromTo(model2Ref.current,
-          { y: 200, x: 60, rotation: 12 },
-          {
-            y: -100,
-            x: -40,
-            rotation: -6,
-            ease: "none",
-            scrollTrigger: {
-              trigger: section,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 4, // Encore plus smooth
-              invalidateOnRefresh: true
-            }
-          }
-        );
-      }
-
-      // Modèle 3 - Mouvement diagonal smooth
-      if (model3Ref.current) {
-        gsap.set(model3Ref.current, {
-          y: -100,
-          x: 100,
-          rotation: 15,
-          opacity: 0
-        });
-
-        gsap.to(model3Ref.current, {
-          opacity: 1,
-          duration: 3,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 85%",
-            once: true
-          }
-        });
-
-        // Parallax ultra smooth
-        gsap.fromTo(model3Ref.current,
-          { y: -100, x: 100, rotation: 15 },
-          {
-            y: 200,
-            x: -70,
-            rotation: -8,
-            ease: "none",
-            scrollTrigger: {
-              trigger: section,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 2.5, // Vitesse différente pour plus de dynamisme
-              invalidateOnRefresh: true
-            }
-          }
-        );
-      }
-    };
-
-    // Animation ultra smooth des lettres
-    const setupLettersAnimation = () => {
-      // État initial : toutes les lettres sont blanches mais très transparentes
+    // RÉVÉLATION DES LETTRES - Plus rapide et plus courte
+    const setupTextReveal = () => {
+      // État initial : toutes les lettres sont transparentes
       letters.forEach((letter) => {
         if (letter.classList.contains('letter')) {
           gsap.set(letter, {
-            color: 'rgba(255, 255, 255, 0.08)', // Encore plus transparent
-            opacity: 0.08
+            opacity: 0.1,
+            color: 'rgba(255, 255, 255, 0.1)'
           });
         }
       });
 
-      // Animation super smooth des lettres
-      letters.forEach((letter, index) => {
-        if (letter.classList.contains('letter')) {
-          gsap.to(letter, {
-            scrollTrigger: {
-              trigger: section,
-              start: "top 70%",
-              end: "bottom 30%",
-              scrub: 2, // Smooth
-              invalidateOnRefresh: true,
-              onUpdate: (self) => {
-                const progress = self.progress;
-                const totalLetters = letters.filter(l => l.classList.contains('letter')).length;
-                const letterProgress = (progress * totalLetters) - index;
-                const clampedProgress = Math.max(0, Math.min(1, letterProgress * 1.2));
+      // Animation de révélation PLUS RAPIDE et qui se termine plus tôt
+      const scrollConfig = {
+        trigger: section,
+        start: "top 70%", /* Plus tard pour commencer */
+        end: "top 30%", /* Plus tôt pour finir - BEAUCOUP plus court ! */
+        scrub: 1,
+        invalidateOnRefresh: true
+      };
 
-                if (clampedProgress > 0) {
-                  // Transition ultra smooth de l'opacity
-                  const opacity = 0.08 + (0.92 * clampedProgress);
-
-                  gsap.set(letter, {
-                    color: `rgba(255, 255, 255, ${opacity})`,
-                    opacity: opacity
-                  });
-                }
-              }
-            }
-          });
+      // Animation principale des lettres
+      gsap.fromTo(
+        letters.filter(l => l.classList.contains('letter')),
+        {
+          opacity: 0.1,
+          color: 'rgba(255, 255, 255, 0.1)'
+        },
+        {
+          opacity: 1,
+          color: 'rgba(255, 255, 255, 1)',
+          duration: 0.3,
+          stagger: 0.02,
+          scrollTrigger: scrollConfig
         }
-      });
+      );
     };
 
-    // Gestion smooth du layering
+    // Animation des 4 images - VRAI PARALLAX avec vitesses différentes
+    const setupModelsParallax = () => {
+      // Modèle 1 - TRÈS LENT (arrière-plan, grande)
+      if (model1Ref.current) {
+        gsap.set(model1Ref.current, {
+          y: 100,
+          opacity: 1, // Toujours visible
+          scale: 1
+        });
+
+        // Parallax TRÈS LENT
+        gsap.fromTo(model1Ref.current,
+          { y: 100 },
+          {
+            y: -100, // Petit mouvement
+            ease: "none",
+            scrollTrigger: {
+              trigger: section,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 3, // TRÈS LENT
+              invalidateOnRefresh: true
+            }
+          }
+        );
+      }
+
+      // Modèle 2 - TRÈS RAPIDE (premier plan, petite)
+      if (model2Ref.current) {
+        gsap.set(model2Ref.current, {
+          y: 250,
+          opacity: 1, // Toujours visible
+          scale: 1
+        });
+
+        // Parallax TRÈS RAPIDE
+        gsap.fromTo(model2Ref.current,
+          { y: 250 },
+          {
+            y: -300, // Grand mouvement
+            ease: "none",
+            scrollTrigger: {
+              trigger: section,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 0.5, // TRÈS RAPIDE
+              invalidateOnRefresh: true
+            }
+          }
+        );
+      }
+
+      // Modèle 3 - VITESSE MOYENNE (milieu, moyenne)
+      if (model3Ref.current) {
+        gsap.set(model3Ref.current, {
+          y: 180,
+          opacity: 1, // Toujours visible
+          scale: 1
+        });
+
+        // Parallax MOYEN
+        gsap.fromTo(model3Ref.current,
+          { y: 180 },
+          {
+            y: -200, // Mouvement moyen
+            ease: "none",
+            scrollTrigger: {
+              trigger: section,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1.5, // VITESSE MOYENNE
+              invalidateOnRefresh: true
+            }
+          }
+        );
+      }
+
+      // Modèle 4 - LENT (arrière-plan, grande)
+      if (model4Ref.current) {
+        gsap.set(model4Ref.current, {
+          y: 80,
+          opacity: 1, // Toujours visible
+          scale: 1
+        });
+
+        // Parallax LENT
+        gsap.fromTo(model4Ref.current,
+          { y: 80 },
+          {
+            y: -120, // Mouvement lent
+            ease: "none",
+            scrollTrigger: {
+              trigger: section,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 2.5, // LENT
+              invalidateOnRefresh: true
+            }
+          }
+        );
+      }
+    };
+
+    // Gestion du z-index SANS opacité
     const setupLayering = () => {
       ScrollTrigger.create({
         trigger: section,
-        start: "top 70%",
-        end: "bottom 30%",
-        scrub: 2, // Smooth
+        start: "top 40%",
+        end: "bottom 60%",
+        scrub: 1,
         invalidateOnRefresh: true,
         onUpdate: (self) => {
           const progress = self.progress;
 
-          // Transition smooth du z-index
-          const zIndexValue = progress > 0.5 ? 2 : 4;
+          // Seulement le z-index change, pas d'opacité
+          const zIndexValue = progress > 0.3 ? 2 : 5;
 
-          [model1Ref.current, model2Ref.current, model3Ref.current].forEach(el => {
+          [model1Ref.current, model2Ref.current, model3Ref.current, model4Ref.current].forEach(el => {
             if (el) {
               el.style.zIndex = zIndexValue;
+              // SUPPRIMÉ : el.style.opacity = imageOpacity;
             }
           });
         }
       });
     };
 
-    setupModelsAnimation();
-    setupLettersAnimation();
-    setupLayering();
+    setupTextReveal();
+    setupModelsParallax();
+    // setupLayering(); // SUPPRIMÉ - Plus de changement d'opacité !
 
     // Cleanup
     return () => {
@@ -262,14 +240,18 @@ const ManifestoSection = () => {
       {/* Grille de fond subtile */}
       <div className="background-grid"></div>
 
-      {/* Texte principal centré */}
-      <div className="manifesto-container">
+      {/* Texte principal centré - AVEC REF pour l'animation */}
+      <div ref={manifestoContainerRef} className="manifesto-container">
         <div ref={textRef} className="manifesto-text">
           {manifestoText}
         </div>
+        {/* Nom PDG en dessous - Simple et clean */}
+        <div className="manifesto-author">
+          Leena Nair PDG Chanel
+        </div>
       </div>
 
-      {/* Images des modèles SEULEMENT - pas de produit */}
+      {/* Images des modèles avec parallax amélioré - 4 images */}
       <div className="models-container">
         {/* Modèle 1 - En haut à gauche */}
         <div
@@ -290,6 +272,13 @@ const ManifestoSection = () => {
           ref={model3Ref}
           className="model-image model-3"
           style={{ backgroundImage: 'url("/image-3.png")' }}
+        />
+
+        {/* Modèle 4 - En bas à gauche - NOUVEAU ! */}
+        <div
+          ref={model4Ref}
+          className="model-image model-4"
+          style={{ backgroundImage: 'url("/image-4.png")' }}
         />
       </div>
     </section>

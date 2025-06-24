@@ -2,7 +2,7 @@
 
 .manifesto-section {
     position: relative;
-    min-height: 100vh;
+    height: 100vh; /* Changé de 150vh à 110vh */
     background: linear-gradient(135deg, #87ceeb 0%, #b8d4f0 50%, #e0f6ff 100%);
     overflow: hidden;
     display: flex;
@@ -25,15 +25,18 @@
     z-index: 1;
 }
 
-/* Container principal du texte */
+/* Container principal du texte - VA SUIVRE avec GSAP et rester au milieu */
 .manifesto-container {
-    position: relative;
-    z-index: 3; /* Au milieu - peut passer devant ou derrière selon le scroll */
+    position: absolute;
+    top: 50%; /* Centré verticalement */
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centre le texte */
+    z-index: 3;
     width: 100%;
     max-width: 1200px;
-    margin: 0 auto;
     padding: 0 40px;
     text-align: center;
+    pointer-events: none;
 }
 
 /* Texte principal du manifesto */
@@ -43,16 +46,28 @@
     font-weight: 400;
     line-height: 1.1;
     letter-spacing: -0.02em;
-    text-shadow: none; /* Pas d'ombre pour plus de clarté */
+    text-shadow: none;
+    margin-bottom: 2rem; /* Espace pour le nom en dessous */
+}
+
+/* Nom PDG en dessous du texte - Simple et clean */
+.manifesto-author {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-top: 1rem;
 }
 
 /* Lettres individuelles - EFFET ULTRA SMOOTH */
 .letter {
     display: inline-block;
-    color: rgba(255, 255, 255, 0.08); /* Blanc encore plus transparent */
-    opacity: 0.08;
-    will-change: opacity;
-    transition: opacity 0.3s ease; /* Transition smooth pour les micro-mouvements */
+    color: rgba(255, 255, 255, 0.1);
+    opacity: 0.1;
+    will-change: opacity, color;
+    transition: none; /* Pas de transition CSS, on utilise GSAP */
 }
 
 /* Espaces entre les mots */
@@ -61,104 +76,126 @@
     width: 0.3em;
 }
 
-/* Container des images de modèles */
+/* Container des images de modèles - LIBERTÉ TOTALE */
 .models-container {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    z-index: 2; /* Par défaut en dessous du texte */
+    height: 100%; /* Prend toute la hauteur de 200vh */
+    z-index: 2;
 }
 
-/* Optimisation smooth pour tous les éléments animés */
+/* Optimisation MAXIMALE pour le parallax smooth - SANS STYLES VISUELS */
 .model-image {
     position: absolute;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    border-radius: 16px;
-    box-shadow:
-            0 20px 60px rgba(0, 0, 0, 0.25),
-            0 8px 24px rgba(0, 0, 0, 0.15);
+    /* SUPPRIMÉ : border-radius, box-shadow */
     opacity: 0;
+
+    /* OPTIMISATIONS CRITIQUES POUR LE SMOOTH SCROLL */
     will-change: transform, opacity;
-    backface-visibility: hidden; /* Optimisation pour smooth scroll */
-    transform-style: preserve-3d; /* Améliore les performances */
-    /* Fallback avec couleurs si pas d'images */
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    transform: translateZ(0);
+
+    /* Améliorer les performances de rendu */
+    -webkit-transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000px;
 }
 
-/* Modèle 1 - En haut à gauche */
+/* Modèle 1 - En haut à gauche PLUS GRANDE */
 .model-1 {
-    width: 280px;
-    height: 200px;
-    top: 8%;
-    left: 5%;
+    width: 380px;
+    height: 280px;
+    top: 15%;
+    left: 8%;
     background-color: #f5f2e8;
     background-image: linear-gradient(135deg, #f5f2e8 0%, #fff8dc 100%);
-    transform: rotate(-12deg);
-    z-index: 4; /* Au-dessus au début */
+    transform: rotate(-8deg) translateZ(0);
+    z-index: 5;
 }
 
-/* Modèle 2 - En haut à droite */
+/* Modèle 2 - En haut à droite PLUS GRANDE */
 .model-2 {
-    width: 220px;
-    height: 160px;
-    top: 12%;
-    right: 8%;
+    width: 300px;
+    height: 220px;
+    top: 8%;
+    right: 15%;
     background-color: #e8f4f8;
     background-image: linear-gradient(135deg, #e8f4f8 0%, #d0e8f0 100%);
-    transform: rotate(15deg);
-    z-index: 4; /* Au-dessus au début */
+    transform: rotate(12deg) translateZ(0);
+    z-index: 5;
 }
 
-/* Modèle 3 - En bas à droite */
+/* Modèle 3 - En bas à droite PLUS GRANDE */
 .model-3 {
-    width: 260px;
-    height: 180px;
-    bottom: 15%;
-    right: 10%;
+    width: 320px;
+    height: 240px;
+    bottom: 20%;
+    right: 8%;
     background-color: #87ceeb;
     background-image: linear-gradient(135deg, #87ceeb 0%, #b8d4f0 100%);
-    transform: rotate(-8deg);
-    z-index: 4; /* Au-dessus au début */
+    transform: rotate(-5deg) translateZ(0);
+    z-index: 5;
 }
 
-/* Produit supprimé - plus besoin */
+/* Modèle 4 - En bas à gauche PLUS GRANDE */
+.model-4 {
+    width: 280px;
+    height: 360px;
+    bottom: 8%;
+    left: 12%;
+    background-color: #f0f8ff;
+    background-image: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+    transform: rotate(8deg) translateZ(0);
+    z-index: 5;
+}
 
-/* Responsive Design */
+/* Responsive Design avec optimisations */
 @media (max-width: 1200px) {
     .manifesto-text {
         font-size: 3.5rem;
         max-width: 900px;
     }
 
+    .manifesto-author {
+        font-size: 1rem;
+    }
+
     .model-1 {
-        width: 200px;
-        height: 140px;
+        width: 320px;
+        height: 230px;
         left: 6%;
     }
 
     .model-2 {
-        width: 160px;
-        height: 120px;
-        right: 10%;
-    }
-
-    .model-3 {
-        width: 180px;
-        height: 130px;
+        width: 250px;
+        height: 180px;
         right: 12%;
     }
 
-    .chanel-product {
-        left: 8%;
+    .model-3 {
+        width: 270px;
+        height: 200px;
+        right: 6%;
+    }
+
+    .model-4 {
+        width: 230px;
+        height: 300px;
+        left: 10%;
     }
 }
 
 @media (max-width: 1024px) {
     .manifesto-container {
         padding: 0 30px;
+        /* Position absolue maintenue pour GSAP */
     }
 
     .manifesto-text {
@@ -166,25 +203,35 @@
     }
 
     .model-1 {
-        width: 180px;
-        height: 120px;
+        width: 200px;
+        height: 140px;
         top: 12%;
     }
 
     .model-2 {
-        width: 140px;
-        height: 100px;
+        width: 180px;
+        height: 130px;
         top: 18%;
     }
 
     .model-3 {
-        width: 160px;
-        height: 110px;
+        width: 190px;
+        height: 140px;
         bottom: 20%;
+    }
+
+    .model-4 {
+        width: 170px;
+        height: 120px;
+        bottom: 18%;
     }
 }
 
 @media (max-width: 768px) {
+    .manifesto-section {
+        height: 90vh; /* Réduit proportionnellement pour 110vh */
+    }
+
     .manifesto-container {
         padding: 0 20px;
     }
@@ -194,113 +241,99 @@
         line-height: 1.3;
     }
 
+    .manifesto-author {
+        font-size: 0.9rem;
+    }
+
+    .model-image {
+        will-change: auto;
+    }
+
     .model-1 {
-        width: 140px;
-        height: 100px;
-        top: 8%;
+        width: 180px;
+        height: 130px;
+        top: 10%;
         left: 5%;
+        position: absolute;
     }
 
     .model-2 {
-        width: 120px;
-        height: 90px;
-        top: 15%;
+        width: 150px;
+        height: 110px;
+        top: 8%;
         right: 8%;
+        position: absolute;
     }
 
     .model-3 {
-        width: 130px;
-        height: 95px;
+        width: 160px;
+        height: 120px;
         bottom: 25%;
-        right: 10%;
+        right: 5%;
+        position: absolute;
     }
 
-    .chanel-product {
-        bottom: 8%;
-        left: 5%;
-    }
-
-    .product-container {
-        width: 120px;
-        height: 160px;
-    }
-
-    .product-tube {
-        width: 100px;
-        height: 140px;
-    }
-
-    .tube-body {
-        height: 110px;
+    .model-4 {
+        width: 140px;
+        height: 180px;
+        bottom: 15%;
+        left: 8%;
+        position: absolute;
     }
 }
 
 @media (max-width: 480px) {
+    .manifesto-section {
+        height: 80vh; /* Encore plus court proportionnellement */
+    }
+
     .manifesto-text {
         font-size: 1.8rem;
         line-height: 1.4;
     }
 
     .model-1 {
-        width: 110px;
-        height: 80px;
+        width: 140px;
+        height: 100px;
         top: 5%;
         left: 3%;
     }
 
     .model-2 {
-        width: 100px;
-        height: 75px;
+        width: 120px;
+        height: 90px;
         right: 5%;
     }
 
     .model-3 {
-        width: 105px;
-        height: 80px;
+        width: 130px;
+        height: 100px;
         bottom: 20%;
         right: 8%;
     }
 
-    .chanel-product {
-        bottom: 5%;
-        left: 3%;
-    }
-
-    .product-container {
-        width: 100px;
-        height: 130px;
-    }
-
-    .product-tube {
-        width: 80px;
-        height: 110px;
-    }
-
-    .tube-body {
-        height: 90px;
-    }
-
-    .tube-label {
-        font-size: 0.7rem;
-        padding: 6px 12px;
+    .model-4 {
+        width: 110px;
+        height: 140px;
+        bottom: 25%;
+        left: 5%;
     }
 }
 
-/* Optimisations de performance */
+/* Désactiver les animations coûteuses si l'utilisateur préfère moins de mouvement */
 @media (prefers-reduced-motion: reduce) {
-    .model-image,
-    .chanel-product,
-    .manifesto-text {
+    .model-image {
         transform: none !important;
-        transition: none;
+        transition: none !important;
+        will-change: auto;
     }
 
-    .manifesto-word {
-        transition: none;
+    .letter {
+        transition: none !important;
     }
 }
 
-/* Amélioration de l'accessibilité */
+/* Améliorer le contraste pour l'accessibilité */
 @media (prefers-contrast: high) {
     .manifesto-text {
         text-shadow:
@@ -308,7 +341,7 @@
                 0 0 8px rgba(0, 0, 0, 0.6);
     }
 
-    .manifesto-word {
+    .letter {
         color: rgba(255, 255, 255, 0.4);
     }
 
@@ -317,48 +350,18 @@
     }
 }
 
-/* Animation de flottement pour le produit */
-@keyframes floatProduct {
-    0%, 100% { transform: translateY(0) rotate(-2deg); }
-    50% { transform: translateY(-8px) rotate(2deg); }
-}
-
-.chanel-product {
-    animation: floatProduct 4s ease-in-out infinite;
-}
-
-/* Animation de flottement subtile pour les modèles */
-@keyframes floatModel1 {
-    0%, 100% { transform: rotate(-8deg) translateY(0); }
-    50% { transform: rotate(-8deg) translateY(-5px); }
-}
-
-@keyframes floatModel2 {
-    0%, 100% { transform: rotate(12deg) translateY(0); }
-    50% { transform: rotate(12deg) translateY(-3px); }
-}
-
-@keyframes floatModel3 {
-    0%, 100% { transform: rotate(-6deg) translateY(0); }
-    50% { transform: rotate(-6deg) translateY(-4px); }
-}
-
-.model-1 {
-    animation: floatModel1 6s ease-in-out infinite;
-}
-
-.model-2 {
-    animation: floatModel2 7s ease-in-out infinite 1s;
-}
-
-.model-3 {
-    animation: floatModel3 5s ease-in-out infinite 2s;
+/* Optimisations de performance critiques */
+.manifesto-section {
+    /* Force le navigateur à créer un nouveau layer de composition */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
 /* Amélioration de la netteté du texte */
-.manifesto-text,
-.tube-label {
+.manifesto-text {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    /* Améliorer la performance de rendu du texte */
+    contain: layout style paint;
 }
