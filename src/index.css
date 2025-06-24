@@ -75,7 +75,7 @@
 
   body {
     font-family: var(--font-primary);
-    background-color: var(--color-chanel-white);
+    background: linear-gradient(135deg, #87ceeb 0%, #e0f6ff 50%, #ffffff 100%);
     color: var(--color-chanel-black);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

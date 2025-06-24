@@ -1,9 +1,8 @@
 .hero-3d {
     position: relative;
     width: 100vw;
-    height: 100vh;
+    height: 90vh;
     overflow: hidden;
-    background: linear-gradient(135deg, #87ceeb 0%, #e0f6ff 50%, #ffffff 100%);
     cursor: grab;
     user-select: none; /* Empêcher la sélection de texte */
 }
