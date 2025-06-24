@@ -17,51 +17,10 @@ const MaRoutineSection = () => {
     gsap.registerPlugin(ScrollTrigger);
 
     const section = sectionRef.current;
-    const image = imageRef.current;
     const content = contentRef.current;
 
     if (!section) return;
 
-    // Animation au scroll pour l'image
-    if (image) {
-      gsap.fromTo(image,
-        {
-          scale: 1.1,
-          opacity: 0.8
-        },
-        {
-          scale: 1,
-          opacity: 1,
-          duration: 2,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 80%",
-            end: "top 20%",
-            scrub: 1,
-            invalidateOnRefresh: true
-          }
-        }
-      );
-    }
-
-    // Animation de parallax léger pour le contenu
-    if (content) {
-      gsap.fromTo(content,
-        { y: 50 },
-        {
-          y: -20,
-          ease: "none",
-          scrollTrigger: {
-            trigger: section,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 2,
-            invalidateOnRefresh: true
-          }
-        }
-      );
-    }
 
     // Animation d'entrée pour les éléments de texte
     const setupTextAnimations = () => {
