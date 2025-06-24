@@ -4,7 +4,9 @@ import Hero3D from '../../components/Hero3D/Hero3D.jsx';
 import Loader from '../../components/Loader/Loader.jsx';
 import ManifestoSection from '../../components/ManifestoSection/ManifestoSection.jsx';
 import ProductSlider from '../../components/ProductSlider/ProductSlider.jsx';
-import ImageParallaxSection from '../../components/ImageParallaxSection/ImageParallaxSection.jsx'; // ← NOUVEAU
+import ImageParallaxSection from '../../components/ImageParallaxSection/ImageParallaxSection.jsx';
+import MaRoutineSection from '../../components/MaRoutineSection/MaRoutineSection.jsx';
+
 import TestSections from '../../components/TestSections/TestSections.jsx';
 import BottomNavbar from '../../components/BottomNavbar/BottomNavbar.jsx';
 import './Home.css';
@@ -46,6 +48,8 @@ const Home = () => {
         {/* NOUVELLE SECTION : Parallax d'images en 3 colonnes */}
         <ImageParallaxSection />
 
+        {/* Section Ma Routine avec l'image et le texte */}
+        <MaRoutineSection />
       </div>
     </>
   );
