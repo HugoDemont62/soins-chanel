@@ -3,7 +3,6 @@
 .manifesto-section {
     position: relative;
     height: 100vh; /* Changé de 150vh à 110vh */
-    background: linear-gradient(135deg, #87ceeb 0%, #b8d4f0 50%, #e0f6ff 100%);
     overflow: hidden;
     display: flex;
     align-items: center;

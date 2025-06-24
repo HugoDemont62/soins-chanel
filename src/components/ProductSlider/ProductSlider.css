@@ -1,0 +1,394 @@
+/* Fichier: src/components/ProductSlider/ProductSlider.css (Styles supplémentaires) */
+
+/* Progress bar pour auto-play */
+.auto-play-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: rgba(0, 0, 0, 0.1);
+    z-index: 20;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #D4AF37 0%, #000000 100%);
+    transform: translateX(-100%);
+    animation: progressFill linear infinite;
+}
+
+@keyframes progressFill {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0%);
+    }
+}
+
+/* Contrôle auto-play */
+.auto-play-control {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #000000;
+    backdrop-filter: blur(10px);
+    z-index: 15;
+}
+
+.auto-play-control:hover {
+    background: #000000;
+    color: #ffffff;
+    transform: scale(1.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Alignement du texte */
+.content-wrapper.text-left {
+    text-align: left;
+}
+
+.content-wrapper.text-center {
+    text-align: center;
+}
+
+.content-wrapper.text-right {
+    text-align: right;
+}
+
+/* États de chargement des images */
+.slide-image {
+    transition: opacity 0.5s ease, transform 0.8s ease;
+}
+
+.slide-image:not([src]) {
+    background: linear-gradient(45deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 20px 20px;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -20px 0;
+    }
+    100% {
+        background-position: 20px 0;
+    }
+}
+
+/* Effets de transition pour les slides */
+.slide.transitioning-out {
+    pointer-events: none;
+}
+
+.slide.transitioning-in {
+    pointer-events: none;
+}
+
+/* Amélioration des performances */
+.slides-container {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+.slide {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Support tactile amélioré */
+.product-slider {
+    touch-action: pan-y pinch-zoom;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Indicateurs améliorés avec labels */
+.slide-indicators {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.indicator {
+    position: relative;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.indicator.active {
+    background: #000000;
+    border-color: #000000;
+}
+
+.indicator:hover {
+    border-color: #000000;
+    transform: scale(1.3);
+}
+
+/* Tooltip pour les indicateurs */
+.indicator::after {
+    content: attr(aria-label);
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 100;
+}
+
+.indicator:hover::after {
+    opacity: 1;
+}
+
+/* Navigation avec fade pour les flèches */
+.nav-arrow {
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.nav-arrow:hover {
+    opacity: 1;
+}
+
+.product-slider:hover .nav-arrow {
+    opacity: 1;
+}
+
+/* Responsive amélioré pour les contrôles */
+@media (max-width: 768px) {
+    .auto-play-control {
+        top: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .auto-play-progress {
+        height: 2px;
+    }
+
+    /* Masquer les tooltips sur mobile */
+    .indicator::after {
+        display: none;
+    }
+}
+
+/* Mode paysage sur mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .slide {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr;
+    }
+
+    .slide-content {
+        order: 1;
+        padding: 20px 30px;
+        min-height: 100vh;
+    }
+
+    .slide-image-container {
+        order: 2;
+        padding: 20px 30px;
+        min-height: 100vh;
+    }
+
+    .slide-title {
+        font-size: 1.5rem;
+    }
+
+    .slide-subtitle {
+        font-size: 0.8rem;
+    }
+}
+
+/* États de focus améliorés */
+.nav-arrow:focus-visible,
+.indicator:focus-visible,
+.slide-button:focus-visible,
+.auto-play-control:focus-visible {
+    outline: 3px solid #D4AF37;
+    outline-offset: 3px;
+    box-shadow: 0 0 0 1px #ffffff;
+}
+
+/* Animation de pulse pour l'indicateur actif */
+.indicator.active::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border: 2px solid #D4AF37;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+    opacity: 0.6;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.3;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+}
+
+/* Optimisation pour les appareils haute densité */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .slide-image {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* Mode sombre complet */
+@media (prefers-color-scheme: dark) {
+    .product-slider {
+        background: #1a1a1a;
+    }
+
+    .slide {
+        background: #2a2a2a !important;
+    }
+
+    .slide-title {
+        color: #ffffff;
+    }
+
+    .slide-subtitle {
+        color: #cccccc;
+    }
+
+    .slide-button {
+        background: #ffffff;
+        color: #000000;
+    }
+
+    .slide-button:hover {
+        background: #D4AF37;
+        color: #000000;
+    }
+
+    .nav-arrow {
+        background: rgba(0, 0, 0, 0.8);
+        color: #ffffff;
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-arrow:hover {
+        background: #ffffff;
+        color: #000000;
+    }
+
+    .auto-play-control {
+        background: rgba(0, 0, 0, 0.8);
+        color: #ffffff;
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .auto-play-control:hover {
+        background: #ffffff;
+        color: #000000;
+    }
+
+    .indicator {
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .indicator.active {
+        background: #ffffff;
+        border-color: #ffffff;
+    }
+
+    .slide-counter {
+        color: #cccccc;
+    }
+
+    .current-number {
+        color: #ffffff;
+    }
+
+    .auto-play-progress {
+        background: rgba(255, 255, 255, 0.1);
+    }
+}
+
+/* Améliorations d'accessibilité */
+@media (prefers-reduced-motion: reduce) {
+    .progress-bar {
+        animation: none !important;
+    }
+
+    .indicator.active::before {
+        animation: none !important;
+    }
+
+    .slide-image:not([src]) {
+        animation: none !important;
+    }
+
+    * {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Support pour les écrans très larges */
+@media (min-width: 1920px) {
+    .slide-content {
+        padding: 120px 80px 120px 120px;
+    }
+
+    .slide-image-container {
+        padding: 120px 120px 120px 80px;
+    }
+
+    .slide-title {
+        font-size: 3.5rem;
+    }
+
+    .slide-subtitle {
+        font-size: 1.25rem;
+    }
+
+    .content-wrapper {
+        max-width: 680px;
+    }
+}

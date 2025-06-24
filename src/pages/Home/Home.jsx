@@ -1,8 +1,9 @@
-// Fichier: src/pages/Home/Home.jsx
+// Fichier: src/pages/Home/Home.jsx (version mise à jour)
 import { useEffect, useState } from 'react';
 import Hero3D from '../../components/Hero3D/Hero3D.jsx';
 import Loader from '../../components/Loader/Loader.jsx';
 import ManifestoSection from '../../components/ManifestoSection/ManifestoSection.jsx';
+import ProductSlider from '../../components/ProductSlider/ProductSlider.jsx'; // ← NOUVEAU
 import TestSections from '../../components/TestSections/TestSections.jsx';
 import BottomNavbar from '../../components/BottomNavbar/BottomNavbar.jsx';
 import './Home.css';
@@ -34,6 +35,9 @@ const Home = () => {
       <div className="home-page">
         <Hero3D />
         <ManifestoSection />
+
+        <ProductSlider />
+
         <TestSections />
       </div>
     </>
