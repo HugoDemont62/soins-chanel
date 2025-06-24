@@ -1,4 +1,3 @@
-// Fichier: src/components/BottomNavbar/BottomNavbar.jsx
 import {Link, useLocation} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import {createPortal} from 'react-dom';
@@ -6,7 +5,6 @@ import './BottomNavbar.css';
 
 const BottomNavbar = () => {
   const location = useLocation();
-  const [isVisible, setIsVisible] = useState(true);
   const [portalContainer, setPortalContainer] = useState(null);
 
   const navItems = [
@@ -20,11 +18,15 @@ const BottomNavbar = () => {
     // Créer un conteneur spécialement pour la navbar
     let container = document.getElementById('navbar-center');
 
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'navbar-center';
+      document.body.appendChild(container);
+    }
     setPortalContainer(container);
 
     // Cleanup
     return () => {
-      // On ne supprime pas le conteneur pour éviter les re-renders
     };
   }, []);
 
