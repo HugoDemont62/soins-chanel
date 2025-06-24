@@ -1,9 +1,10 @@
-// Fichier: src/pages/Home/Home.jsx (version mise à jour)
+// Fichier: src/pages/Home/Home.jsx (version mise à jour avec ImageParallaxSection)
 import { useEffect, useState } from 'react';
 import Hero3D from '../../components/Hero3D/Hero3D.jsx';
 import Loader from '../../components/Loader/Loader.jsx';
 import ManifestoSection from '../../components/ManifestoSection/ManifestoSection.jsx';
-import ProductSlider from '../../components/ProductSlider/ProductSlider.jsx'; // ← NOUVEAU
+import ProductSlider from '../../components/ProductSlider/ProductSlider.jsx';
+import ImageParallaxSection from '../../components/ImageParalaxSection/ImageParalaxSection.jsx'; // ← NOUVEAU
 import TestSections from '../../components/TestSections/TestSections.jsx';
 import BottomNavbar from '../../components/BottomNavbar/BottomNavbar.jsx';
 import './Home.css';
@@ -33,12 +34,17 @@ const Home = () => {
   return (
     <>
       <div className="home-page">
+        {/* Hero 3D avec le modèle et les nuages */}
         <Hero3D />
+
+        {/* Section manifesto avec les lettres qui s'animent */}
         <ManifestoSection />
 
+        {/* Slider de produits */}
         <ProductSlider />
 
-        <TestSections />
+        {/* NOUVELLE SECTION : Parallax d'images en 3 colonnes */}
+        <ImageParallaxSection />
       </div>
     </>
   );

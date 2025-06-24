@@ -1,8 +1,8 @@
-/* Fichier: src/components/ManifestoSection/ManifestoSection.css */
+/* Fichier: src/components/ManifestoSection/ManifestoSection.css (CORRECTION FLASH) */
 
 .manifesto-section {
     position: relative;
-    height: 100vh; /* Changé de 150vh à 110vh */
+    height: 100vh;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -27,9 +27,9 @@
 /* Container principal du texte - VA SUIVRE avec GSAP et rester au milieu */
 .manifesto-container {
     position: absolute;
-    top: 50%; /* Centré verticalement */
+    top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Centre le texte */
+    transform: translate(-50%, -50%);
     z-index: 3;
     width: 100%;
     max-width: 1200px;
@@ -46,27 +46,65 @@
     line-height: 1.1;
     letter-spacing: -0.02em;
     text-shadow: none;
-    margin-bottom: 2rem; /* Espace pour le nom en dessous */
+    margin-bottom: 2rem;
+
+    /* ✅ CORRECTION : Empêcher le flash initial */
+    opacity: 0;
+    animation: preventFlash 0.1s ease forwards;
+}
+
+/* ✅ NOUVEAU : Animation pour empêcher le flash */
+@keyframes preventFlash {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 /* Nom PDG en dessous du texte - Simple et clean */
 .manifesto-author {
     font-family: 'Inter', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 0.8);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+    text-align: center;
     margin-top: 1rem;
 }
 
-/* Lettres individuelles - EFFET ULTRA SMOOTH */
+/* Nom de la personne */
+.author-name {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+}
+
+/* Titre/Poste */
+.author-title {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+/* ✅ CORRECTION : Lettres individuelles avec état initial contrôlé */
 .letter {
     display: inline-block;
-    color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.1); /* État initial transparent */
     opacity: 0.1;
     will-change: opacity, color;
-    transition: none; /* Pas de transition CSS, on utilise GSAP */
+    transition: none;
+
+    /* Empêcher tout flash initial */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ✅ NOUVEAU : Classe pour le texte avant initialisation GSAP */
+.manifesto-text:not(.gsap-initialized) .letter {
+    color: rgba(255, 255, 255, 0.08);
+    opacity: 0.08;
 }
 
 /* Espaces entre les mots */
@@ -81,7 +119,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%; /* Prend toute la hauteur de 200vh */
+    height: 100%;
     z-index: 2;
 }
 
@@ -91,7 +129,6 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    /* SUPPRIMÉ : border-radius, box-shadow */
     opacity: 0;
 
     /* OPTIMISATIONS CRITIQUES POUR LE SMOOTH SCROLL */
@@ -166,6 +203,14 @@
         font-size: 1rem;
     }
 
+    .author-name {
+        font-size: 1rem;
+    }
+
+    .author-title {
+        font-size: 0.85rem;
+    }
+
     .model-1 {
         width: 320px;
         height: 230px;
@@ -194,7 +239,6 @@
 @media (max-width: 1024px) {
     .manifesto-container {
         padding: 0 30px;
-        /* Position absolue maintenue pour GSAP */
     }
 
     .manifesto-text {
@@ -228,7 +272,7 @@
 
 @media (max-width: 768px) {
     .manifesto-section {
-        height: 90vh; /* Réduit proportionnellement pour 110vh */
+        height: 90vh;
     }
 
     .manifesto-container {
@@ -242,6 +286,14 @@
 
     .manifesto-author {
         font-size: 0.9rem;
+    }
+
+    .author-name {
+        font-size: 0.9rem;
+    }
+
+    .author-title {
+        font-size: 0.8rem;
     }
 
     .model-image {
@@ -283,7 +335,7 @@
 
 @media (max-width: 480px) {
     .manifesto-section {
-        height: 80vh; /* Encore plus court proportionnellement */
+        height: 80vh;
     }
 
     .manifesto-text {
@@ -330,6 +382,10 @@
     .letter {
         transition: none !important;
     }
+
+    .manifesto-text {
+        animation: none !important;
+    }
 }
 
 /* Améliorer le contraste pour l'accessibilité */
@@ -341,7 +397,7 @@
     }
 
     .letter {
-        color: rgba(255, 255, 255, 0.4);
+        color: rgba(255, 255, 255, 0.4) !important;
     }
 
     .background-grid {
@@ -351,7 +407,6 @@
 
 /* Optimisations de performance critiques */
 .manifesto-section {
-    /* Force le navigateur à créer un nouveau layer de composition */
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
 }
@@ -361,6 +416,5 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    /* Améliorer la performance de rendu du texte */
     contain: layout style paint;
 }

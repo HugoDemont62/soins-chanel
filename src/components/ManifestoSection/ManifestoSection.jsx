@@ -1,4 +1,4 @@
-// Fichier: src/components/ManifestoSection/ManifestoSection.jsx
+// Fichier: src/components/ManifestoSection/ManifestoSection.jsx (CORRECTION FINALE)
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -8,7 +8,7 @@ const ManifestoSection = () => {
   const sectionRef = useRef(null);
   const textRef = useRef(null);
   const lettersRef = useRef([]);
-  const manifestoContainerRef = useRef(null); // AJOUT du ref manquant
+  const manifestoContainerRef = useRef(null);
 
   // Refs pour les images de modèles (4 maintenant)
   const model1Ref = useRef(null);
@@ -27,11 +27,13 @@ const ManifestoSection = () => {
 
     if (!section || !textElement) return;
 
-    // Fonction pour diviser le texte en lettres (comme dans ton exemple)
+    // Fonction pour diviser le texte en lettres
     const splitTextIntoLetters = (element) => {
       const text = element.textContent;
       const words = text.split(' ');
       element.innerHTML = '';
+
+      const allLetters = []; // ← Tableau pour collecter toutes les lettres
 
       words.forEach((word, wordIndex) => {
         const wordSpan = document.createElement('span');
@@ -45,48 +47,60 @@ const ManifestoSection = () => {
           span.textContent = char;
           span.className = 'letter';
           wordSpan.appendChild(span);
+          allLetters.push(span); // ← Ajouter au tableau
         }
 
         element.appendChild(wordSpan);
       });
 
-      return element.querySelectorAll('.letter');
+      return allLetters; // ← Retourner le tableau de lettres
     };
 
     // Diviser le texte en lettres
     const letters = splitTextIntoLetters(textElement);
-    lettersRef.current = letters;
+    lettersRef.current = letters; // ← Maintenant c'est garantit un tableau
+
+    // ✅ NOUVEAU : Marquer que GSAP va prendre le contrôle
+    textElement.classList.add('gsap-initialized');
+
     // RÉVÉLATION DES LETTRES - Plus rapide et plus courte
     const setupTextReveal = () => {
-      // État initial : toutes les lettres sont transparentes
-      letters.forEach((letter) => {
-        if (letter.classList.contains('letter')) {
-          gsap.set(letter, {
-            opacity: 0.1,
-            color: 'rgba(255, 255, 255, 0.1)'
-          });
-        }
+      // Vérification de sécurité
+      if (!Array.isArray(letters) || letters.length === 0) {
+        console.warn('Letters array is empty or invalid');
+        return;
+      }
+
+      // ✅ CORRECTION : Immédiatement définir l'état initial AVANT toute animation
+      gsap.set(letters, {
+        opacity: 0.08,
+        color: 'rgba(255, 255, 255, 0.08)'
       });
 
       // Animation de révélation PLUS RAPIDE et qui se termine plus tôt
       const scrollConfig = {
         trigger: section,
-        start: "top 70%", /* Plus tard pour commencer */
-        end: "top 30%", /* Plus tôt pour finir - BEAUCOUP plus court ! */
+        start: "top 70%",
+        end: "top 30%",
         scrub: 1,
         invalidateOnRefresh: true
       };
 
-      // Animation principale des lettres
+      // ← CORRECTION ICI : Filtrer avant d'utiliser dans GSAP
+      const letterElements = letters.filter(l =>
+        l && l.classList && l.classList.contains('letter')
+      );
+
+      // Animation principale des lettres - avec des valeurs plus visibles
       gsap.fromTo(
-        letters.filter(l => l.classList.contains('letter')),
+        letterElements, // ← Utiliser le tableau filtré
         {
-          opacity: 0.1,
-          color: 'rgba(255, 255, 255, 0.1)'
+          opacity: 0.08,
+          color: 'rgba(255, 255, 255, 0.08)'
         },
         {
           opacity: 1,
-          color: 'rgba(255, 255, 255, 1)',
+          color: 'rgba(255, 255, 255, 1)', // ✅ Blanc pur à la fin
           duration: 0.3,
           stagger: 0.02,
           scrollTrigger: scrollConfig
@@ -100,7 +114,7 @@ const ManifestoSection = () => {
       if (model1Ref.current) {
         gsap.set(model1Ref.current, {
           y: 100,
-          opacity: 1, // Toujours visible
+          opacity: 1,
           scale: 1
         });
 
@@ -108,13 +122,13 @@ const ManifestoSection = () => {
         gsap.fromTo(model1Ref.current,
           { y: 100 },
           {
-            y: -100, // Petit mouvement
+            y: -100,
             ease: "none",
             scrollTrigger: {
               trigger: section,
               start: "top bottom",
               end: "bottom top",
-              scrub: 3, // TRÈS LENT
+              scrub: 3,
               invalidateOnRefresh: true
             }
           }
@@ -125,7 +139,7 @@ const ManifestoSection = () => {
       if (model2Ref.current) {
         gsap.set(model2Ref.current, {
           y: 250,
-          opacity: 1, // Toujours visible
+          opacity: 1,
           scale: 1
         });
 
@@ -133,13 +147,13 @@ const ManifestoSection = () => {
         gsap.fromTo(model2Ref.current,
           { y: 250 },
           {
-            y: -300, // Grand mouvement
+            y: -300,
             ease: "none",
             scrollTrigger: {
               trigger: section,
               start: "top bottom",
               end: "bottom top",
-              scrub: 0.5, // TRÈS RAPIDE
+              scrub: 0.5,
               invalidateOnRefresh: true
             }
           }
@@ -150,7 +164,7 @@ const ManifestoSection = () => {
       if (model3Ref.current) {
         gsap.set(model3Ref.current, {
           y: 180,
-          opacity: 1, // Toujours visible
+          opacity: 1,
           scale: 1
         });
 
@@ -158,13 +172,13 @@ const ManifestoSection = () => {
         gsap.fromTo(model3Ref.current,
           { y: 180 },
           {
-            y: -200, // Mouvement moyen
+            y: -200,
             ease: "none",
             scrollTrigger: {
               trigger: section,
               start: "top bottom",
               end: "bottom top",
-              scrub: 1.5, // VITESSE MOYENNE
+              scrub: 1.5,
               invalidateOnRefresh: true
             }
           }
@@ -175,7 +189,7 @@ const ManifestoSection = () => {
       if (model4Ref.current) {
         gsap.set(model4Ref.current, {
           y: 80,
-          opacity: 1, // Toujours visible
+          opacity: 1,
           scale: 1
         });
 
@@ -183,13 +197,13 @@ const ManifestoSection = () => {
         gsap.fromTo(model4Ref.current,
           { y: 80 },
           {
-            y: -120, // Mouvement lent
+            y: -120,
             ease: "none",
             scrollTrigger: {
               trigger: section,
               start: "top bottom",
               end: "bottom top",
-              scrub: 2.5, // LENT
+              scrub: 2.5,
               invalidateOnRefresh: true
             }
           }
@@ -197,33 +211,13 @@ const ManifestoSection = () => {
       }
     };
 
-    // Gestion du z-index SANS opacité
-    const setupLayering = () => {
-      ScrollTrigger.create({
-        trigger: section,
-        start: "top 40%",
-        end: "bottom 60%",
-        scrub: 1,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          const progress = self.progress;
-
-          // Seulement le z-index change, pas d'opacité
-          const zIndexValue = progress > 0.3 ? 2 : 5;
-
-          [model1Ref.current, model2Ref.current, model3Ref.current, model4Ref.current].forEach(el => {
-            if (el) {
-              el.style.zIndex = zIndexValue;
-              // SUPPRIMÉ : el.style.opacity = imageOpacity;
-            }
-          });
-        }
-      });
-    };
-
-    setupTextReveal();
-    setupModelsParallax();
-    // setupLayering(); // SUPPRIMÉ - Plus de changement d'opacité !
+    // Exécuter les animations avec gestion d'erreur
+    try {
+      setupTextReveal();
+      setupModelsParallax();
+    } catch (error) {
+      console.error('Erreur dans les animations ManifestoSection:', error);
+    }
 
     // Cleanup
     return () => {
@@ -247,7 +241,8 @@ const ManifestoSection = () => {
         </div>
         {/* Nom PDG en dessous - Simple et clean */}
         <div className="manifesto-author">
-          Leena Nair PDG Chanel
+          <div className="author-name">Leena Nair</div>
+          <div className="author-title">PDG Chanel</div>
         </div>
       </div>
 

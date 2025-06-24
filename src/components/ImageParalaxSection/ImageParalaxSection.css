@@ -1,0 +1,365 @@
+/* Fichier: src/components/ImageParallaxSection/ImageParallaxSection.css */
+
+.image-parallax-section {
+    position: relative;
+    height: 150vh; /* Section plus haute pour permettre le parallax */
+    overflow: hidden;
+    padding: 80px 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    background: linear-gradient(135deg, #87ceeb 0%, #e0f6ff 50%, #ffffff 100%);
+}
+
+/* Header de la section */
+.parallax-header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    margin-bottom: 100px;
+    padding: 0 40px;
+    color: white;
+}
+
+.parallax-title {
+    font-family: 'ABChanel Corpo', 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 400;
+    color: #000000;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 1.5s ease 0.5s forwards;
+}
+
+.parallax-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 300;
+    max-width: 600px;
+    color: white;
+    margin: 0 auto;
+    line-height: 1.6;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 1.5s ease 0.8s forwards;
+}
+
+/* Container principal des colonnes */
+.parallax-container {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+    height: 100%;
+    z-index: 5;
+}
+
+/* Styles des colonnes */
+.parallax-column {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    position: relative;
+
+    /* Optimisations pour les performances */
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+.left-column {
+    padding-top: 100px; /* Décalage initial pour varier les hauteurs */
+}
+
+.center-column {
+    padding-top: 0px; /* Colonne centrale commence plus haut */
+}
+
+.right-column {
+    padding-top: 150px; /* Décalage différent pour la droite */
+}
+
+/* Wrappers des images */
+.image-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: none; /* Utilise le curseur personnalisé */
+}
+
+.image-wrapper:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+}
+
+.center-wrapper {
+    /* Images du centre légèrement plus grandes */
+    transform: scale(1.05);
+}
+
+.center-wrapper:hover {
+    transform: scale(1.08) translateY(-8px);
+}
+
+/* Images */
+.parallax-image {
+    width: 100%;
+    height: auto;
+    min-height: 280px;
+    max-height: 400px;
+    object-fit: cover;
+    display: block;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: brightness(0.95) contrast(1.05);
+}
+
+.parallax-image:hover {
+    transform: scale(1.05);
+    filter: brightness(1) contrast(1.1);
+}
+
+.center-image {
+    /* Images centrales avec un traitement visuel différent */
+    filter: brightness(1) contrast(1.1) saturate(1.1);
+    min-height: 320px;
+    max-height: 450px;
+}
+
+.center-image:hover {
+    filter: brightness(1.05) contrast(1.15) saturate(1.15);
+}
+
+/* Overlay décoratif */
+.parallax-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.03;
+}
+
+.overlay-text {
+    font-family: 'ABChanel Corpo', 'Playfair Display', serif;
+    font-size: 12rem;
+    font-weight: 600;
+    color: #000000;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* États de chargement */
+.parallax-image[src=""] {
+    background: linear-gradient(45deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 20px 20px;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -20px 0;
+    }
+    100% {
+        background-position: 20px 0;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .parallax-container {
+        gap: 30px;
+        padding: 0 30px;
+    }
+
+    .parallax-title {
+        font-size: 3.5rem;
+    }
+
+    .parallax-subtitle {
+        font-size: 1.125rem;
+    }
+
+    .overlay-text {
+        font-size: 10rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .image-parallax-section {
+        height: 120vh;
+        padding: 60px 0;
+    }
+
+    .parallax-header {
+        margin-bottom: 80px;
+    }
+
+    .parallax-container {
+        gap: 25px;
+        padding: 0 25px;
+    }
+
+    .parallax-title {
+        font-size: 3rem;
+    }
+
+    .left-column {
+        padding-top: 60px;
+    }
+
+    .right-column {
+        padding-top: 100px;
+    }
+
+    .parallax-image {
+        min-height: 220px;
+        max-height: 320px;
+    }
+
+    .center-image {
+        min-height: 250px;
+        max-height: 360px;
+    }
+}
+
+@media (max-width: 768px) {
+    .image-parallax-section {
+        height: 100vh;
+        padding: 40px 0;
+    }
+
+    .parallax-header {
+        margin-bottom: 60px;
+        padding: 0 20px;
+    }
+
+    .parallax-title {
+        font-size: 2.5rem;
+        margin-bottom: 16px;
+    }
+
+    .parallax-subtitle {
+        font-size: 1rem;
+    }
+
+    .parallax-container {
+        gap: 20px;
+        padding: 0 20px;
+    }
+
+    .left-column,
+    .right-column {
+        padding-top: 40px;
+    }
+
+    .center-column {
+        padding-top: 0;
+    }
+
+    .image-wrapper {
+        border-radius: 12px;
+    }
+
+    .parallax-image {
+        min-height: 180px;
+        max-height: 260px;
+    }
+
+    .center-image {
+        min-height: 200px;
+        max-height: 280px;
+    }
+
+    .center-wrapper {
+        transform: scale(1.02);
+    }
+
+    .center-wrapper:hover {
+        transform: scale(1.04) translateY(-4px);
+    }
+
+    .overlay-text {
+        font-size: 6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .image-parallax-section {
+        height: 80vh;
+    }
+
+    .parallax-container {
+        gap: 15px;
+        padding: 0 15px;
+    }
+
+    .parallax-title {
+        font-size: 2rem;
+    }
+
+    .parallax-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .parallax-image {
+        min-height: 150px;
+        max-height: 220px;
+    }
+
+    .center-image {
+        min-height: 170px;
+        max-height: 240px;
+    }
+
+    .overlay-text {
+        font-size: 4rem;
+    }
+}
+
+/* Optimisations pour les appareils avec performances réduites */
+@media (prefers-reduced-motion: reduce) {
+    .parallax-column {
+        will-change: auto;
+        transform: none !important;
+    }
+
+    .parallax-image {
+        transition: none !important;
+    }
+
+    .image-wrapper {
+        transition: none !important;
+    }
+
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+
+/* Amélioration des performances */
+.parallax-container {
+    contain: layout style paint;
+}
+
+.parallax-image {
+    contain: layout style paint;
+    content-visibility: auto;
+    contain-intrinsic-size: 300px;
+}
