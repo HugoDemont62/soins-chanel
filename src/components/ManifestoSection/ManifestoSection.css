@@ -1,0 +1,364 @@
+/* Fichier: src/components/ManifestoSection/ManifestoSection.css */
+
+.manifesto-section {
+    position: relative;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #87ceeb 0%, #b8d4f0 50%, #e0f6ff 100%);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Grille de fond subtile */
+.background-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.1;
+    background-image:
+            linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+    background-size: 20px 20px;
+    z-index: 1;
+}
+
+/* Container principal du texte */
+.manifesto-container {
+    position: relative;
+    z-index: 3; /* Au milieu - peut passer devant ou derrière selon le scroll */
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    text-align: center;
+}
+
+/* Texte principal du manifesto */
+.manifesto-text {
+    font-family: 'ABChanel Corpo', 'Playfair Display', serif;
+    font-size: 4.5rem;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-shadow: none; /* Pas d'ombre pour plus de clarté */
+}
+
+/* Lettres individuelles - EFFET ULTRA SMOOTH */
+.letter {
+    display: inline-block;
+    color: rgba(255, 255, 255, 0.08); /* Blanc encore plus transparent */
+    opacity: 0.08;
+    will-change: opacity;
+    transition: opacity 0.3s ease; /* Transition smooth pour les micro-mouvements */
+}
+
+/* Espaces entre les mots */
+.letter-space {
+    display: inline-block;
+    width: 0.3em;
+}
+
+/* Container des images de modèles */
+.models-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2; /* Par défaut en dessous du texte */
+}
+
+/* Optimisation smooth pour tous les éléments animés */
+.model-image {
+    position: absolute;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 16px;
+    box-shadow:
+            0 20px 60px rgba(0, 0, 0, 0.25),
+            0 8px 24px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    will-change: transform, opacity;
+    backface-visibility: hidden; /* Optimisation pour smooth scroll */
+    transform-style: preserve-3d; /* Améliore les performances */
+    /* Fallback avec couleurs si pas d'images */
+}
+
+/* Modèle 1 - En haut à gauche */
+.model-1 {
+    width: 280px;
+    height: 200px;
+    top: 8%;
+    left: 5%;
+    background-color: #f5f2e8;
+    background-image: linear-gradient(135deg, #f5f2e8 0%, #fff8dc 100%);
+    transform: rotate(-12deg);
+    z-index: 4; /* Au-dessus au début */
+}
+
+/* Modèle 2 - En haut à droite */
+.model-2 {
+    width: 220px;
+    height: 160px;
+    top: 12%;
+    right: 8%;
+    background-color: #e8f4f8;
+    background-image: linear-gradient(135deg, #e8f4f8 0%, #d0e8f0 100%);
+    transform: rotate(15deg);
+    z-index: 4; /* Au-dessus au début */
+}
+
+/* Modèle 3 - En bas à droite */
+.model-3 {
+    width: 260px;
+    height: 180px;
+    bottom: 15%;
+    right: 10%;
+    background-color: #87ceeb;
+    background-image: linear-gradient(135deg, #87ceeb 0%, #b8d4f0 100%);
+    transform: rotate(-8deg);
+    z-index: 4; /* Au-dessus au début */
+}
+
+/* Produit supprimé - plus besoin */
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .manifesto-text {
+        font-size: 3.5rem;
+        max-width: 900px;
+    }
+
+    .model-1 {
+        width: 200px;
+        height: 140px;
+        left: 6%;
+    }
+
+    .model-2 {
+        width: 160px;
+        height: 120px;
+        right: 10%;
+    }
+
+    .model-3 {
+        width: 180px;
+        height: 130px;
+        right: 12%;
+    }
+
+    .chanel-product {
+        left: 8%;
+    }
+}
+
+@media (max-width: 1024px) {
+    .manifesto-container {
+        padding: 0 30px;
+    }
+
+    .manifesto-text {
+        font-size: 3rem;
+    }
+
+    .model-1 {
+        width: 180px;
+        height: 120px;
+        top: 12%;
+    }
+
+    .model-2 {
+        width: 140px;
+        height: 100px;
+        top: 18%;
+    }
+
+    .model-3 {
+        width: 160px;
+        height: 110px;
+        bottom: 20%;
+    }
+}
+
+@media (max-width: 768px) {
+    .manifesto-container {
+        padding: 0 20px;
+    }
+
+    .manifesto-text {
+        font-size: 2.2rem;
+        line-height: 1.3;
+    }
+
+    .model-1 {
+        width: 140px;
+        height: 100px;
+        top: 8%;
+        left: 5%;
+    }
+
+    .model-2 {
+        width: 120px;
+        height: 90px;
+        top: 15%;
+        right: 8%;
+    }
+
+    .model-3 {
+        width: 130px;
+        height: 95px;
+        bottom: 25%;
+        right: 10%;
+    }
+
+    .chanel-product {
+        bottom: 8%;
+        left: 5%;
+    }
+
+    .product-container {
+        width: 120px;
+        height: 160px;
+    }
+
+    .product-tube {
+        width: 100px;
+        height: 140px;
+    }
+
+    .tube-body {
+        height: 110px;
+    }
+}
+
+@media (max-width: 480px) {
+    .manifesto-text {
+        font-size: 1.8rem;
+        line-height: 1.4;
+    }
+
+    .model-1 {
+        width: 110px;
+        height: 80px;
+        top: 5%;
+        left: 3%;
+    }
+
+    .model-2 {
+        width: 100px;
+        height: 75px;
+        right: 5%;
+    }
+
+    .model-3 {
+        width: 105px;
+        height: 80px;
+        bottom: 20%;
+        right: 8%;
+    }
+
+    .chanel-product {
+        bottom: 5%;
+        left: 3%;
+    }
+
+    .product-container {
+        width: 100px;
+        height: 130px;
+    }
+
+    .product-tube {
+        width: 80px;
+        height: 110px;
+    }
+
+    .tube-body {
+        height: 90px;
+    }
+
+    .tube-label {
+        font-size: 0.7rem;
+        padding: 6px 12px;
+    }
+}
+
+/* Optimisations de performance */
+@media (prefers-reduced-motion: reduce) {
+    .model-image,
+    .chanel-product,
+    .manifesto-text {
+        transform: none !important;
+        transition: none;
+    }
+
+    .manifesto-word {
+        transition: none;
+    }
+}
+
+/* Amélioration de l'accessibilité */
+@media (prefers-contrast: high) {
+    .manifesto-text {
+        text-shadow:
+                2px 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 8px rgba(0, 0, 0, 0.6);
+    }
+
+    .manifesto-word {
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .background-grid {
+        opacity: 0.2;
+    }
+}
+
+/* Animation de flottement pour le produit */
+@keyframes floatProduct {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50% { transform: translateY(-8px) rotate(2deg); }
+}
+
+.chanel-product {
+    animation: floatProduct 4s ease-in-out infinite;
+}
+
+/* Animation de flottement subtile pour les modèles */
+@keyframes floatModel1 {
+    0%, 100% { transform: rotate(-8deg) translateY(0); }
+    50% { transform: rotate(-8deg) translateY(-5px); }
+}
+
+@keyframes floatModel2 {
+    0%, 100% { transform: rotate(12deg) translateY(0); }
+    50% { transform: rotate(12deg) translateY(-3px); }
+}
+
+@keyframes floatModel3 {
+    0%, 100% { transform: rotate(-6deg) translateY(0); }
+    50% { transform: rotate(-6deg) translateY(-4px); }
+}
+
+.model-1 {
+    animation: floatModel1 6s ease-in-out infinite;
+}
+
+.model-2 {
+    animation: floatModel2 7s ease-in-out infinite 1s;
+}
+
+.model-3 {
+    animation: floatModel3 5s ease-in-out infinite 2s;
+}
+
+/* Amélioration de la netteté du texte */
+.manifesto-text,
+.tube-label {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}

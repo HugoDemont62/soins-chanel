@@ -681,16 +681,6 @@ const Hero3D = () => {
         <div ref={mountRef} />
       </div>
 
-      {/* Fallback si Three.js ne charge pas */}
-      {!isModelReady && (
-        <div className="fallback-cube">
-          <div className="bottle-body">
-            <div className="bottle-cap"></div>
-            <div className="bottle-label">CHANEL</div>
-          </div>
-        </div>
-      )}
-
       {/* Texte en bas à droite */}
       <div className="hero-bottom-text">
         <p>Des formules d'exception. Une expertise sur mesure. Explorez une nouvelle vision du soin du visage, où la science rencontre la sensorialité, et chaque geste sublime l'essentiel.</p>

@@ -31,51 +31,12 @@ function RouteChangeHandler({ setIsTransitioning }) {
 }
 
 function AppContent() {
-  // const [isLoading, setIsLoading] = useState(true);
-  // const [isTransitioning, setIsTransitioning] = useState(false);
   const location = useLocation();
-
-  // Gestion du loader initial
-  // const handleLoaderComplete = () => {
-  //   setIsLoading(false);
-  //
-  //   // Animation d'entrée du contenu principal
-  //   gsap.fromTo('body',
-  //     { overflow: 'hidden' },
-  //     { overflow: 'auto', duration: 0.1 }
-  //   );
-  // };
-
-  // Désactiver le scroll pendant le chargement
-  // useEffect(() => {
-  //   if (isLoading) {
-  //     document.body.style.overflow = 'hidden';
-  //   } else {
-  //     document.body.style.overflow = 'auto';
-  //   }
-  //
-  //   return () => {
-  //     document.body.style.overflow = 'auto';
-  //   };
-  // }, [isLoading]);
 
   return (
     <>
       {/* Curseur personnalisé */}
       <CustomCursor />
-
-      {/* Loader initial */}
-      {/*{isLoading && (*/}
-      {/*  <Loader onComplete={handleLoaderComplete} />*/}
-      {/*)}*/}
-
-      {/* Loader de transition */}
-      {/*{isTransitioning && !isLoading && (*/}
-      {/*  <Loader onComplete={() => {}} isPageTransition={true} />*/}
-      {/*)}*/}
-
-      {/* Handler pour les changements de route */}
-      {/*<RouteChangeHandler setIsTransitioning={setIsTransitioning} />*/}
 
       {/* Contenu principal avec transitions */}
       <PageTransition pathname={location.pathname}>
@@ -84,9 +45,6 @@ function AppContent() {
           <Route path="/products" element={<Products />} />
         </Routes>
       </PageTransition>
-
-      {/* Footer */}
-      {/*<Footer />*/}
     </>
   );
 }
