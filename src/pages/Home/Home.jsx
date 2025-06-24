@@ -46,7 +46,6 @@ const Home = () => {
         {/* NOUVELLE SECTION : Parallax d'images en 3 colonnes */}
         <ImageParallaxSection />
 
-        <TestSections />
       </div>
     </>
   );
