@@ -92,11 +92,11 @@ const ImageParallaxSection = () => {
 
     // Configuration des animations parallax
     const setupParallax = () => {
-      // Colonne de GAUCHE - Va vers le BAS (vitesse normale)
+      // Colonne de GAUCHE - Va vers le HAUT (mouvement révélateur)
       gsap.fromTo(leftColumn,
-        { y: -150 },
+        { y: 200 }, // Commence plus bas (visible depuis le bas)
         {
-          y: 300,
+          y: -100, // Monte vers le haut
           ease: "none",
           scrollTrigger: {
             trigger: section,
@@ -108,11 +108,11 @@ const ImageParallaxSection = () => {
         }
       );
 
-      // Colonne du CENTRE - Va vers le HAUT (vitesse plus lente)
+      // Colonne du CENTRE - Va vers le HAUT (vitesse plus lente pour rester visible)
       gsap.fromTo(centerColumn,
-        { y: 200 },
+        { y: 100 }, // Commence moins bas
         {
-          y: -200,
+          y: -50, // Monte moins haut pour rester visible
           ease: "none",
           scrollTrigger: {
             trigger: section,
@@ -124,11 +124,11 @@ const ImageParallaxSection = () => {
         }
       );
 
-      // Colonne de DROITE - Va vers le BAS (vitesse rapide)
+      // Colonne de DROITE - Va vers le HAUT (vitesse rapide)
       gsap.fromTo(rightColumn,
-        { y: -200 },
+        { y: 250 }, // Commence encore plus bas
         {
-          y: 350,
+          y: -150, // Monte plus haut
           ease: "none",
           scrollTrigger: {
             trigger: section,
@@ -265,7 +265,7 @@ const ImageParallaxSection = () => {
           </div>
 
           <div className="science-block">
-            <h3 className="science-title2 science-title">UNE APPROCHE DU SOIN GLOBALE ET SENSORIELLE.</h3>
+            <h3 className="science-title science-title2">UNE APPROCHE DU SOIN GLOBALE ET SENSORIELLE.</h3>
             <p className="science-text">
               Chez CHANEL, l'efficacité s'exprime dans la justesse du geste, la précision des textures et l'élégance du résultat. Chaque formule est pensée comme une expérience : pour la peau, pour le temps, pour soi.
             </p>
