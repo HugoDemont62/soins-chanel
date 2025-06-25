@@ -49,7 +49,7 @@ function AppContent() {
   return (
     <>
       {/* Curseur personnalisé */}
-      <CustomCursor />
+      {/*<CustomCursor />*/}
 
       {/* Contenu principal avec transitions */}
       <PageTransition pathname={location.pathname}>

@@ -76,18 +76,19 @@
     order: 2;
 }
 
-/* Section contenu - 50% de la largeur */
+/* Section contenu - 50% de la largeur - CORRIGÉ POUR ÉVITER COUPURE */
 .gamme-content-section {
-    padding: 0 80px;
+    padding: 0 40px; /* RÉDUIT le padding */
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start; /* ← Alignement à gauche pour tout le contenu */
+    align-items: flex-start;
     position: relative;
     background: #ffffff;
     order: 2;
-    max-width: 600px;
+    max-width: 100%; /* SUPPRIMÉ la limite */
     margin: 0 auto;
+    overflow: visible; /* AJOUTÉ */
 }
 
 .gamme-container.reverse .gamme-content-section {
@@ -104,114 +105,152 @@
     letter-spacing: 0.02em;
     margin-bottom: 50px;
     text-transform: uppercase;
-    text-align: left; /* ← Aligné à gauche */
+    text-align: left;
     opacity: 0;
-    align-self: flex-start; /* ← Force à rester à gauche */
+    align-self: flex-start;
 }
 
-/* Container du slider de produits - Aligné à gauche */
+/* Container du slider de produits - CORRIGÉ POUR ÉVITER COUPURE */
 .products-slider-container {
     width: 100%;
     margin-bottom: 60px;
     position: relative;
-    overflow: visible; /* Permet de voir une partie du produit suivant */
-    max-width: 520px; /* ← Agrandi pour éviter la coupure */
-    align-self: flex-start; /* ← Force à rester à gauche */
+    overflow: visible; /* CHANGÉ de hidden à visible */
+    max-width: 100%; /* SUPPRIMÉ la limite restrictive */
+    align-self: flex-start;
 }
 
 .products-slider-viewport {
-    overflow: hidden;
+    overflow: visible; /* CHANGÉ de hidden à visible */
     width: 100%;
     position: relative;
-    /* Affiche 1 produit complet + ~40% du suivant */
-    max-width: 320px; /* ← Ajusté pour voir plus du produit suivant */
+    max-width: 600px; /* AUGMENTÉ pour voir plus de cartes */
     margin: 0;
 }
 
 .products-slider-track {
     display: flex;
     transition: none; /* GSAP gère les transitions */
-    gap: 16px;
-    padding: 0;
+    gap: 20px; /* Plus d'espace entre les cartes */
+    padding: 0 0 20px 0; /* Padding en bas pour éviter coupure des ombres */
     cursor: grab;
     user-select: none;
     will-change: transform;
+    overflow: visible; /* AJOUTÉ */
 }
 
 .products-slider-track:active {
     cursor: grabbing;
 }
 
-/* Card produit - Taille exacte comme sur le screenshot */
-.product-card {
-    min-width: 220px;
-    width: 220px;
+/* ===== NOUVEAU STYLE MODERNE - Comme ton design Figma ===== */
+
+/* Card produit moderne - CORRIGÉ POUR ÉVITER COUPURE */
+.product-card-modern {
+    min-width: 280px;
+    width: 280px;
+    height: 420px;
     flex-shrink: 0;
-    border-radius: 12px;
-    padding: 20px 16px 16px 16px;
+    border-radius: 0; /* Pas de bordure arrondie comme sur Figma */
+    padding: 24px 20px 20px 20px;
     text-align: center;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: grab;
+    user-select: none;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    /* AJOUTÉ pour éviter la coupure : */
+    transform: translateZ(0); /* Force l'affichage complet */
+    backface-visibility: hidden;
 }
 
-.product-card:hover {
-    transform: translateY(-12px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+.product-card-modern:active {
+    cursor: grabbing;
 }
 
-/* Couleurs par gamme - selon le design */
-.product-card.hydra-beauty {
-    background: linear-gradient(135deg, #E8F4F8 0%, #D0E8F0 100%);
-    border: 1px solid rgba(135, 206, 235, 0.2);
+.product-card-modern:hover {
+    transform: translateY(-8px) translateZ(0);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
 }
 
-.product-card.n1-chanel {
-    background: linear-gradient(135deg, #F8E8E8 0%, #F0D0D0 100%);
-    border: 1px solid rgba(220, 20, 60, 0.2);
+/* Couleurs par gamme - EXACTEMENT comme ton Figma */
+.product-card-modern.hydra-beauty {
+    background: linear-gradient(135deg, #E8F4F8 0%, #D6EDF5 100%);
 }
 
-.product-card.sublimage {
-    background: linear-gradient(135deg, #F5F2E8 0%, #E8E0D0 100%);
-    border: 1px solid rgba(212, 175, 55, 0.2);
+.product-card-modern.n1-chanel {
+    background: linear-gradient(135deg, #F8E8E8 0%, #F0D6D6 100%);
 }
 
-/* Nom de la gamme en petit */
-.product-gamme-name {
+.product-card-modern.sublimage {
+    background: linear-gradient(135deg, #F5F2E8 0%, #EDE6D0 100%);
+}
+
+/* Tag gamme en haut */
+.product-tag {
+    background: rgba(255, 255, 255, 0.9);
+    color: #000000;
     font-family: 'Inter', sans-serif;
     font-size: 0.7rem;
     font-weight: 600;
-    color: #666666;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 16px;
+    letter-spacing: 0.08em;
+    padding: 8px 16px;
+    border-radius: 20px;
+    margin: 0 auto 24px auto;
+    width: fit-content;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* Image produit - Plus grande comme sur le screenshot */
-.product-image {
-    width: 100px;
-    height: 140px;
+/* Container image centré */
+.product-image-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    min-height: 180px;
+}
+
+/* Image produit - Plus grande comme sur Figma */
+.product-image-modern {
+    width: 140px;
+    height: 180px;
     object-fit: contain;
-    margin: 0 auto 16px auto;
-    display: block;
     transition: transform 0.3s ease;
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
 }
 
-.product-card:hover .product-image {
+.product-card-modern:hover .product-image-modern {
     transform: scale(1.05);
 }
 
-/* Nom du produit - Plus compact */
-.product-name {
+/* Nom du produit - Style Figma */
+.product-name-modern {
     font-family: 'ABChanel Corpo', 'Inter', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 700;
+    font-size: 1rem;
+    font-weight: 600;
     color: #000000;
     margin-bottom: 8px;
-    line-height: 1.2;
-    height: auto;
+    line-height: 1.3;
+    text-align: center;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Description du produit */
+.product-utility-modern {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: #666666;
+    margin-bottom: 20px;
+    line-height: 1.4;
     min-height: 32px;
     display: flex;
     align-items: center;
@@ -219,82 +258,68 @@
     text-align: center;
 }
 
-/* Utilité du produit - Plus compact */
-.product-utility {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 400;
-    color: #666666;
-    margin-bottom: 16px;
-    line-height: 1.3;
-    height: auto;
-    min-height: 24px;
+/* Actions (bouton + prix) */
+.product-actions {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
-
-/* Section CTA et prix */
-.product-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
     gap: 12px;
+    margin-top: auto;
 }
 
-.product-cta {
+/* Bouton moderne - Style Figma */
+.product-btn-modern {
     background: #000000;
     color: #ffffff;
     border: none;
-    padding: 10px 14px;
-    border-radius: 8px;
+    padding: 12px 20px;
+    border-radius: 0; /* Rectangulaire comme sur Figma */
     font-family: 'Inter', sans-serif;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    flex: 1;
-    min-height: 36px;
+    width: 100%;
+    min-height: 44px;
 }
 
-.product-cta:hover {
+.product-btn-modern:hover {
     background: #333333;
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
-.product-price {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.85rem;
+/* Prix - Style Figma */
+.product-price-modern {
+    font-family: 'ABChanel Corpo', 'Inter', sans-serif;
+    font-size: 1.2rem;
     font-weight: 700;
     color: #000000;
-    white-space: nowrap;
-    min-width: 45px;
+    text-align: center;
+    letter-spacing: 0.02em;
 }
 
-/* Navigation du slider - style minimaliste */
+/* Navigation dots du slider - Style plus moderne */
 .slider-navigation {
     display: flex;
     justify-content: center;
-    gap: 8px;
-    margin-top: 25px;
+    gap: 10px;
+    margin-top: 30px;
 }
 
 .slider-nav-dot {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.25);
+    background: rgba(0, 0, 0, 0.2);
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .slider-nav-dot.active {
     background: #000000;
-    transform: scale(1.4);
+    transform: scale(1.5);
 }
 
 .slider-nav-dot:hover {
@@ -310,7 +335,7 @@
     color: #525252;
     line-height: 1.7;
     margin-bottom: 40px;
-    text-align: left; /* ← Aligné à gauche */
+    text-align: left;
     max-width: 450px;
     opacity: 0;
 }
@@ -319,7 +344,7 @@
 .gamme-discover-button {
     display: inline-flex;
     align-items: center;
-    justify-content: flex-start; /* ← Aligné à gauche */
+    justify-content: flex-start;
     padding: 0;
     background: transparent;
     color: #000000;
@@ -334,7 +359,7 @@
     border-bottom: 2px solid #000000;
     padding-bottom: 6px;
     opacity: 0;
-    align-self: flex-start; /* ← Force à rester à gauche */
+    align-self: flex-start;
 }
 
 .gamme-discover-button:hover {
@@ -343,11 +368,11 @@
     transform: translateY(-2px);
 }
 
-/* Responsive Design */
+/* Responsive Design - CORRIGÉ */
 @media (max-width: 1200px) {
     .gamme-content-section {
-        padding: 0 60px;
-        max-width: 520px;
+        padding: 0 30px; /* Moins de padding */
+        max-width: 100%;
     }
 
     .gammes-main-title {
@@ -359,13 +384,20 @@
         margin-bottom: 40px;
     }
 
-    .products-slider-container {
-        max-width: 420px;
+    .products-slider-viewport {
+        max-width: 500px; /* Plus large sur tablette */
     }
 
-    .product-card {
-        min-width: 180px;
+    .product-card-modern {
+        min-width: 240px;
+        width: 240px;
+        height: 380px;
         padding: 20px 16px;
+    }
+
+    .product-image-modern {
+        width: 120px;
+        height: 150px;
     }
 }
 
@@ -400,9 +432,9 @@
     .gamme-content-section,
     .gamme-container.reverse .gamme-content-section {
         order: 2;
-        padding: 80px 40px;
+        padding: 80px 20px; /* Moins de padding */
         max-width: none;
-        align-items: flex-start; /* ← Maintenir l'alignement à gauche sur tablet */
+        align-items: flex-start;
     }
 
     .gammes-main-title {
@@ -412,22 +444,22 @@
     .gamme-title {
         font-size: 2rem;
         margin-bottom: 35px;
-        text-align: left; /* ← Maintenir l'alignement à gauche */
+        text-align: left;
     }
 
     .products-slider-container {
         max-width: 100%;
         margin-bottom: 50px;
-        align-self: flex-start; /* ← Maintenir l'alignement à gauche */
+        align-self: flex-start;
     }
 
     .products-slider-viewport {
-        max-width: 350px; /* ← Agrandi pour tablet */
+        max-width: 400px; /* Ajusté pour tablette */
     }
 
     .gamme-description {
         margin-bottom: 35px;
-        text-align: left; /* ← Maintenir l'alignement à gauche */
+        text-align: left;
     }
 }
 
@@ -453,8 +485,8 @@
 
     .gamme-content-section,
     .gamme-container.reverse .gamme-content-section {
-        padding: 60px 30px;
-        align-items: flex-start; /* ← Maintenir l'alignement à gauche sur mobile */
+        padding: 60px 15px; /* Minimal padding sur mobile */
+        align-items: flex-start;
     }
 
     .gammes-main-title {
@@ -464,50 +496,49 @@
     .gamme-title {
         font-size: 1.8rem;
         margin-bottom: 30px;
-        text-align: left; /* ← Maintenir l'alignement à gauche */
+        text-align: left;
     }
 
     .gamme-description {
         font-size: 0.9rem;
         margin-bottom: 30px;
-        text-align: left; /* ← Maintenir l'alignement à gauche */
+        text-align: left;
     }
 
-    .product-card {
-        min-width: 180px; /* ← Réduit pour mobile */
-        width: 180px;
-        padding: 16px 12px;
+    .product-card-modern {
+        min-width: 220px;
+        width: 220px;
+        height: 360px;
+        padding: 18px 14px;
+    }
+
+    .product-image-modern {
+        width: 100px;
+        height: 130px;
+    }
+
+    .product-name-modern {
+        font-size: 0.9rem;
+        min-height: 36px;
+    }
+
+    .product-utility-modern {
+        font-size: 0.75rem;
+        min-height: 28px;
+    }
+
+    .product-btn-modern {
+        padding: 10px 16px;
+        font-size: 0.7rem;
+        min-height: 40px;
+    }
+
+    .product-price-modern {
+        font-size: 1.1rem;
     }
 
     .products-slider-viewport {
-        max-width: 250px; /* ← Ajusté pour mobile */
-    }
-
-    .product-image {
-        width: 70px;
-        height: 90px;
-        margin-bottom: 16px;
-    }
-
-    .product-name {
-        font-size: 0.8rem;
-        height: 35px;
-    }
-
-    .product-utility {
-        font-size: 0.7rem;
-        height: 30px;
-        margin-bottom: 16px;
-    }
-
-    .product-cta {
-        padding: 8px 12px;
-        font-size: 0.65rem;
-        min-height: 32px;
-    }
-
-    .product-price {
-        font-size: 0.8rem;
+        max-width: 300px; /* Mobile */
     }
 }
 
@@ -527,7 +558,7 @@
 
     .gamme-content-section,
     .gamme-container.reverse .gamme-content-section {
-        padding: 50px 20px;
+        padding: 50px 10px; /* Très minimal sur petit mobile */
     }
 
     .gamme-title {
@@ -538,34 +569,20 @@
         font-size: 0.85rem;
     }
 
-    .product-card {
-        min-width: 140px;
+    .product-card-modern {
+        min-width: 200px;
+        width: 200px;
+        height: 340px;
         padding: 16px 12px;
     }
 
-    .product-image {
-        width: 60px;
-        height: 75px;
+    .product-image-modern {
+        width: 90px;
+        height: 115px;
     }
 
-    .product-name {
-        font-size: 0.75rem;
-        height: 32px;
-    }
-
-    .product-utility {
-        font-size: 0.65rem;
-        height: 28px;
-    }
-
-    .product-cta {
-        padding: 6px 10px;
-        font-size: 0.6rem;
-        min-height: 28px;
-    }
-
-    .product-price {
-        font-size: 0.75rem;
+    .products-slider-viewport {
+        max-width: 250px;
     }
 
     .gamme-discover-button {
@@ -596,8 +613,8 @@
 }
 
 /* États de chargement */
-.product-image[src=""],
-.product-image:not([src]) {
+.product-image-modern[src=""],
+.product-image-modern:not([src]) {
     background: linear-gradient(45deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
     background-size: 20px 20px;
     animation: shimmer 1.5s infinite;
@@ -620,10 +637,10 @@
     contain: layout style paint;
 }
 
-.product-card {
+.product-card-modern {
     contain: layout style paint;
     content-visibility: auto;
-    contain-intrinsic-size: 200px 300px;
+    contain-intrinsic-size: 280px 420px;
 }
 
 .gamme-image-section {
@@ -635,10 +652,10 @@
 /* Mode réduit pour l'accessibilité */
 @media (prefers-reduced-motion: reduce) {
     .products-slider-track,
-    .product-card,
-    .product-image,
+    .product-card-modern,
+    .product-image-modern,
     .gamme-discover-button,
-    .product-cta {
+    .product-btn-modern {
         animation: none !important;
         transition: none !important;
     }
@@ -656,7 +673,7 @@
 
 /* Amélioration du contraste pour l'accessibilité */
 @media (prefers-contrast: high) {
-    .product-card {
+    .product-card-modern {
         border: 2px solid #000000;
     }
 
@@ -670,7 +687,7 @@
 }
 
 /* Focus states pour l'accessibilité */
-.product-cta:focus,
+.product-btn-modern:focus,
 .gamme-discover-button:focus,
 .slider-nav-dot:focus {
     outline: 2px solid #D4AF37;
@@ -692,26 +709,209 @@ html {
 }
 
 /* Amélioration de la lisibilité */
-.product-name,
-.product-utility {
+.product-name-modern,
+.product-utility-modern {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 /* Styles pour les états de loading */
-.gamme-wrapper.loading .product-card {
+.gamme-wrapper.loading .product-card-modern {
     opacity: 0.7;
     pointer-events: none;
 }
 
 /* Transitions fluides pour les hover states */
-.product-card,
-.product-cta,
+.product-card-modern,
+.product-btn-modern,
 .gamme-discover-button,
 .slider-nav-dot {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+}
+
+/* À AJOUTER dans src/components/GammesSection/GammesSection.css */
+
+/* ===== STYLES SWIPER - CARROUSEL PARFAIT ===== */
+
+/* Container du slider Swiper - CONTENU DANS LES 50% */
+.products-slider-container {
+    width: 100%;
+    margin-bottom: 60px;
+    position: relative;
+    max-width: 100%;
+    align-self: flex-start;
+    overflow: hidden; /* ← IMPORTANT : Contient le carrousel */
+}
+
+/* Swiper wrapper personnalisé - LIMITÉ À SA ZONE */
+.swiper-products {
+    width: 100%;
+    padding-bottom: 20px !important; /* ← RÉDUIT : Plus besoin d'espace pour pagination */
+    overflow: hidden !important; /* ← FORCÉ : Pas de débordement */
+    max-width: 100% !important;
+}
+
+.swiper-products .swiper-wrapper {
+    align-items: stretch;
+}
+
+.swiper-products .swiper-slide {
+    height: auto;
+    display: flex;
+    align-items: stretch;
+    max-width: 280px !important; /* ← LIMITÉ : Taille max des cartes */
+    width: 280px !important; /* ← LARGEUR FIXE pour slidesPerView="auto" */
+}
+
+/* Pagination Swiper - Style moderne */
+.swiper-products .swiper-pagination {
+    position: absolute;
+    bottom: 10px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    gap: 8px !important;
+}
+
+.swiper-products .swiper-pagination-bullet {
+    width: 8px !important;
+    height: 8px !important;
+    background: rgba(0, 0, 0, 0.2) !important;
+    border-radius: 50% !important;
+    opacity: 1 !important;
+    transition: all 0.3s ease !important;
+    margin: 0 !important;
+}
+
+.swiper-products .swiper-pagination-bullet-active {
+    background: #000000 !important;
+    transform: scale(1.5) !important;
+}
+
+.swiper-products .swiper-pagination-bullet:hover {
+    background: #000000 !important;
+    transform: scale(1.2) !important;
+}
+
+/* Navigation Swiper - POSITIONNÉE DANS LA ZONE */
+.swiper-products .swiper-button-next,
+.swiper-products .swiper-button-prev {
+    color: #000000 !important;
+    width: 35px !important;
+    height: 35px !important;
+    margin-top: -17.5px !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 50% !important;
+    transition: all 0.3s ease !important;
+    /* ← IMPORTANT : Positionnement dans la zone */
+    top: 50% !important;
+}
+
+.swiper-products .swiper-button-next {
+    right: 10px !important; /* ← Dans la zone droite */
+}
+
+.swiper-products .swiper-button-prev {
+    left: 10px !important; /* ← Dans la zone gauche */
+}
+
+.swiper-products .swiper-button-next:hover,
+.swiper-products .swiper-button-prev:hover {
+    background: rgba(255, 255, 255, 1) !important;
+    transform: scale(1.1) !important;
+}
+
+.swiper-products .swiper-button-next::after,
+.swiper-products .swiper-button-prev::after {
+    font-size: 14px !important;
+}
+
+/* Responsive pour Swiper - ADAPTÉ AUX 50% */
+@media (max-width: 768px) {
+    .swiper-products {
+        padding-bottom: 15px !important; /* ← RÉDUIT : Plus de pagination */
+    }
+
+    .swiper-products .swiper-button-next,
+    .swiper-products .swiper-button-prev {
+        display: none !important; /* Masquer flèches sur mobile */
+    }
+
+    .swiper-products .swiper-slide {
+        max-width: 220px !important; /* ← Plus petit sur mobile */
+        width: 220px !important; /* ← LARGEUR FIXE mobile */
+    }
+}
+
+/* Section contenu - STRICT 50% */
+.gamme-content-section {
+    overflow: hidden !important; /* ← FORCÉ : Pas de débordement */
+    padding: 0 20px !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important; /* ← IMPORTANT : Inclut padding */
+}
+
+/* Container gamme - STRICT 50% chacun */
+.gamme-container {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    width: 100%;
+    height: 100vh;
+    max-width: none;
+    margin: 0;
+    gap: 0;
+    overflow: hidden; /* ← AJOUTÉ : Empêche débordement */
+}
+
+/* Image section - STRICT 50% */
+.gamme-image-section {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    order: 1;
+    max-width: 50vw; /* ← STRICT : 50% de l'écran */
+    box-sizing: border-box;
+}
+
+/* Content section - STRICT 50% */
+.gamme-content-section {
+    max-width: 50vw; /* ← STRICT : 50% de l'écran */
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+}
+
+@media (max-width: 1200px) {
+    .gamme-content-section {
+        padding: 0 15px !important;
+    }
+}
+
+@media (max-width: 1024px) {
+    /* Sur tablette, on garde le 50% mais ajuste */
+    .gamme-content-section {
+        padding: 80px 15px !important;
+        max-width: 100% !important; /* ← Sur tablette, pleine largeur */
+    }
+
+    .gamme-image-section {
+        max-width: 100% !important; /* ← Sur tablette, pleine largeur */
+    }
+}
+
+@media (max-width: 768px) {
+    .gamme-content-section {
+        padding: 60px 10px !important;
+        max-width: 100% !important;
+    }
 }
