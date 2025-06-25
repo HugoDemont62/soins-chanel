@@ -117,7 +117,7 @@ const Hero3D = () => {
     let isComponentMounted = true;
 
     // CHANGE TON NOM DE FICHIER ICI :
-    const MODEL_PATH = '/model.glb'; // ← TON FICHIER ICI
+    const MODEL_PATH = '/chanel.glb'; // ← TON FICHIER ICI
 
     // Fonction de préchargement immédiat
     const preloadEverything = async () => {
