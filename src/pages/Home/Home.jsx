@@ -7,9 +7,11 @@ import ProductSlider from '../../components/ProductSlider/ProductSlider.jsx';
 import ImageParallaxSection from '../../components/ImageParallaxSection/ImageParallaxSection.jsx';
 import MaRoutineSection from '../../components/MaRoutineSection/MaRoutineSection.jsx';
 
+
 import TestSections from '../../components/TestSections/TestSections.jsx';
 import BottomNavbar from '../../components/BottomNavbar/BottomNavbar.jsx';
 import './Home.css';
+import GammesSection from '../../components/GammesSection/GammesSection.jsx';
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -44,6 +46,8 @@ const Home = () => {
 
         {/* Slider de produits */}
         <ProductSlider />
+
+        <GammesSection />
 
         {/* NOUVELLE SECTION : Parallax d'images en 3 colonnes */}
         <ImageParallaxSection />
