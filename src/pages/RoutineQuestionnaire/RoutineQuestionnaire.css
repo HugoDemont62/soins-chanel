@@ -575,3 +575,66 @@
         overscroll-behavior: contain;
     }
 }
+
+/* Ajout à ajouter dans src/pages/RoutineQuestionnaire/RoutineQuestionnaire.css */
+
+/* Styles pour les checkboxes (choix multiples) */
+.checkbox-outer {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px; /* Carré avec coins arrondis */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.checkbox-inner {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background: #000000;
+    transform: scale(0);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.option-item.selected .checkbox-outer {
+    border-color: #000000;
+    background: #000000;
+}
+
+.option-item.selected .checkbox-inner {
+    transform: scale(1);
+    background: #ffffff; /* Contraste sur fond noir */
+}
+
+/* Amélioration du style pour le choix multiple */
+.question-description span {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.85em;
+    color: #D4AF37;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Responsive pour les nouvelles checkboxes */
+@media (max-width: 480px) {
+    .checkbox-outer {
+        width: 18px;
+        height: 18px;
+    }
+
+    .checkbox-inner {
+        width: 6px;
+        height: 6px;
+    }
+
+    .question-description span {
+        font-size: 0.75em;
+        margin-top: 6px;
+    }
+}

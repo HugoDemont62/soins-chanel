@@ -15,8 +15,9 @@ const RoutineQuestionnaire = () => {
 
   // État du questionnaire
   const [currentStep, setCurrentStep] = useState(0);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOptions, setSelectedOptions] = useState([]); // Support pour choix multiple
   const [answers, setAnswers] = useState({});
+  const [hasAnimated, setHasAnimated] = useState(false); // Pour éviter de réanimer les options
 
   // Données du questionnaire selon le type
   const questionnaires = {
@@ -27,7 +28,8 @@ const RoutineQuestionnaire = () => {
           id: 1,
           question: "Quel est votre principal besoin ?",
           description: "Choisissez le besoin qui correspond le mieux à vos attentes actuelles.",
-          image: "/question-image-1.jpg",
+          image: "/image-1.png",
+          multipleChoice: false, // Choix unique
           options: [
             { id: "hydration", label: "Hydratation intense", description: "Pour une peau sèche et déshydratée" },
             { id: "anti-age", label: "Anti-âge global", description: "Pour prévenir et corriger les signes de l'âge" },
@@ -38,21 +40,23 @@ const RoutineQuestionnaire = () => {
         },
         {
           id: 2,
-          question: "À quel moment appliquez-vous vos soins ?",
-          description: "Définissez votre rythme idéal pour une routine adaptée à votre quotidien.",
-          image: "/question-image-2.jpg",
+          question: "Quels sont vos moments de soins préférés ?",
+          description: "Vous pouvez sélectionner plusieurs moments selon vos habitudes.",
+          image: "/image-2.png",
+          multipleChoice: true, // Choix multiple
           options: [
-            { id: "matin", label: "Uniquement le matin", description: "Routine matinale énergisante" },
-            { id: "soir", label: "Uniquement le soir", description: "Routine nocturne réparatrice" },
-            { id: "matin-soir", label: "Matin et soir", description: "Routine complète jour/nuit" },
-            { id: "weekend", label: "Week-end uniquement", description: "Routine cocooning du weekend" }
+            { id: "matin", label: "Le matin", description: "Routine matinale énergisante" },
+            { id: "midi", label: "À midi", description: "Retouche hydratation en journée" },
+            { id: "soir", label: "Le soir", description: "Routine nocturne réparatrice" },
+            { id: "weekend", label: "Week-end", description: "Routine cocooning du weekend" }
           ]
         },
         {
           id: 3,
           question: "Quelle texture privilégiez-vous ?",
           description: "Sélectionnez la texture qui vous procure le plus de plaisir d'application.",
-          image: "/question-image-3.jpg",
+          image: "/image-3.png",
+          multipleChoice: false, // Choix unique
           options: [
             { id: "creme", label: "Crème onctueuse", description: "Texture riche et nourrissante" },
             { id: "fluide", label: "Fluide léger", description: "Texture fraîche et non grasse" },
@@ -70,7 +74,8 @@ const RoutineQuestionnaire = () => {
           id: 1,
           question: "Quel niveau de soin recherchez-vous ?",
           description: "Définissez l'intensité de votre routine beauté quotidienne.",
-          image: "/question-image-exception-1.jpg",
+          image: "/-image-1.png",
+          multipleChoice: false,
           options: [
             { id: "premium", label: "Soin Premium", description: "Pour une expérience de luxe quotidienne" },
             { id: "intensif", label: "Soin Intensif", description: "Pour des résultats visibles et durables" },
@@ -79,9 +84,10 @@ const RoutineQuestionnaire = () => {
         },
         {
           id: 2,
-          question: "Quelle est votre priorité anti-âge ?",
-          description: "Choisissez l'aspect sur lequel vous souhaitez concentrer votre routine.",
-          image: "/question-image-exception-2.jpg",
+          question: "Quelles sont vos priorités anti-âge ?",
+          description: "Sélectionnez tous les aspects sur lesquels vous souhaitez agir.",
+          image: "/image-2.png",
+          multipleChoice: true, // Choix multiple
           options: [
             { id: "fermete", label: "Fermeté", description: "Redensifier et raffermir la peau" },
             { id: "rides", label: "Rides et ridules", description: "Lisser et prévenir les signes du temps" },
@@ -93,7 +99,8 @@ const RoutineQuestionnaire = () => {
           id: 3,
           question: "Quel rituel vous correspond ?",
           description: "Sélectionnez le rituel qui s'adapte le mieux à votre style de vie.",
-          image: "/question-image-exception-3.jpg",
+          image: "/image-3.png",
+          multipleChoice: false,
           options: [
             { id: "complet", label: "Rituel complet", description: "Nettoyage, sérum, crème, contour des yeux" },
             { id: "essentiel", label: "Rituel essentiel", description: "Les 3 étapes fondamentales" },
@@ -108,9 +115,12 @@ const RoutineQuestionnaire = () => {
   const currentQuestion = currentQuestionnaire.steps[currentStep];
   const isLastStep = currentStep === currentQuestionnaire.steps.length - 1;
 
-  // Animation d'entrée
+  // Animation d'entrée SEULEMENT au changement de step
   useEffect(() => {
     if (!currentQuestion) return;
+
+    setHasAnimated(false);
+    setSelectedOptions([]); // Reset sélection pour nouvelle question
 
     const tl = gsap.timeline({ delay: 0.2 });
 
@@ -123,7 +133,14 @@ const RoutineQuestionnaire = () => {
     // Titre et description
     tl.fromTo(questionContainerRef.current?.children,
       { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 1, ease: "power3.out", stagger: 0.2 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: "power3.out",
+        stagger: 0.2,
+        onComplete: () => setHasAnimated(true) // Marquer comme animé
+      },
       "-=0.8"
     );
 
@@ -137,46 +154,68 @@ const RoutineQuestionnaire = () => {
     return () => {
       tl.kill();
     };
-  }, [currentStep, currentQuestion]);
+  }, [currentStep]); // ← SEULEMENT au changement de step
 
-  // Animation du bouton continuer
+  // Animation du bouton continuer (séparée et sans interférer avec les options)
   useEffect(() => {
-    if (selectedOption && continueButtonRef.current) {
+    if (selectedOptions.length > 0 && continueButtonRef.current && hasAnimated) {
       gsap.fromTo(continueButtonRef.current,
         { opacity: 0, y: 20, scale: 0.9 },
         { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" }
       );
     }
-  }, [selectedOption]);
+  }, [selectedOptions, hasAnimated]); // ← Dépend des options sélectionnées ET de l'état d'animation
 
   const handleOptionSelect = (optionId) => {
-    setSelectedOption(optionId);
-    setAnswers(prev => ({
-      ...prev,
-      [currentQuestion.id]: optionId
-    }));
+    if (currentQuestion.multipleChoice) {
+      // Choix multiple
+      setSelectedOptions(prev => {
+        if (prev.includes(optionId)) {
+          // Désélectionner si déjà sélectionné
+          return prev.filter(id => id !== optionId);
+        } else {
+          // Ajouter à la sélection
+          return [...prev, optionId];
+        }
+      });
+    } else {
+      // Choix unique
+      setSelectedOptions([optionId]);
+    }
   };
 
   const handleContinue = () => {
-    if (!selectedOption) return;
+    if (selectedOptions.length === 0) return;
+
+    // Sauvegarder les réponses
+    const answerValue = currentQuestion.multipleChoice ? selectedOptions : selectedOptions[0];
+    const updatedAnswers = { ...answers, [currentQuestion.id]: answerValue };
+    setAnswers(updatedAnswers);
 
     if (isLastStep) {
       // Dernière étape - aller aux résultats
-      console.log('Réponses finales:', answers);
+      console.log('Réponses finales:', updatedAnswers);
       navigate(`/routine/results/${type}`, {
-        state: { answers: { ...answers, [currentQuestion.id]: selectedOption } }
+        state: { answers: updatedAnswers }
       });
     } else {
       // Étape suivante
       setCurrentStep(prev => prev + 1);
-      setSelectedOption(null);
     }
   };
 
   const handleBack = () => {
     if (currentStep > 0) {
       setCurrentStep(prev => prev - 1);
-      setSelectedOption(answers[currentQuestionnaire.steps[currentStep - 1].id] || null);
+      // Récupérer les réponses précédentes
+      const previousAnswer = answers[currentQuestionnaire.steps[currentStep - 1].id];
+      if (Array.isArray(previousAnswer)) {
+        setSelectedOptions(previousAnswer);
+      } else if (previousAnswer) {
+        setSelectedOptions([previousAnswer]);
+      } else {
+        setSelectedOptions([]);
+      }
     } else {
       navigate('/routine/selection');
     }
@@ -230,7 +269,14 @@ const RoutineQuestionnaire = () => {
         {/* Container de la question */}
         <div ref={questionContainerRef} className="question-container">
           <h2 className="question-title">{currentQuestion.question}</h2>
-          <p className="question-description">{currentQuestion.description}</p>
+          <p className="question-description">
+            {currentQuestion.description}
+            {currentQuestion.multipleChoice && (
+              <span style={{ display: 'block', marginTop: '8px', fontSize: '0.85em', color: '#D4AF37', fontWeight: '600' }}>
+                ✓ Choix multiples possibles
+              </span>
+            )}
+          </p>
         </div>
 
         {/* Container des options avec scroll */}
@@ -239,14 +285,27 @@ const RoutineQuestionnaire = () => {
             {currentQuestion.options.map((option) => (
               <div
                 key={option.id}
-                className={`option-item ${selectedOption === option.id ? 'selected' : ''}`}
+                className={`option-item ${selectedOptions.includes(option.id) ? 'selected' : ''}`}
                 onClick={() => handleOptionSelect(option.id)}
                 data-cursor="hover"
               >
                 <div className="option-radio">
-                  <div className="radio-outer">
-                    <div className="radio-inner" />
-                  </div>
+                  {currentQuestion.multipleChoice ? (
+                    // Checkbox pour choix multiple
+                    <div className="checkbox-outer">
+                      <div className="checkbox-inner" />
+                      {selectedOptions.includes(option.id) && (
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" style={{ position: 'absolute' }}>
+                          <path d="M20 6L9 17L4 12" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      )}
+                    </div>
+                  ) : (
+                    // Radio button pour choix unique
+                    <div className="radio-outer">
+                      <div className="radio-inner" />
+                    </div>
+                  )}
                 </div>
                 <div className="option-content">
                   <h3 className="option-label">{option.label}</h3>
@@ -258,7 +317,7 @@ const RoutineQuestionnaire = () => {
         </div>
 
         {/* Bouton continuer */}
-        {selectedOption && (
+        {selectedOptions.length > 0 && (
           <div className="continue-container">
             <button
               ref={continueButtonRef}

@@ -166,14 +166,14 @@
 .progress-track {
     width: 100%;
     height: 4px;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.25);
     border-radius: 2px;
     overflow: hidden;
 }
 
 .progress-fill {
     height: 100%;
-    background: #000000;
+    background: black !important;
     border-radius: 2px;
     transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     transform-origin: left;
@@ -428,22 +428,4 @@
 
 .slider-main-image {
     contain: layout style paint;
-}
-
-/* Mode réduit pour l'accessibilité */
-@media (prefers-reduced-motion: reduce) {
-    .slider-main-image,
-    .slide,
-    .progress-fill {
-        animation: none !important;
-        transition: none !important;
-    }
-
-    .slider-title,
-    .slider-description,
-    .slider-button {
-        animation: none !important;
-        opacity: 1 !important;
-        transform: none !important;
-    }
 }

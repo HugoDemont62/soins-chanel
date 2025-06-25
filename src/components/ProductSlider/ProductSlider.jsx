@@ -10,7 +10,7 @@ const ProductSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  // Données des slides
+  // Données des slides avec tes vraies images
   const slides = [
     {
       id: 1,
@@ -18,15 +18,15 @@ const ProductSlider = () => {
       description: "Des formules d'exception. Une expertise sur mesure. Explorez une nouvelle vision du soin du visage, où la science rencontre la sensorialité, et chaque geste sublime l'essentiel.",
       buttonText: "DÉCOUVRIR",
       buttonAction: () => console.log('Découvrir slide 1'),
-      image: "/image.png",
+      image: "/image.png", // Ton image principale
     },
     {
       id: 2,
-      title: "RÉVELER UNE PEAU NETTE, PURE ET RESPECTÉE.",
+      title: "RÉVÉLER UNE PEAU NETTE, PURE ET RESPECTÉE.",
       description: "Nettoyage en profondeur et démaquillage. La science rencontre la douceur pour révéler l'éclat naturel de votre peau avec respect et efficacité.",
       buttonText: "VOIR LA SÉRIE",
       buttonAction: () => console.log('Voir la série slide 2'),
-      image: "/image-slider-2.jpg",
+      image: "/image-1.png", // Tes autres images
     },
     {
       id: 3,
@@ -34,7 +34,7 @@ const ProductSlider = () => {
       description: "La phase de préparation fondatrice pour une peau réceptive. Chaque geste compte pour révéler la beauté naturelle et préparer l'épiderme aux soins qui suivent.",
       buttonText: "EN SAVOIR PLUS",
       buttonAction: () => console.log('En savoir plus slide 3'),
-      image: "/image-slider-3.jpg",
+      image: "/image-2.png",
     },
     {
       id: 4,
@@ -42,7 +42,39 @@ const ProductSlider = () => {
       description: "Des soins ciblés et performants. La technologie au service de la beauté pour des résultats visibles et durables.",
       buttonText: "DÉCOUVRIR",
       buttonAction: () => console.log('Découvrir slide 4'),
-      image: "/image-slider-4.jpg",
+      image: "/image-3.png",
+    },
+    {
+      id: 5,
+      title: "SUBLIMER LA PEAU AVEC L'EXCELLENCE CHANEL.",
+      description: "L'art du soin selon CHANEL. Une expertise unique pour révéler toute la beauté de votre peau avec élégance et raffinement.",
+      buttonText: "EXPLORER",
+      buttonAction: () => console.log('Explorer slide 5'),
+      image: "/image-4.png",
+    },
+    {
+      id: 6,
+      title: "RÉVÉLER L'ÉCLAT NATUREL DE VOTRE PEAU.",
+      description: "Une approche holistique du soin. Chaque produit CHANEL est conçu pour révéler la beauté authentique de votre peau.",
+      buttonText: "DÉCOUVRIR",
+      buttonAction: () => console.log('Découvrir slide 6'),
+      image: "/image-5.png",
+    },
+    {
+      id: 7,
+      title: "L'ART DU SOIN SELON CHANEL.",
+      description: "Innovation et tradition s'unissent pour créer des formules d'exception. Découvrez l'univers du soin CHANEL.",
+      buttonText: "EN SAVOIR PLUS",
+      buttonAction: () => console.log('En savoir plus slide 7'),
+      image: "/image-6.png",
+    },
+    {
+      id: 8,
+      title: "UNE EXPÉRIENCE SENSORIELLE UNIQUE.",
+      description: "Plus qu'un soin, une véritable expérience beauté. Laissez-vous porter par la sensorialité des textures CHANEL.",
+      buttonText: "EXPLORER",
+      buttonAction: () => console.log('Explorer slide 8'),
+      image: "/image-7.png",
     }
   ];
 
@@ -167,6 +199,17 @@ const ProductSlider = () => {
 
   }, []);
 
+  // Auto-play (optionnel)
+  useEffect(() => {
+    const autoPlay = setInterval(() => {
+      if (!isAnimating) {
+        nextSlide();
+      }
+    }, 6000); // Change toutes les 6 secondes
+
+    return () => clearInterval(autoPlay);
+  }, [currentSlide, isAnimating]);
+
   // Calcul du pourcentage de progression
   const progressPercentage = ((currentSlide + 1) / totalSlides) * 100;
 
@@ -199,10 +242,7 @@ const ProductSlider = () => {
         </div>
 
         {/* Section Image - 65% (DROITE) */}
-        <div
-          className="slider-image-section"
-          style={{ backgroundColor: slides[currentSlide].backgroundColor }}
-        >
+        <div className="slider-image-section">
           <div className="slide-image-container">
             <img
               src={slides[currentSlide].image}
@@ -239,7 +279,7 @@ const ProductSlider = () => {
             </button>
           </div>
 
-          {/* Progress bar - SOUS L'IMAGE */}
+          {/* Progress bar NOIRE - SOUS L'IMAGE */}
           <div className="progress-bar-container">
             <div className="progress-track">
               <div
