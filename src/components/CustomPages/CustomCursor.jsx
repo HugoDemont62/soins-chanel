@@ -6,13 +6,13 @@ const CustomCursor = () => {
   const cursorRef = useRef(null);
   const cursorDotRef = useRef(null);
   const cursorTextRef = useRef(null);
-  const [cursorState, setCursorState] = useState('default'); // 'default', 'hover', 'drag', 'text'
+  const [cursorState, setCursorState] = useState('default');
   const [cursorText, setCursorText] = useState('');
 
   // Variables pour la position et le mouvement
   const mousePosition = useRef({ x: 0, y: 0 });
   const cursorPosition = useRef({ x: 0, y: 0 });
-  const isVisible = useRef(true);
+  const isVisible = useRef(false);
 
   useEffect(() => {
     const cursor = cursorRef.current;
@@ -21,20 +21,20 @@ const CustomCursor = () => {
 
     if (!cursor || !cursorDot) return;
 
-    // Animation fluide du curseur
+    // Animation fluide du curseur - Style Chanel discret
     const updateCursor = () => {
-      // Interpolation pour un mouvement fluide
-      cursorPosition.current.x += (mousePosition.current.x - cursorPosition.current.x) * 0.15;
-      cursorPosition.current.y += (mousePosition.current.y - cursorPosition.current.y) * 0.15;
+      // Interpolation fluide pour mouvement élégant
+      cursorPosition.current.x += (mousePosition.current.x - cursorPosition.current.x) * 0.1;
+      cursorPosition.current.y += (mousePosition.current.y - cursorPosition.current.y) * 0.1;
 
       gsap.set(cursor, {
-        x: cursorPosition.current.x - 25, // Centrer le curseur (50px / 2)
-        y: cursorPosition.current.y - 25,
+        x: cursorPosition.current.x - 15, // Centrer (30px / 2)
+        y: cursorPosition.current.y - 15,
       });
 
       gsap.set(cursorDot, {
-        x: mousePosition.current.x - 2, // Point précis
-        y: mousePosition.current.y - 2,
+        x: mousePosition.current.x - 1, // Point précis
+        y: mousePosition.current.y - 1,
       });
 
       requestAnimationFrame(updateCursor);
@@ -47,27 +47,33 @@ const CustomCursor = () => {
 
       if (!isVisible.current) {
         isVisible.current = true;
-        gsap.to(cursor, { opacity: 1, duration: 0.3 });
-        gsap.to(cursorDot, { opacity: 1, duration: 0.3 });
+        gsap.to(cursor, { opacity: 1, duration: 0.2 });
+        gsap.to(cursorDot, { opacity: 1, duration: 0.2 });
       }
     };
 
     // Gestion de la sortie de la fenêtre
     const handleMouseLeave = () => {
       isVisible.current = false;
-      gsap.to(cursor, { opacity: 0, duration: 0.3 });
-      gsap.to(cursorDot, { opacity: 0, duration: 0.3 });
+      gsap.to(cursor, { opacity: 0, duration: 0.2 });
+      gsap.to(cursorDot, { opacity: 0, duration: 0.2 });
     };
 
     const handleMouseEnter = () => {
       isVisible.current = true;
-      gsap.to(cursor, { opacity: 1, duration: 0.3 });
-      gsap.to(cursorDot, { opacity: 1, duration: 0.3 });
+      gsap.to(cursor, { opacity: 1, duration: 0.2 });
+      gsap.to(cursorDot, { opacity: 1, duration: 0.2 });
     };
 
-    // Fonction pour détecter le type d'élément sous le curseur
+    // Fonction pour détecter le type d'élément - Style Chanel
     const detectElementType = (element) => {
       if (!element) return 'default';
+
+      // Vérifier si c'est le carrousel Swiper
+      if (element.closest('.swiper-products') ||
+        element.closest('.products-slider-track')) {
+        return 'drag';
+      }
 
       // Vérifier si c'est le canvas 3D
       if (element.tagName === 'CANVAS' || element.closest('.threejs-container')) {
@@ -79,13 +85,17 @@ const CustomCursor = () => {
         element.tagName === 'BUTTON' ||
         element.closest('a') ||
         element.closest('button') ||
-        element.getAttribute('data-cursor') === 'hover') {
+        element.getAttribute('data-cursor') === 'hover' ||
+        element.closest('.navbar-item') ||
+        element.closest('.product-btn-modern') ||
+        element.closest('.gamme-discover-button') ||
+        element.closest('.routine-button') ||
+        element.closest('.nav-arrow-square')) {
         return 'hover';
       }
 
       // Vérifier si c'est un élément de texte interactif
-      if (element.closest('.navbar-item') ||
-        element.closest('.text-word') ||
+      if (element.closest('.text-word') ||
         element.getAttribute('data-cursor') === 'text') {
         return 'text';
       }
@@ -100,11 +110,11 @@ const CustomCursor = () => {
       switch (elementType) {
         case 'hover':
           setCursorState('hover');
-          setCursorText('CLICK');
+          setCursorText('');
           break;
         case 'drag':
           setCursorState('drag');
-          setCursorText('DRAG');
+          setCursorText('');
           break;
         case 'text':
           setCursorState('text');
@@ -130,8 +140,7 @@ const CustomCursor = () => {
       mutations.forEach((mutation) => {
         mutation.addedNodes.forEach((node) => {
           if (node.nodeType === 1) {
-            // Pas besoin d'ajouter d'event listeners spécifiques
-            // car on utilise la délégation d'événements
+            // Les nouveaux éléments seront automatiquement détectés
           }
         });
       });
@@ -149,7 +158,7 @@ const CustomCursor = () => {
     };
   }, []);
 
-  // Effet pour les changements d'état du curseur
+  // Effet pour les changements d'état du curseur - Style Chanel discret
   useEffect(() => {
     const cursor = cursorRef.current;
     const cursorTextEl = cursorTextRef.current;
@@ -159,8 +168,8 @@ const CustomCursor = () => {
     switch (cursorState) {
       case 'hover':
         gsap.to(cursor, {
-          scale: 1.5,
-          backgroundColor: '#D4AF37',
+          scale: 1.8,
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
           duration: 0.3,
           ease: 'power2.out',
         });
@@ -168,8 +177,8 @@ const CustomCursor = () => {
 
       case 'drag':
         gsap.to(cursor, {
-          scale: 2,
-          backgroundColor: '#87ceeb',
+          scale: 2.2,
+          backgroundColor: 'rgba(212, 175, 55, 0.8)',
           duration: 0.3,
           ease: 'power2.out',
         });
@@ -177,8 +186,8 @@ const CustomCursor = () => {
 
       case 'text':
         gsap.to(cursor, {
-          scale: 0.8,
-          backgroundColor: '#525252',
+          scale: 0.6,
+          backgroundColor: 'rgba(0, 0, 0, 0.6)',
           duration: 0.3,
           ease: 'power2.out',
         });
@@ -187,13 +196,13 @@ const CustomCursor = () => {
       default:
         gsap.to(cursor, {
           scale: 1,
-          backgroundColor: '#000000',
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
           duration: 0.3,
           ease: 'power2.out',
         });
     }
 
-    // Animation du texte
+    // Animation du texte (si nécessaire)
     if (cursorText && cursorTextEl) {
       gsap.set(cursorTextEl, { opacity: 0, scale: 0.5 });
       gsap.to(cursorTextEl, {
@@ -214,54 +223,58 @@ const CustomCursor = () => {
 
   return (
     <>
-      {/* Curseur principal */}
+      {/* Curseur principal - Style Chanel discret */}
       <div
         ref={cursorRef}
         style={{
           position: 'fixed',
           top: 0,
           left: 0,
-          width: '50px',
-          height: '50px',
-          backgroundColor: '#000000',
+          width: '30px',
+          height: '30px',
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
           borderRadius: '50%',
           pointerEvents: 'none',
           zIndex: 9999,
-          mixBlendMode: 'difference',
+          mixBlendMode: 'normal', // Pas de difference pour Chanel
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          transition: 'none', // On utilise GSAP pour les animations
+          transition: 'none',
+          border: '1px solid rgba(255, 255, 255, 0.3)',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+          backdropFilter: 'blur(10px)',
         }}
       >
-        {/* Texte dans le curseur */}
+        {/* Texte dans le curseur (optionnel) */}
         <span
           ref={cursorTextRef}
           style={{
             color: '#ffffff',
-            fontSize: '10px',
+            fontSize: '8px',
             fontWeight: '600',
             fontFamily: 'Inter, sans-serif',
             textAlign: 'center',
             opacity: 0,
             pointerEvents: 'none',
-            mixBlendMode: 'normal',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
           }}
         >
           {cursorText}
         </span>
       </div>
 
-      {/* Point central précis */}
+      {/* Point central précis - Plus discret */}
       <div
         ref={cursorDotRef}
         style={{
           position: 'fixed',
           top: 0,
           left: 0,
-          width: '4px',
-          height: '4px',
-          backgroundColor: '#ffffff',
+          width: '2px',
+          height: '2px',
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
           borderRadius: '50%',
           pointerEvents: 'none',
           zIndex: 10000,
