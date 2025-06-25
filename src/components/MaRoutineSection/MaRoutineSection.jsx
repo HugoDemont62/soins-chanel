@@ -72,8 +72,6 @@ const MaRoutineSection = () => {
   // Fonction pour gérer le clic sur le bouton
   const handleCreateRoutine = () => {
     console.log('Créer ma routine clicked');
-    // Ici tu peux ajouter la navigation vers la page de création de routine
-    // ou ouvrir un modal, etc.
   };
 
   return (
