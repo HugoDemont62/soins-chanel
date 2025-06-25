@@ -1,4 +1,4 @@
-// Fichier: src/components/ManifestoSection/ManifestoSection.jsx (CORRECTION FINALE)
+// Fichier: src/components/ManifestoSection/ManifestoSection.jsx
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -10,14 +10,11 @@ const ManifestoSection = () => {
   const lettersRef = useRef([]);
   const manifestoContainerRef = useRef(null);
 
-  // Refs pour les images de modèles (4 maintenant)
+  // Refs pour les images de modèles
   const model1Ref = useRef(null);
   const model2Ref = useRef(null);
   const model3Ref = useRef(null);
   const model4Ref = useRef(null);
-
-  // Le texte exact du manifesto
-  const manifestoText = "CHANEL RÉVÈLE UNE VISION SINGULIÈRE DE LA BEAUTÉ, OÙ LA SCIENCE RENCONTRE L'ÉLÉGANCE.";
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -27,90 +24,89 @@ const ManifestoSection = () => {
 
     if (!section || !textElement) return;
 
-    // Fonction pour diviser le texte en lettres
-    const splitTextIntoLetters = (element) => {
-      const text = element.textContent;
-      const words = text.split(' ');
-      element.innerHTML = '';
+    // Fonction pour diviser le texte ligne par ligne
+    const splitText = (element) => {
+      const lines = element.querySelectorAll('.manifesto-line');
+      const allLetters = [];
 
-      const allLetters = []; // ← Tableau pour collecter toutes les lettres
+      lines.forEach(line => {
+        const text = line.textContent;
+        const words = text.split(' ');
 
-      words.forEach((word, wordIndex) => {
-        const wordSpan = document.createElement('span');
-        wordSpan.className = 'word';
-        wordSpan.style.display = 'inline-block';
-        wordSpan.style.marginRight = '0.3em';
+        // Vider la ligne
+        line.innerHTML = '';
 
-        for (let i = 0; i < word.length; i++) {
-          const char = word[i];
-          const span = document.createElement('span');
-          span.textContent = char;
-          span.className = 'letter';
-          wordSpan.appendChild(span);
-          allLetters.push(span); // ← Ajouter au tableau
-        }
+        words.forEach((word, wordIndex) => {
+          // Créer un span pour chaque mot
+          const wordSpan = document.createElement('span');
+          wordSpan.className = 'word';
 
-        element.appendChild(wordSpan);
+          // Diviser chaque mot en lettres
+          for (let i = 0; i < word.length; i++) {
+            const letterSpan = document.createElement('span');
+            letterSpan.textContent = word[i];
+            letterSpan.className = 'letter';
+            wordSpan.appendChild(letterSpan);
+            allLetters.push(letterSpan);
+          }
+
+          line.appendChild(wordSpan);
+
+          // Ajouter un espace après chaque mot (sauf le dernier)
+          if (wordIndex < words.length - 1) {
+            const spaceSpan = document.createElement('span');
+            spaceSpan.innerHTML = '&nbsp;';
+            spaceSpan.className = 'space';
+            line.appendChild(spaceSpan);
+          }
+        });
       });
 
-      return allLetters; // ← Retourner le tableau de lettres
+      return allLetters;
     };
 
-    // Diviser le texte en lettres
-    const letters = splitTextIntoLetters(textElement);
-    lettersRef.current = letters; // ← Maintenant c'est garantit un tableau
+    // Appliquer le split au texte
+    const letters = splitText(textElement);
+    lettersRef.current = letters;
 
-    // ✅ NOUVEAU : Marquer que GSAP va prendre le contrôle
-    textElement.classList.add('gsap-initialized');
-
-    // RÉVÉLATION DES LETTRES - Plus rapide et plus courte
+    // Animation des lettres au scroll
     const setupTextReveal = () => {
-      // Vérification de sécurité
       if (!Array.isArray(letters) || letters.length === 0) {
         console.warn('Letters array is empty or invalid');
         return;
       }
 
-      // ✅ CORRECTION : Immédiatement définir l'état initial AVANT toute animation
+      // État initial - très transparent pour qu'on puisse un peu voir le texte
       gsap.set(letters, {
-        opacity: 0.08,
-        color: 'rgba(255, 255, 255, 0.08)'
+        color: 'rgba(255, 255, 255, 0.1)'
       });
 
-      // Animation de révélation PLUS RAPIDE et qui se termine plus tôt
-      const scrollConfig = {
-        trigger: section,
-        start: "top 70%",
-        end: "top 30%",
-        scrub: 1,
-        invalidateOnRefresh: true
-      };
-
-      // ← CORRECTION ICI : Filtrer avant d'utiliser dans GSAP
-      const letterElements = letters.filter(l =>
-        l && l.classList && l.classList.contains('letter')
-      );
-
-      // Animation principale des lettres - avec des valeurs plus visibles
-      gsap.fromTo(
-        letterElements, // ← Utiliser le tableau filtré
+      // Animation de révélation progressive au scroll
+      gsap.fromTo(letters,
         {
-          opacity: 0.08,
-          color: 'rgba(255, 255, 255, 0.08)'
+          color: 'rgba(255, 255, 255, 0.1)'
         },
         {
-          opacity: 1,
-          color: 'rgba(255, 255, 255, 1)', // ✅ Blanc pur à la fin
-          duration: 0.3,
-          stagger: 0.02,
-          scrollTrigger: scrollConfig
+          color: 'rgba(255, 255, 255, 1)',
+          stagger: {
+            each: 0.015,
+            from: "start"
+          },
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            start: "top center", // Commence quand le haut de la section arrive au centre
+            end: "bottom center", // Finit quand le bas de la section arrive au centre
+            scrub: 1.5, // Animation bien liée au scroll
+            invalidateOnRefresh: true,
+          }
         }
       );
     };
 
-    // Animation des 4 images - VRAI PARALLAX avec vitesses différentes
+    // Animation des images parallax
     const setupModelsParallax = () => {
-      // Modèle 1 - TRÈS LENT (arrière-plan, grande)
+      // Modèle 1 - TRÈS LENT
       if (model1Ref.current) {
         gsap.set(model1Ref.current, {
           y: 100,
@@ -118,7 +114,6 @@ const ManifestoSection = () => {
           scale: 1
         });
 
-        // Parallax TRÈS LENT
         gsap.fromTo(model1Ref.current,
           { y: 100 },
           {
@@ -135,7 +130,7 @@ const ManifestoSection = () => {
         );
       }
 
-      // Modèle 2 - TRÈS RAPIDE (premier plan, petite)
+      // Modèle 2 - TRÈS RAPIDE
       if (model2Ref.current) {
         gsap.set(model2Ref.current, {
           y: 250,
@@ -143,7 +138,6 @@ const ManifestoSection = () => {
           scale: 1
         });
 
-        // Parallax TRÈS RAPIDE
         gsap.fromTo(model2Ref.current,
           { y: 250 },
           {
@@ -160,7 +154,7 @@ const ManifestoSection = () => {
         );
       }
 
-      // Modèle 3 - VITESSE MOYENNE (milieu, moyenne)
+      // Modèle 3 - VITESSE MOYENNE
       if (model3Ref.current) {
         gsap.set(model3Ref.current, {
           y: 180,
@@ -168,7 +162,6 @@ const ManifestoSection = () => {
           scale: 1
         });
 
-        // Parallax MOYEN
         gsap.fromTo(model3Ref.current,
           { y: 180 },
           {
@@ -185,7 +178,7 @@ const ManifestoSection = () => {
         );
       }
 
-      // Modèle 4 - LENT (arrière-plan, grande)
+      // Modèle 4 - LENT
       if (model4Ref.current) {
         gsap.set(model4Ref.current, {
           y: 80,
@@ -193,7 +186,6 @@ const ManifestoSection = () => {
           scale: 1
         });
 
-        // Parallax LENT
         gsap.fromTo(model4Ref.current,
           { y: 80 },
           {
@@ -211,7 +203,6 @@ const ManifestoSection = () => {
       }
     };
 
-    // Exécuter les animations avec gestion d'erreur
     try {
       setupTextReveal();
       setupModelsParallax();
@@ -231,45 +222,42 @@ const ManifestoSection = () => {
 
   return (
     <section ref={sectionRef} className="manifesto-section">
-      {/* Grille de fond subtile */}
       <div className="background-grid"></div>
 
-      {/* Texte principal centré - AVEC REF pour l'animation */}
       <div ref={manifestoContainerRef} className="manifesto-container">
         <div ref={textRef} className="manifesto-text">
-          {manifestoText}
+          <p className="manifesto-line">CHANEL RÉVÈLE UNE</p>
+          <p className="manifesto-line">VISION SINGULIÈRE DE</p>
+          <p className="manifesto-line">LA BEAUTÉ, OÙ LA</p>
+          <p className="manifesto-line">SCIENCE RENCONTRE</p>
+          <p className="manifesto-line">L'ÉLÉGANCE.</p>
         </div>
-        {/* Nom PDG en dessous - Simple et clean */}
+
         <div className="manifesto-author">
           <div className="author-name">Leena Nair</div>
           <div className="author-title">PDG Chanel</div>
         </div>
       </div>
 
-      {/* Images des modèles avec parallax amélioré - 4 images */}
       <div className="models-container">
-        {/* Modèle 1 - En haut à gauche */}
         <div
           ref={model1Ref}
           className="model-image model-1"
           style={{ backgroundImage: 'url("/image-1.png")' }}
         />
 
-        {/* Modèle 2 - En haut à droite */}
         <div
           ref={model2Ref}
           className="model-image model-2"
           style={{ backgroundImage: 'url("/image-2.png")' }}
         />
 
-        {/* Modèle 3 - En bas à droite */}
         <div
           ref={model3Ref}
           className="model-image model-3"
           style={{ backgroundImage: 'url("/image-3.png")' }}
         />
 
-        {/* Modèle 4 - En bas à gauche - NOUVEAU ! */}
         <div
           ref={model4Ref}
           className="model-image model-4"

@@ -1,4 +1,4 @@
-/* Fichier: src/components/ManifestoSection/ManifestoSection.css (CORRECTION FLASH) */
+/* Fichier: src/components/ManifestoSection/ManifestoSection.css */
 
 .manifesto-section {
     position: relative;
@@ -9,7 +9,6 @@
     justify-content: center;
 }
 
-/* Grille de fond subtile */
 .background-grid {
     position: absolute;
     top: 0;
@@ -24,7 +23,6 @@
     z-index: 1;
 }
 
-/* Container principal du texte - VA SUIVRE avec GSAP et rester au milieu */
 .manifesto-container {
     position: absolute;
     top: 50%;
@@ -38,7 +36,6 @@
     pointer-events: none;
 }
 
-/* Texte principal du manifesto */
 .manifesto-text {
     font-family: 'ABChanel Corpo', 'Playfair Display', serif;
     font-size: 4.5rem;
@@ -47,30 +44,23 @@
     letter-spacing: -0.02em;
     text-shadow: none;
     margin-bottom: 2rem;
-
-    /* ✅ CORRECTION : Empêcher le flash initial */
-    opacity: 0;
-    animation: preventFlash 0.1s ease forwards;
+    opacity: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
 }
 
-/* ✅ NOUVEAU : Animation pour empêcher le flash */
-@keyframes preventFlash {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+.manifesto-line {
+    margin: 0;
+    padding: 0;
 }
 
-/* Nom PDG en dessous du texte - Simple et clean */
 .manifesto-author {
     font-family: 'Inter', sans-serif;
     text-align: center;
     margin-top: 1rem;
 }
 
-/* Nom de la personne */
 .author-name {
     font-size: 1.1rem;
     font-weight: 500;
@@ -79,7 +69,6 @@
     margin-bottom: 0.25rem;
 }
 
-/* Titre/Poste */
 .author-title {
     font-size: 0.9rem;
     font-weight: 400;
@@ -88,32 +77,28 @@
     text-transform: uppercase;
 }
 
-/* ✅ CORRECTION : Lettres individuelles avec état initial contrôlé */
+/* Styles pour les lettres et mots */
+.word {
+    display: inline-block;
+    white-space: nowrap;
+}
+
 .letter {
     display: inline-block;
-    color: rgba(255, 255, 255, 0.1); /* État initial transparent */
-    opacity: 0.1;
-    will-change: opacity, color;
+    color: rgba(255, 255, 255, 0.1);
+    will-change: color;
     transition: none;
-
-    /* Empêcher tout flash initial */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* ✅ NOUVEAU : Classe pour le texte avant initialisation GSAP */
-.manifesto-text:not(.gsap-initialized) .letter {
-    color: rgba(255, 255, 255, 0.08);
-    opacity: 0.08;
-}
-
-/* Espaces entre les mots */
-.letter-space {
+.space {
     display: inline-block;
-    width: 0.3em;
+    font-size: inherit;
+    line-height: inherit;
 }
 
-/* Container des images de modèles - LIBERTÉ TOTALE */
+/* Images de modèles */
 .models-container {
     position: absolute;
     top: 0;
@@ -123,28 +108,22 @@
     z-index: 2;
 }
 
-/* Optimisation MAXIMALE pour le parallax smooth - SANS STYLES VISUELS */
 .model-image {
     position: absolute;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     opacity: 0;
-
-    /* OPTIMISATIONS CRITIQUES POUR LE SMOOTH SCROLL */
     will-change: transform, opacity;
     backface-visibility: hidden;
     transform-style: preserve-3d;
     perspective: 1000px;
     transform: translateZ(0);
-
-    /* Améliorer les performances de rendu */
     -webkit-transform: translateZ(0);
     -webkit-backface-visibility: hidden;
     -webkit-perspective: 1000px;
 }
 
-/* Modèle 1 - En haut à gauche PLUS GRANDE */
 .model-1 {
     width: 380px;
     height: 280px;
@@ -156,7 +135,6 @@
     z-index: 5;
 }
 
-/* Modèle 2 - En haut à droite PLUS GRANDE */
 .model-2 {
     width: 300px;
     height: 220px;
@@ -168,7 +146,6 @@
     z-index: 5;
 }
 
-/* Modèle 3 - En bas à droite PLUS GRANDE */
 .model-3 {
     width: 320px;
     height: 240px;
@@ -180,7 +157,6 @@
     z-index: 5;
 }
 
-/* Modèle 4 - En bas à gauche PLUS GRANDE */
 .model-4 {
     width: 280px;
     height: 360px;
@@ -192,7 +168,7 @@
     z-index: 5;
 }
 
-/* Responsive Design avec optimisations */
+/* Responsive Design */
 @media (max-width: 1200px) {
     .manifesto-text {
         font-size: 3.5rem;
@@ -305,7 +281,6 @@
         height: 130px;
         top: 10%;
         left: 5%;
-        position: absolute;
     }
 
     .model-2 {
@@ -313,7 +288,6 @@
         height: 110px;
         top: 8%;
         right: 8%;
-        position: absolute;
     }
 
     .model-3 {
@@ -321,7 +295,6 @@
         height: 120px;
         bottom: 25%;
         right: 5%;
-        position: absolute;
     }
 
     .model-4 {
@@ -329,7 +302,6 @@
         height: 180px;
         bottom: 15%;
         left: 8%;
-        position: absolute;
     }
 }
 
@@ -371,7 +343,7 @@
     }
 }
 
-/* Désactiver les animations coûteuses si l'utilisateur préfère moins de mouvement */
+/* Désactivation des animations pour les utilisateurs préférant moins de mouvement */
 @media (prefers-reduced-motion: reduce) {
     .model-image {
         transform: none !important;
@@ -388,7 +360,7 @@
     }
 }
 
-/* Améliorer le contraste pour l'accessibilité */
+/* Amélioration du contraste pour l'accessibilité */
 @media (prefers-contrast: high) {
     .manifesto-text {
         text-shadow:
@@ -405,16 +377,12 @@
     }
 }
 
-/* Optimisations de performance critiques */
+/* Optimisations de performance */
 .manifesto-section {
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
 }
 
-/* Amélioration de la netteté du texte */
 .manifesto-text {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
     contain: layout style paint;
 }
