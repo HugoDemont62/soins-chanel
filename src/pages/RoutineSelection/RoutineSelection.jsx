@@ -153,11 +153,11 @@ const RoutineSelection = () => {
         {/* Contenu de la section bleue */}
         <div className="section-content">
 
-          {/* Image de produits au centre */}
+          {/* Image de produits en bas */}
           <div className="product-image-container animate-element">
             <img
               src="/image-1.png"
-              alt="Routine de soins ciblés"
+              alt="Produit 1"
               className="product-image"
             />
           </div>
@@ -174,14 +174,13 @@ const RoutineSelection = () => {
             </p>
           </div>
 
-          {/* Prix et bouton en bas à droite */}
-          <div className="section-footer blue-footer">
-            <div className="price-tag animate-element">399 = 38 Hug</div>
+          {/* Prix et bouton en bas à droite avec bande */}
+          <div className="section-footer gold-footer">
             <button
               className="section-arrow-button animate-element"
               onClick={(e) => {
                 e.stopPropagation();
-                handleSelectTargeted();
+                handleSelectException();
               }}
               data-cursor="hover"
             >
@@ -201,11 +200,11 @@ const RoutineSelection = () => {
         {/* Contenu de la section noire */}
         <div className="section-content">
 
-          {/* Image de produits au centre */}
+          {/* Image de produits en bas */}
           <div className="product-image-container animate-element">
             <img
-              src="/image-sublimage.png"
-              alt="Routine de soins d'exception"
+              src="/image-1.png"
+              alt="Produit Sublimage 1"
               className="product-image"
             />
           </div>
@@ -222,7 +221,7 @@ const RoutineSelection = () => {
             </p>
           </div>
 
-          {/* Bouton en bas à droite */}
+          {/* Bouton en bas à droite avec bande */}
           <div className="section-footer gold-footer">
             <button
               className="section-arrow-button animate-element"

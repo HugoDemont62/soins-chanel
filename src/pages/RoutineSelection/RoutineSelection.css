@@ -119,35 +119,34 @@
     z-index: 5;
 }
 
-/* Image de produits au centre */
+/* Image de produits en bas */
 .product-image-container {
-    position: absolute;
-    top: 50%;
+    bottom: 80px;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
     z-index: 3;
 }
 
 .product-image {
-    width: 280px;
+    width: 400px;
     height: auto;
     object-fit: contain;
-    filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.15));
+    filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.15));
     transition: all 0.4s ease;
 }
 
 .routine-section:hover .product-image {
     transform: scale(1.05);
-    filter: drop-shadow(0 20px 45px rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.2));
 }
 
-/* Container de texte - en bas à gauche */
+/* Container de texte - en haut à gauche */
 .section-text-container {
-    position: absolute;
-    bottom: 120px;
+    top: 60px;
     left: 40px;
     z-index: 4;
     text-align: left;
+    max-width: 400px;
 }
 
 /* Styles pour le texte bleu */
@@ -194,42 +193,28 @@
     text-shadow: 0 1px 5px rgba(212, 175, 55, 0.3);
 }
 
-/* Footer des sections - en bas à droite */
+/* Footer des sections - simple en bas à droite */
 .section-footer {
     position: absolute;
-    bottom: 40px;
-    right: 40px;
+    bottom: 20px;
+    right: 20px;
+    z-index: 4;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 16px;
-    z-index: 4;
-}
-
-/* Prix pour la section bleue */
-.price-tag {
-    background: rgba(255, 255, 255, 0.9);
-    color: #000000;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 600;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    gap: 10px;
 }
 
 /* Bouton flèche */
 .section-arrow-button {
-    width: 50px;
-    height: 50px;
+    width: 35px;
+    height: 35px;
     border: none;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: 300;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -237,34 +222,31 @@
     overflow: hidden;
 }
 
-/* Bouton pour section bleue */
-.blue-footer .section-arrow-button {
+/* Styles spécifiques pour chaque section */
+.blue-button {
     background: rgba(255, 255, 255, 0.9);
     color: #000000;
-    border: 1px solid rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.blue-footer .section-arrow-button:hover {
+.blue-button:hover {
     background: #ffffff;
     transform: scale(1.1);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Bouton pour section dorée */
-.gold-footer .section-arrow-button {
+.gold-button {
     background: rgba(212, 175, 55, 0.9);
     color: #2c1810;
-    border: 1px solid rgba(212, 175, 55, 0.5);
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
 }
 
-.gold-footer .section-arrow-button:hover {
+.gold-button:hover {
     background: #D4AF37;
     transform: scale(1.1);
-    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
 }
 
 /* Effet de click */
