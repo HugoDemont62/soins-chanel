@@ -288,12 +288,12 @@ const GammesSection = () => {
               {/* Titre de la gamme */}
               <h3 className="gamme-title">{gamme.title}</h3>
 
-              {/* SWIPER CARROUSEL - VRAI CARROUSEL CIRCULAIRE ! */}
+              {/* SWIPER CARROUSEL - NOUVEAU DESIGN DE CARDS */}
               <div className="products-slider-container">
                 <Swiper
-                  modules={[Navigation]} // ← SEULEMENT NAVIGATION
+                  modules={[Navigation]}
                   spaceBetween={20}
-                  slidesPerView="auto" // ← AUTO : S'adapte au contenu
+                  slidesPerView="auto"
                   centeredSlides={false}
                   loop={false}
                   loopFillGroupWithBlank={false}
@@ -311,13 +311,13 @@ const GammesSection = () => {
                   slidesPerGroup={1}
                   allowTouchMove={true}
                   touchRatio={1}
-                  spaceBetween={20}
                   className="swiper-products"
                 >
                   {gamme.products.map((product) => (
                     <SwiperSlide key={product.id}>
                       <div className={`product-card-modern ${gamme.cardClass}`}>
-                        {/* Tag gamme en haut */}
+
+                        {/* Tag gamme en haut à gauche */}
                         <div className="product-tag">{product.gamme}</div>
 
                         {/* Image produit centrée */}
@@ -330,22 +330,26 @@ const GammesSection = () => {
                           />
                         </div>
 
-                        {/* Nom du produit */}
-                        <h4 className="product-name-modern">{product.name}</h4>
+                        {/* Section contenu en bas avec tout aligné à gauche */}
+                        <div className="product-content-section">
 
-                        {/* Description */}
-                        <p className="product-utility-modern">{product.utility}</p>
+                          {/* Nom du produit - aligné à gauche */}
+                          <h4 className="product-name-modern">{product.name}</h4>
 
-                        {/* Prix et bouton */}
-                        <div className="product-actions">
-                          <button
-                            className="product-btn-modern"
-                            onClick={product.addToCart}
-                            data-cursor="hover"
-                          >
-                            AJOUTER AU PANIER
-                          </button>
-                          <span className="product-price-modern">{product.price}</span>
+                          {/* Description - alignée à gauche */}
+                          <p className="product-utility-modern">{product.utility}</p>
+
+                          {/* Actions : bouton à gauche + prix à droite */}
+                          <div className="product-actions">
+                            <button
+                              className="product-btn-modern"
+                              onClick={product.addToCart}
+                              data-cursor="hover"
+                            >
+                              AJOUTER AU PANIER
+                            </button>
+                            <span className="product-price-modern">{product.price}</span>
+                          </div>
                         </div>
                       </div>
                     </SwiperSlide>

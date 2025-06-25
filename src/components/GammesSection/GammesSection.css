@@ -53,6 +53,7 @@
     max-width: none;
     margin: 0;
     gap: 0;
+    overflow: hidden;
 }
 
 .gamme-container.reverse {
@@ -70,15 +71,17 @@
     justify-content: center;
     overflow: hidden;
     order: 1;
+    max-width: 50vw;
+    box-sizing: border-box;
 }
 
 .gamme-container.reverse .gamme-image-section {
     order: 2;
 }
 
-/* Section contenu - 50% de la largeur - CORRIGÉ POUR ÉVITER COUPURE */
+/* Section contenu - 50% de la largeur */
 .gamme-content-section {
-    padding: 0 40px; /* RÉDUIT le padding */
+    padding: 0 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -86,9 +89,10 @@
     position: relative;
     background: #ffffff;
     order: 2;
-    max-width: 100%; /* SUPPRIMÉ la limite */
+    max-width: 50vw;
     margin: 0 auto;
-    overflow: visible; /* AJOUTÉ */
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 .gamme-container.reverse .gamme-content-section {
@@ -110,60 +114,59 @@
     align-self: flex-start;
 }
 
-/* Container du slider de produits - CORRIGÉ POUR ÉVITER COUPURE */
+/* Container du slider de produits */
 .products-slider-container {
     width: 100%;
     margin-bottom: 60px;
     position: relative;
-    overflow: visible; /* CHANGÉ de hidden à visible */
-    max-width: 100%; /* SUPPRIMÉ la limite restrictive */
+    overflow: hidden;
+    max-width: 100%;
     align-self: flex-start;
 }
 
 .products-slider-viewport {
-    overflow: visible; /* CHANGÉ de hidden à visible */
+    overflow: hidden;
     width: 100%;
     position: relative;
-    max-width: 600px; /* AUGMENTÉ pour voir plus de cartes */
+    max-width: 600px;
     margin: 0;
 }
 
 .products-slider-track {
     display: flex;
-    transition: none; /* GSAP gère les transitions */
-    gap: 20px; /* Plus d'espace entre les cartes */
-    padding: 0 0 20px 0; /* Padding en bas pour éviter coupure des ombres */
+    transition: none;
+    gap: 20px;
+    padding: 0 0 20px 0;
     cursor: grab;
     user-select: none;
     will-change: transform;
-    overflow: visible; /* AJOUTÉ */
+    overflow: visible;
 }
 
 .products-slider-track:active {
     cursor: grabbing;
 }
 
-/* ===== NOUVEAU STYLE MODERNE - Comme ton design Figma ===== */
+/* ===== NOUVEAU STYLE MODERNE - Cards avec couleurs par gamme ===== */
 
-/* Card produit moderne - CORRIGÉ POUR ÉVITER COUPURE */
+/* Card produit moderne - SANS HOVER */
 .product-card-modern {
     min-width: 280px;
     width: 280px;
     height: 420px;
     flex-shrink: 0;
-    border-radius: 0; /* Pas de bordure arrondie comme sur Figma */
-    padding: 24px 20px 20px 20px;
-    text-align: center;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 16px;
+    padding: 0;
+    text-align: left;
+    /* SUPPRIMÉ : transition et hover */
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     cursor: grab;
     user-select: none;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    /* AJOUTÉ pour éviter la coupure : */
-    transform: translateZ(0); /* Force l'affichage complet */
+    overflow: hidden;
+    transform: translateZ(0);
     backface-visibility: hidden;
 }
 
@@ -171,12 +174,9 @@
     cursor: grabbing;
 }
 
-.product-card-modern:hover {
-    transform: translateY(-8px) translateZ(0);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-}
+/* SUPPRIMÉ : .product-card-modern:hover */
 
-/* Couleurs par gamme - EXACTEMENT comme ton Figma */
+/* Couleurs par gamme - REMISES COMME AVANT */
 .product-card-modern.hydra-beauty {
     background: linear-gradient(135deg, #E8F4F8 0%, #D6EDF5 100%);
 }
@@ -189,9 +189,13 @@
     background: linear-gradient(135deg, #F5F2E8 0%, #EDE6D0 100%);
 }
 
-/* Tag gamme en haut */
+/* Tag gamme en haut à gauche - REPOSITIONNÉ */
 .product-tag {
-    background: rgba(255, 255, 255, 0.9);
+    position: absolute;
+    top: 20px; /* Plus bas */
+    left: 20px; /* Plus à droite */
+    width: auto;
+    background: rgba(255, 255, 255, 0.95);
     color: #000000;
     font-family: 'Inter', sans-serif;
     font-size: 0.7rem;
@@ -200,107 +204,118 @@
     letter-spacing: 0.08em;
     padding: 8px 16px;
     border-radius: 20px;
-    margin: 0 auto 24px auto;
-    width: fit-content;
+    margin: 0;
+    text-align: center;
+    box-sizing: border-box;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    z-index: 10;
 }
 
-/* Container image centré */
+/* Container image centré - CORRIGÉ */
 .product-image-container {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
-    min-height: 180px;
+    margin: 40px 0 20px 0; /* Plus d'espace en haut */
+    min-height: 200px; /* Plus de hauteur */
+    padding: 0 20px;
+    position: relative;
 }
 
-/* Image produit - Plus grande comme sur Figma */
+/* Image produit - TAILLE CORRIGÉE */
 .product-image-modern {
-    width: 140px;
-    height: 180px;
+    width: 140px; /* Plus large */
+    height: 180px; /* Plus haute */
     object-fit: contain;
-    transition: transform 0.3s ease;
-    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+    /* Centrage parfait */
+    position: relative;
+    z-index: 2;
 }
 
-.product-card-modern:hover .product-image-modern {
-    transform: scale(1.05);
-}
+/* SUPPRIMÉ : .product-card-modern:hover .product-image-modern */
 
-/* Nom du produit - Style Figma */
-.product-name-modern {
-    font-family: 'ABChanel Corpo', 'Inter', sans-serif;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #000000;
-    margin-bottom: 8px;
-    line-height: 1.3;
-    text-align: center;
-    min-height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Description du produit */
-.product-utility-modern {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 400;
-    color: #666666;
-    margin-bottom: 20px;
-    line-height: 1.4;
-    min-height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
-
-/* Actions (bouton + prix) */
-.product-actions {
+/* Section contenu en bas */
+.product-content-section {
+    padding: 0 20px 20px 20px;
     display: flex;
     flex-direction: column;
     gap: 12px;
     margin-top: auto;
 }
 
-/* Bouton moderne - Style Figma */
+/* Nom du produit - ALIGNÉ À GAUCHE */
+.product-name-modern {
+    font-family: 'ABChanel Corpo', 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #000000;
+    margin: 0;
+    line-height: 1.3;
+    text-align: left;
+    min-height: auto;
+}
+
+/* Description du produit - ALIGNÉ À GAUCHE */
+.product-utility-modern {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #666666;
+    margin: 0;
+    line-height: 1.4;
+    text-align: left;
+    min-height: auto;
+}
+
+/* Actions (bouton + prix) - LAYOUT HORIZONTAL */
+.product-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+/* Bouton moderne - SANS HOVER EXCESSIF */
 .product-btn-modern {
     background: #000000;
     color: #ffffff;
     border: none;
-    padding: 12px 20px;
-    border-radius: 0; /* Rectangulaire comme sur Figma */
+    padding: 10px 16px;
+    border-radius: 6px;
     font-family: 'Inter', sans-serif;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    width: 100%;
-    min-height: 44px;
+    /* RÉDUIT : transition plus subtile */
+    transition: background-color 0.2s ease;
+    flex-shrink: 0;
+    white-space: nowrap;
+    min-height: 36px;
 }
 
+/* RÉDUIT : hover plus subtil */
 .product-btn-modern:hover {
     background: #333333;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    /* SUPPRIMÉ : transform et box-shadow */
 }
 
-/* Prix - Style Figma */
+/* Prix - À DROITE */
 .product-price-modern {
     font-family: 'ABChanel Corpo', 'Inter', sans-serif;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #000000;
-    text-align: center;
+    text-align: right;
     letter-spacing: 0.02em;
+    flex-shrink: 0;
 }
 
-/* Navigation dots du slider - Style plus moderne */
+/* Navigation dots du slider */
 .slider-navigation {
     display: flex;
     justify-content: center;
@@ -327,7 +342,7 @@
     transform: scale(1.2);
 }
 
-/* Description de la gamme - Alignée à gauche */
+/* Description de la gamme */
 .gamme-description {
     font-family: 'Inter', sans-serif;
     font-size: 1rem;
@@ -340,7 +355,7 @@
     opacity: 0;
 }
 
-/* Bouton découvrir - Aligné à gauche */
+/* Bouton découvrir */
 .gamme-discover-button {
     display: inline-flex;
     align-items: center;
@@ -368,11 +383,95 @@
     transform: translateY(-2px);
 }
 
-/* Responsive Design - CORRIGÉ */
+/* ===== STYLES SWIPER ===== */
+
+.swiper-products {
+    width: 100%;
+    padding-bottom: 20px !important;
+    overflow: hidden !important;
+    max-width: 100% !important;
+}
+
+.swiper-products .swiper-wrapper {
+    align-items: stretch;
+}
+
+.swiper-products .swiper-slide {
+    height: auto;
+    display: flex;
+    align-items: stretch;
+    max-width: 280px !important;
+    width: 280px !important;
+}
+
+/* Pagination Swiper */
+.swiper-products .swiper-pagination {
+    position: absolute;
+    bottom: 10px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    gap: 8px !important;
+}
+
+.swiper-products .swiper-pagination-bullet {
+    width: 8px !important;
+    height: 8px !important;
+    background: rgba(0, 0, 0, 0.2) !important;
+    border-radius: 50% !important;
+    opacity: 1 !important;
+    transition: all 0.3s ease !important;
+    margin: 0 !important;
+}
+
+.swiper-products .swiper-pagination-bullet-active {
+    background: #000000 !important;
+    transform: scale(1.5) !important;
+}
+
+.swiper-products .swiper-pagination-bullet:hover {
+    background: #000000 !important;
+    transform: scale(1.2) !important;
+}
+
+/* Navigation Swiper */
+.swiper-products .swiper-button-next,
+.swiper-products .swiper-button-prev {
+    color: #000000 !important;
+    width: 35px !important;
+    height: 35px !important;
+    margin-top: -17.5px !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 50% !important;
+    transition: all 0.3s ease !important;
+    top: 50% !important;
+}
+
+.swiper-products .swiper-button-next {
+    right: 10px !important;
+}
+
+.swiper-products .swiper-button-prev {
+    left: 10px !important;
+}
+
+.swiper-products .swiper-button-next:hover,
+.swiper-products .swiper-button-prev:hover {
+    background: rgba(255, 255, 255, 1) !important;
+    transform: scale(1.1) !important;
+}
+
+.swiper-products .swiper-button-next::after,
+.swiper-products .swiper-button-prev::after {
+    font-size: 14px !important;
+}
+
+/* Responsive Design */
 @media (max-width: 1200px) {
     .gamme-content-section {
-        padding: 0 30px; /* Moins de padding */
-        max-width: 100%;
+        padding: 0 15px;
     }
 
     .gammes-main-title {
@@ -385,19 +484,36 @@
     }
 
     .products-slider-viewport {
-        max-width: 500px; /* Plus large sur tablette */
+        max-width: 500px;
     }
 
     .product-card-modern {
-        min-width: 240px;
-        width: 240px;
-        height: 380px;
-        padding: 20px 16px;
+        min-width: 260px;
+        width: 260px;
+        height: 400px;
     }
 
     .product-image-modern {
-        width: 120px;
-        height: 150px;
+        width: 120px; /* Ajusté pour tablette */
+        height: 160px;
+    }
+
+    .product-name-modern {
+        font-size: 0.95rem;
+    }
+
+    .product-utility-modern {
+        font-size: 0.8rem;
+    }
+
+    .product-btn-modern {
+        padding: 9px 14px;
+        font-size: 0.65rem;
+        min-height: 34px;
+    }
+
+    .product-price-modern {
+        font-size: 1rem;
     }
 }
 
@@ -427,12 +543,13 @@
     .gamme-container.reverse .gamme-image-section {
         order: 1;
         min-height: 60vh;
+        max-width: 100%;
     }
 
     .gamme-content-section,
     .gamme-container.reverse .gamme-content-section {
         order: 2;
-        padding: 80px 20px; /* Moins de padding */
+        padding: 80px 15px;
         max-width: none;
         align-items: flex-start;
     }
@@ -454,7 +571,7 @@
     }
 
     .products-slider-viewport {
-        max-width: 400px; /* Ajusté pour tablette */
+        max-width: 400px;
     }
 
     .gamme-description {
@@ -485,7 +602,7 @@
 
     .gamme-content-section,
     .gamme-container.reverse .gamme-content-section {
-        padding: 60px 15px; /* Minimal padding sur mobile */
+        padding: 60px 10px;
         align-items: flex-start;
     }
 
@@ -506,39 +623,63 @@
     }
 
     .product-card-modern {
-        min-width: 220px;
-        width: 220px;
-        height: 360px;
-        padding: 18px 14px;
+        min-width: 240px;
+        width: 240px;
+        height: 380px;
+    }
+
+    .product-content-section {
+        padding: 0 16px 16px 16px;
+        gap: 10px;
+    }
+
+    .product-tag {
+        top: 16px;
+        left: 16px;
+        padding: 6px 12px;
+        font-size: 0.65rem;
     }
 
     .product-image-modern {
-        width: 100px;
-        height: 130px;
+        width: 110px; /* Ajusté pour mobile */
+        height: 140px;
     }
 
     .product-name-modern {
         font-size: 0.9rem;
-        min-height: 36px;
     }
 
     .product-utility-modern {
         font-size: 0.75rem;
-        min-height: 28px;
     }
 
     .product-btn-modern {
-        padding: 10px 16px;
-        font-size: 0.7rem;
-        min-height: 40px;
+        padding: 8px 12px;
+        font-size: 0.6rem;
+        min-height: 32px;
     }
 
     .product-price-modern {
-        font-size: 1.1rem;
+        font-size: 0.95rem;
+    }
+
+    .product-actions {
+        gap: 8px;
+        margin-top: 12px;
     }
 
     .products-slider-viewport {
-        max-width: 300px; /* Mobile */
+        max-width: 300px;
+    }
+
+    .swiper-products .swiper-button-next,
+    .swiper-products .swiper-button-prev {
+        display: none !important;
+    }
+
+    .swiper-products .swiper-slide {
+        max-width: 240px !important;
+        width: 240px !important;
     }
 }
 
@@ -558,7 +699,7 @@
 
     .gamme-content-section,
     .gamme-container.reverse .gamme-content-section {
-        padding: 50px 10px; /* Très minimal sur petit mobile */
+        padding: 50px 10px;
     }
 
     .gamme-title {
@@ -570,10 +711,21 @@
     }
 
     .product-card-modern {
-        min-width: 200px;
-        width: 200px;
-        height: 340px;
-        padding: 16px 12px;
+        min-width: 220px;
+        width: 220px;
+        height: 360px;
+    }
+
+    .product-content-section {
+        padding: 0 14px 14px 14px;
+        gap: 8px;
+    }
+
+    .product-tag {
+        top: 14px;
+        left: 14px;
+        padding: 5px 10px;
+        font-size: 0.6rem;
     }
 
     .product-image-modern {
@@ -581,8 +733,36 @@
         height: 115px;
     }
 
+    .product-name-modern {
+        font-size: 0.85rem;
+    }
+
+    .product-utility-modern {
+        font-size: 0.7rem;
+    }
+
+    .product-btn-modern {
+        padding: 7px 10px;
+        font-size: 0.55rem;
+        min-height: 30px;
+    }
+
+    .product-price-modern {
+        font-size: 0.9rem;
+    }
+
+    .product-actions {
+        gap: 6px;
+        margin-top: 10px;
+    }
+
     .products-slider-viewport {
         max-width: 250px;
+    }
+
+    .swiper-products .swiper-slide {
+        max-width: 220px !important;
+        width: 220px !important;
     }
 
     .gamme-discover-button {
@@ -595,20 +775,6 @@
     to {
         opacity: 1;
         transform: translateY(0);
-    }
-}
-
-@keyframes slideInLeft {
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes slideInRight {
-    to {
-        opacity: 1;
-        transform: translateX(0);
     }
 }
 
@@ -677,6 +843,10 @@
         border: 2px solid #000000;
     }
 
+    .product-tag {
+        border: 1px solid #000000;
+    }
+
     .slider-nav-dot {
         border: 1px solid #000000;
     }
@@ -722,8 +892,7 @@ html {
     pointer-events: none;
 }
 
-/* Transitions fluides pour les hover states */
-.product-card-modern,
+/* Transitions fluides pour les hover states réduits */
 .product-btn-modern,
 .gamme-discover-button,
 .slider-nav-dot {
@@ -731,187 +900,4 @@ html {
     transform: translateZ(0);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-}
-
-/* À AJOUTER dans src/components/GammesSection/GammesSection.css */
-
-/* ===== STYLES SWIPER - CARROUSEL PARFAIT ===== */
-
-/* Container du slider Swiper - CONTENU DANS LES 50% */
-.products-slider-container {
-    width: 100%;
-    margin-bottom: 60px;
-    position: relative;
-    max-width: 100%;
-    align-self: flex-start;
-    overflow: hidden; /* ← IMPORTANT : Contient le carrousel */
-}
-
-/* Swiper wrapper personnalisé - LIMITÉ À SA ZONE */
-.swiper-products {
-    width: 100%;
-    padding-bottom: 20px !important; /* ← RÉDUIT : Plus besoin d'espace pour pagination */
-    overflow: hidden !important; /* ← FORCÉ : Pas de débordement */
-    max-width: 100% !important;
-}
-
-.swiper-products .swiper-wrapper {
-    align-items: stretch;
-}
-
-.swiper-products .swiper-slide {
-    height: auto;
-    display: flex;
-    align-items: stretch;
-    max-width: 280px !important; /* ← LIMITÉ : Taille max des cartes */
-    width: 280px !important; /* ← LARGEUR FIXE pour slidesPerView="auto" */
-}
-
-/* Pagination Swiper - Style moderne */
-.swiper-products .swiper-pagination {
-    position: absolute;
-    bottom: 10px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: auto !important;
-    display: flex !important;
-    justify-content: center !important;
-    gap: 8px !important;
-}
-
-.swiper-products .swiper-pagination-bullet {
-    width: 8px !important;
-    height: 8px !important;
-    background: rgba(0, 0, 0, 0.2) !important;
-    border-radius: 50% !important;
-    opacity: 1 !important;
-    transition: all 0.3s ease !important;
-    margin: 0 !important;
-}
-
-.swiper-products .swiper-pagination-bullet-active {
-    background: #000000 !important;
-    transform: scale(1.5) !important;
-}
-
-.swiper-products .swiper-pagination-bullet:hover {
-    background: #000000 !important;
-    transform: scale(1.2) !important;
-}
-
-/* Navigation Swiper - POSITIONNÉE DANS LA ZONE */
-.swiper-products .swiper-button-next,
-.swiper-products .swiper-button-prev {
-    color: #000000 !important;
-    width: 35px !important;
-    height: 35px !important;
-    margin-top: -17.5px !important;
-    background: rgba(255, 255, 255, 0.9) !important;
-    border-radius: 50% !important;
-    transition: all 0.3s ease !important;
-    /* ← IMPORTANT : Positionnement dans la zone */
-    top: 50% !important;
-}
-
-.swiper-products .swiper-button-next {
-    right: 10px !important; /* ← Dans la zone droite */
-}
-
-.swiper-products .swiper-button-prev {
-    left: 10px !important; /* ← Dans la zone gauche */
-}
-
-.swiper-products .swiper-button-next:hover,
-.swiper-products .swiper-button-prev:hover {
-    background: rgba(255, 255, 255, 1) !important;
-    transform: scale(1.1) !important;
-}
-
-.swiper-products .swiper-button-next::after,
-.swiper-products .swiper-button-prev::after {
-    font-size: 14px !important;
-}
-
-/* Responsive pour Swiper - ADAPTÉ AUX 50% */
-@media (max-width: 768px) {
-    .swiper-products {
-        padding-bottom: 15px !important; /* ← RÉDUIT : Plus de pagination */
-    }
-
-    .swiper-products .swiper-button-next,
-    .swiper-products .swiper-button-prev {
-        display: none !important; /* Masquer flèches sur mobile */
-    }
-
-    .swiper-products .swiper-slide {
-        max-width: 220px !important; /* ← Plus petit sur mobile */
-        width: 220px !important; /* ← LARGEUR FIXE mobile */
-    }
-}
-
-/* Section contenu - STRICT 50% */
-.gamme-content-section {
-    overflow: hidden !important; /* ← FORCÉ : Pas de débordement */
-    padding: 0 20px !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important; /* ← IMPORTANT : Inclut padding */
-}
-
-/* Container gamme - STRICT 50% chacun */
-.gamme-container {
-    display: grid;
-    grid-template-columns: 50% 50%;
-    width: 100%;
-    height: 100vh;
-    max-width: none;
-    margin: 0;
-    gap: 0;
-    overflow: hidden; /* ← AJOUTÉ : Empêche débordement */
-}
-
-/* Image section - STRICT 50% */
-.gamme-image-section {
-    position: relative;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    order: 1;
-    max-width: 50vw; /* ← STRICT : 50% de l'écran */
-    box-sizing: border-box;
-}
-
-/* Content section - STRICT 50% */
-.gamme-content-section {
-    max-width: 50vw; /* ← STRICT : 50% de l'écran */
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-}
-
-@media (max-width: 1200px) {
-    .gamme-content-section {
-        padding: 0 15px !important;
-    }
-}
-
-@media (max-width: 1024px) {
-    /* Sur tablette, on garde le 50% mais ajuste */
-    .gamme-content-section {
-        padding: 80px 15px !important;
-        max-width: 100% !important; /* ← Sur tablette, pleine largeur */
-    }
-
-    .gamme-image-section {
-        max-width: 100% !important; /* ← Sur tablette, pleine largeur */
-    }
-}
-
-@media (max-width: 768px) {
-    .gamme-content-section {
-        padding: 60px 10px !important;
-        max-width: 100% !important;
-    }
 }
