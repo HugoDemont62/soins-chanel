@@ -16,6 +16,7 @@ import MaRoutine from './pages/MaRoutine/MaRoutine.jsx';
 import RoutineSelection from './pages/RoutineSelection/RoutineSelection.jsx';
 import RoutineQuestionnaire
   from './pages/RoutineQuestionnaire/RoutineQuestionnaire.jsx';
+import RoutineResults from './pages/RoutineResults/RoutineResults.jsx';
 
 // Hook pour détecter les changements de route
 function RouteChangeHandler({ setIsTransitioning }) {
@@ -58,8 +59,8 @@ function AppContent() {
           <Route path="/products" element={<Products />} />
           <Route path="/routine" element={<MaRoutine />} />
           <Route path="/routine/selection" element={<RoutineSelection />} />
-          <Route path="/routine/questionnaire/:type" element={<RoutineQuestionnaire />} />  {/* ← Nouvelle route */}
-
+          <Route path="/routine/questionnaire/:type" element={<RoutineQuestionnaire />} />
+          <Route path="/routine/results/:type" element={<RoutineResults />} />
         </Routes>
       </PageTransition>
     </>
