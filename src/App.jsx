@@ -12,6 +12,7 @@ import CustomCursor from './components/CustomPages/CustomCursor.jsx';
 // Pages
 import Home from './pages/Home/Home.jsx';
 import Products from './pages/Products/Products.jsx';
+import MaRoutine from './pages/MaRoutine/MaRoutine.jsx';
 
 // Hook pour détecter les changements de route
 function RouteChangeHandler({ setIsTransitioning }) {
@@ -52,6 +53,7 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/routine" element={<MaRoutine />} />  {/* ← Nouvelle route */}
         </Routes>
       </PageTransition>
     </>

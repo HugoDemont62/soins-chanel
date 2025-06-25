@@ -1,0 +1,414 @@
+/* Fichier: src/pages/MaRoutine/MaRoutine.css */
+
+.ma-routine-page {
+    min-height: 100vh;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 40px 20px;
+}
+
+/* Logo Chanel en haut au centre */
+.routine-logo-header {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    opacity: 0;
+}
+
+.routine-logo-img {
+    height: 50px;
+    width: auto;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.05));
+    transition: all 0.3s ease;
+}
+
+.routine-logo-img:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.1));
+}
+
+/* Container principal centré */
+.routine-main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    z-index: 5;
+    position: relative;
+}
+
+/* Titre principal avec disposition décalée */
+.routine-main-title {
+    margin-bottom: 60px;
+    position: relative;
+}
+
+.title-line {
+    font-family: 'ABChanel Corpo', 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 400;
+    color: #000000;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    opacity: 0;
+    display: block;
+}
+
+/* Disposition décalée pour créer l'effet non-aligné */
+.title-line.line-1 {
+    transform: translateX(-40px);
+    margin-left: -40px;
+}
+
+.title-line.line-2 {
+    transform: translateX(20px);
+    margin-left: 20px;
+}
+
+.title-line.line-3 {
+    transform: translateX(-15px);
+    margin-left: -15px;
+}
+
+/* Description */
+.routine-main-description {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.125rem;
+    font-weight: 400;
+    color: #525252;
+    line-height: 1.7;
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 80px auto;
+    opacity: 0;
+}
+
+/* Bouton CTA */
+.routine-cta-button {
+    background: #000000;
+    color: #ffffff;
+    border: none;
+    padding: 18px 40px;
+    border-radius: 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    min-width: 220px;
+}
+
+.routine-cta-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.routine-cta-button:hover::before {
+    left: 100%;
+}
+
+.routine-cta-button:hover {
+    background: #333333;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.routine-cta-button:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Éléments décoratifs en arrière-plan */
+.routine-decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.decoration-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.03;
+    background: radial-gradient(circle, #000000 0%, transparent 70%);
+}
+
+.decoration-circle.circle-1 {
+    width: 600px;
+    height: 600px;
+    top: -200px;
+    right: -150px;
+    animation: floatSlow 20s ease-in-out infinite;
+}
+
+.decoration-circle.circle-2 {
+    width: 400px;
+    height: 400px;
+    bottom: -100px;
+    left: -100px;
+    animation: floatSlow 25s ease-in-out infinite reverse;
+}
+
+.decoration-circle.circle-3 {
+    width: 800px;
+    height: 800px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: floatSlow 30s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes floatSlow {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    25% {
+        transform: translate(30px, -20px) rotate(90deg);
+    }
+    50% {
+        transform: translate(0, -40px) rotate(180deg);
+    }
+    75% {
+        transform: translate(-30px, -20px) rotate(270deg);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .routine-main-container {
+        max-width: 700px;
+        padding: 0 30px;
+    }
+
+    .title-line {
+        font-size: 3.5rem;
+    }
+
+    .routine-main-description {
+        font-size: 1rem;
+        max-width: 550px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .routine-logo-header {
+        top: 50px;
+    }
+
+    .routine-logo-img {
+        height: 45px;
+    }
+
+    .title-line {
+        font-size: 3rem;
+    }
+
+    .routine-main-description {
+        font-size: 0.95rem;
+        margin-bottom: 60px;
+    }
+
+    .routine-cta-button {
+        padding: 16px 35px;
+        font-size: 0.8rem;
+    }
+
+    /* Réduire le décalage sur tablette */
+    .title-line.line-1 {
+        transform: translateX(-25px);
+        margin-left: -25px;
+    }
+
+    .title-line.line-2 {
+        transform: translateX(15px);
+        margin-left: 15px;
+    }
+
+    .title-line.line-3 {
+        transform: translateX(-10px);
+        margin-left: -10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .ma-routine-page {
+        padding: 30px 15px;
+    }
+
+    .routine-logo-header {
+        top: 40px;
+    }
+
+    .routine-logo-img {
+        height: 38px;
+    }
+
+    .routine-main-container {
+        max-width: none;
+        padding: 0 20px;
+    }
+
+    .routine-main-title {
+        margin-bottom: 50px;
+    }
+
+    .title-line {
+        font-size: 2.5rem;
+        margin-bottom: 6px;
+    }
+
+    .routine-main-description {
+        font-size: 0.9rem;
+        margin-bottom: 50px;
+        max-width: none;
+    }
+
+    .routine-cta-button {
+        padding: 14px 30px;
+        font-size: 0.75rem;
+        min-width: 200px;
+    }
+
+    /* Réduire encore plus le décalage sur mobile */
+    .title-line.line-1 {
+        transform: translateX(-15px);
+        margin-left: -15px;
+    }
+
+    .title-line.line-2 {
+        transform: translateX(10px);
+        margin-left: 10px;
+    }
+
+    .title-line.line-3 {
+        transform: translateX(-8px);
+        margin-left: -8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .routine-logo-header {
+        top: 30px;
+    }
+
+    .routine-logo-img {
+        height: 32px;
+    }
+
+    .title-line {
+        font-size: 2rem;
+        line-height: 0.95;
+    }
+
+    .routine-main-description {
+        font-size: 0.85rem;
+        line-height: 1.6;
+        margin-bottom: 40px;
+    }
+
+    .routine-cta-button {
+        padding: 12px 25px;
+        font-size: 0.7rem;
+        min-width: 180px;
+    }
+
+    /* Minimal décalage sur très petit écran */
+    .title-line.line-1 {
+        transform: translateX(-8px);
+        margin-left: -8px;
+    }
+
+    .title-line.line-2 {
+        transform: translateX(5px);
+        margin-left: 5px;
+    }
+
+    .title-line.line-3 {
+        transform: translateX(-3px);
+        margin-left: -3px;
+    }
+
+    .decoration-circle.circle-1 {
+        width: 400px;
+        height: 400px;
+    }
+
+    .decoration-circle.circle-2 {
+        width: 300px;
+        height: 300px;
+    }
+
+    .decoration-circle.circle-3 {
+        width: 500px;
+        height: 500px;
+    }
+}
+
+/* États de chargement et animations */
+.title-line,
+.routine-main-description,
+.routine-cta-button,
+.routine-logo-img {
+    will-change: transform, opacity;
+}
+
+/* Mode réduit pour l'accessibilité */
+@media (prefers-reduced-motion: reduce) {
+    .decoration-circle,
+    .routine-cta-button::before {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .title-line,
+    .routine-main-description,
+    .routine-cta-button,
+    .routine-logo-img {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+/* Amélioration du contraste pour l'accessibilité */
+@media (prefers-contrast: high) {
+    .routine-cta-button {
+        border: 2px solid #000000;
+    }
+
+    .title-line {
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* Focus states pour l'accessibilité */
+.routine-cta-button:focus,
+.routine-logo-img:focus {
+    outline: 2px solid #D4AF37;
+    outline-offset: 4px;
+}
