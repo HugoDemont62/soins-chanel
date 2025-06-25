@@ -1,80 +1,406 @@
-/* Fichier: src/components/ProductSlider/ProductSlider.css (Styles supplémentaires) */
+/* Fichier: src/components/ProductSlider/ProductSlider.css */
 
-/* Progress bar pour auto-play */
-.auto-play-progress {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: rgba(0, 0, 0, 0.1);
-    z-index: 20;
+.product-slider {
+    position: relative;
+    min-height: 105vh;
+    display: flex;
+    align-items: center;
     overflow: hidden;
+    padding: 0;
+    background: white;
 }
 
-.progress-bar {
-    height: 100%;
+/* Container principal - disposition inversée par rapport à MaRoutineSection */
+.slider-container {
+    display: grid;
+    grid-template-columns: 35% 65%;
     width: 100%;
-    background: linear-gradient(90deg, #D4AF37 0%, #000000 100%);
-    transform: translateX(-100%);
-    animation: progressFill linear infinite;
+    height: 100vh;
+    max-width: none;
+    margin: 0;
+    gap: 0;
 }
 
-@keyframes progressFill {
-    from {
-        transform: translateX(-100%);
-    }
-    to {
-        transform: translateX(0%);
-    }
+/* Section contenu - 35% de la largeur (GAUCHE) */
+.slider-content-section {
+    padding: 80px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
+    background: #ffffff;
 }
 
-/* Contrôle auto-play */
-.auto-play-control {
-    position: absolute;
-    top: 40px;
-    right: 40px;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+/* Section image - 65% de la largeur (DROITE) */
+.slider-image-section {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: #000000;
-    backdrop-filter: blur(10px);
-    z-index: 15;
+    overflow: hidden;
+    flex-direction: column;
 }
 
-.auto-play-control:hover {
+/* Image principale */
+.slider-main-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Titre principal */
+.slider-title {
+    font-family: 'ABChanel Corpo', 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 400;
+    color: #000000;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 32px;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+/* Description */
+.slider-description {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.125rem;
+    font-weight: 400;
+    color: #525252;
+    line-height: 1.7;
+    margin-bottom: 48px;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+/* Bouton call-to-action */
+.slider-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0;
+    background: transparent;
+    color: #000000;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    align-self: flex-start;
+    border-bottom: 2px solid #000000;
+    padding-bottom: 4px;
+}
+
+.slider-button:hover {
+    color: #333333;
+    border-bottom-color: #D4AF37;
+    transform: translateY(-1px);
+}
+
+/* Navigation flèches - EN BAS À GAUCHE DE L'IMAGE */
+.navigation-controls {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    gap: 0;
+    z-index: 10;
+}
+
+.nav-arrow-square {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.nav-arrow-square:first-child {
+    border-right: none;
+}
+
+.nav-arrow-square:hover {
     background: #000000;
     color: #ffffff;
     transform: scale(1.05);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* Alignement du texte */
-.content-wrapper.text-left {
-    text-align: left;
+.nav-arrow-square:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
 }
 
-.content-wrapper.text-center {
-    text-align: center;
+.nav-arrow-square:disabled:hover {
+    background: rgba(255, 255, 255, 0.9);
+    color: #000000;
 }
 
-.content-wrapper.text-right {
-    text-align: right;
+/* Progress bar - DÉTACHÉE SOUS L'IMAGE */
+.progress-bar-container {
+    left: 50%;
+    width: 100%;
+    z-index: 10;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    background: white;
 }
 
-/* États de chargement des images */
-.slide-image {
-    transition: opacity 0.5s ease, transform 0.8s ease;
+.progress-track {
+    width: 100%;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
 }
 
-.slide-image:not([src]) {
+.progress-fill {
+    height: 100%;
+    background: #000000;
+    border-radius: 2px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: left;
+}
+
+/* Compteur de slides */
+.slide-counter {
+    position: absolute;
+    bottom: -60px;
+    right: 20px;
+    color: #000000;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.current-number {
+    color: #000000;
+    font-weight: 600;
+}
+
+.separator {
+    opacity: 0.7;
+    color: #000000;
+}
+
+.total-number {
+    opacity: 0.7;
+    color: #000000;
+}
+
+/* Container des slides */
+.slides-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.slide-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 80px;
+}
+
+.slide-image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Animations d'entrée */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide.active .slider-title {
+    animation: fadeInUp 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+}
+
+.slide.active .slider-description {
+    animation: fadeInUp 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
+}
+
+.slide.active .slider-button {
+    animation: fadeInUp 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.6s forwards;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .slider-container {
+        grid-template-columns: 40% 60%;
+    }
+
+    .slider-content-section {
+        padding: 60px 40px;
+    }
+
+    .slider-title {
+        font-size: 2.25rem;
+    }
+
+    .slider-description {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .slider-container {
+        grid-template-columns: 45% 55%;
+    }
+
+    .slider-content-section {
+        padding: 50px 30px;
+    }
+
+    .slider-title {
+        font-size: 2rem;
+        margin-bottom: 24px;
+    }
+
+    .slider-description {
+        font-size: 0.95rem;
+        margin-bottom: 36px;
+    }
+}
+
+@media (max-width: 768px) {
+    .product-slider {
+        min-height: auto;
+    }
+
+    .slider-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 50vh;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .slider-content-section {
+        order: 1;
+        padding: 60px 40px;
+        min-height: 50vh;
+        display: flex;
+        justify-content: center;
+    }
+
+    .slider-image-section {
+        order: 2;
+        min-height: 50vh;
+    }
+
+    .slider-title {
+        font-size: 2.5rem;
+        text-align: left;
+        margin-bottom: 28px;
+    }
+
+    .slider-description {
+        font-size: 1rem;
+        text-align: left;
+        margin-bottom: 40px;
+    }
+
+    .navigation-controls {
+        bottom: 15px;
+        left: 15px;
+        gap: 0;
+    }
+
+    .progress-bar-container {
+        bottom: -40px;
+        width: 150px;
+    }
+
+    .slide-counter {
+        bottom: -40px;
+        right: 15px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .slider-container {
+        grid-template-rows: auto 40vh;
+    }
+
+    .slider-image-section {
+        min-height: 40vh;
+    }
+
+    .slider-content-section {
+        padding: 40px 20px;
+    }
+
+    .slider-title {
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+
+    .slider-description {
+        font-size: 0.9rem;
+        margin-bottom: 32px;
+    }
+
+    .navigation-controls {
+        bottom: 10px;
+        left: 15px;
+        gap: 0;
+    }
+
+    .progress-bar-container {
+        bottom: -30px;
+        width: 120px;
+    }
+
+    .slide-counter {
+        bottom: -30px;
+        right: 15px;
+        font-size: 0.8rem;
+    }
+}
+
+/* États de chargement de l'image */
+.slider-main-image[src=""] {
     background: linear-gradient(45deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
     background-size: 20px 20px;
     animation: shimmer 1.5s infinite;
@@ -89,306 +415,31 @@
     }
 }
 
-/* Effets de transition pour les slides */
-.slide.transitioning-out {
-    pointer-events: none;
-}
-
-.slide.transitioning-in {
-    pointer-events: none;
-}
-
-/* Amélioration des performances */
-.slides-container {
+/* Optimisations pour les performances */
+.slider-image-section {
     will-change: transform;
     transform: translateZ(0);
     backface-visibility: hidden;
 }
 
-.slide {
-    will-change: transform, opacity;
-    transform: translateZ(0);
-    backface-visibility: hidden;
+.slider-main-image {
+    contain: layout style paint;
 }
 
-/* Support tactile amélioré */
-.product-slider {
-    touch-action: pan-y pinch-zoom;
-    -webkit-overflow-scrolling: touch;
-}
-
-/* Indicateurs améliorés avec labels */
-.slide-indicators {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.indicator {
-    position: relative;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 2px solid rgba(0, 0, 0, 0.3);
-    background: transparent;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.indicator.active {
-    background: #000000;
-    border-color: #000000;
-}
-
-.indicator:hover {
-    border-color: #000000;
-    transform: scale(1.3);
-}
-
-/* Tooltip pour les indicateurs */
-.indicator::after {
-    content: attr(aria-label);
-    position: absolute;
-    bottom: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-    z-index: 100;
-}
-
-.indicator:hover::after {
-    opacity: 1;
-}
-
-/* Navigation avec fade pour les flèches */
-.nav-arrow {
-    opacity: 0.7;
-    transition: all 0.3s ease;
-}
-
-.nav-arrow:hover {
-    opacity: 1;
-}
-
-.product-slider:hover .nav-arrow {
-    opacity: 1;
-}
-
-/* Responsive amélioré pour les contrôles */
-@media (max-width: 768px) {
-    .auto-play-control {
-        top: 20px;
-        right: 20px;
-        width: 40px;
-        height: 40px;
-    }
-
-    .auto-play-progress {
-        height: 2px;
-    }
-
-    /* Masquer les tooltips sur mobile */
-    .indicator::after {
-        display: none;
-    }
-}
-
-/* Mode paysage sur mobile */
-@media (max-width: 768px) and (orientation: landscape) {
-    .slide {
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr;
-    }
-
-    .slide-content {
-        order: 1;
-        padding: 20px 30px;
-        min-height: 100vh;
-    }
-
-    .slide-image-container {
-        order: 2;
-        padding: 20px 30px;
-        min-height: 100vh;
-    }
-
-    .slide-title {
-        font-size: 1.5rem;
-    }
-
-    .slide-subtitle {
-        font-size: 0.8rem;
-    }
-}
-
-/* États de focus améliorés */
-.nav-arrow:focus-visible,
-.indicator:focus-visible,
-.slide-button:focus-visible,
-.auto-play-control:focus-visible {
-    outline: 3px solid #D4AF37;
-    outline-offset: 3px;
-    box-shadow: 0 0 0 1px #ffffff;
-}
-
-/* Animation de pulse pour l'indicateur actif */
-.indicator.active::before {
-    content: '';
-    position: absolute;
-    top: -4px;
-    left: -4px;
-    right: -4px;
-    bottom: -4px;
-    border: 2px solid #D4AF37;
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-    opacity: 0.6;
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-        opacity: 0.6;
-    }
-    50% {
-        transform: scale(1.2);
-        opacity: 0.3;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 0.6;
-    }
-}
-
-/* Optimisation pour les appareils haute densité */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .slide-image {
-        image-rendering: -webkit-optimize-contrast;
-        image-rendering: crisp-edges;
-    }
-}
-
-/* Mode sombre complet */
-@media (prefers-color-scheme: dark) {
-    .product-slider {
-        background: #1a1a1a;
-    }
-
-    .slide {
-        background: #2a2a2a !important;
-    }
-
-    .slide-title {
-        color: #ffffff;
-    }
-
-    .slide-subtitle {
-        color: #cccccc;
-    }
-
-    .slide-button {
-        background: #ffffff;
-        color: #000000;
-    }
-
-    .slide-button:hover {
-        background: #D4AF37;
-        color: #000000;
-    }
-
-    .nav-arrow {
-        background: rgba(0, 0, 0, 0.8);
-        color: #ffffff;
-        border-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .nav-arrow:hover {
-        background: #ffffff;
-        color: #000000;
-    }
-
-    .auto-play-control {
-        background: rgba(0, 0, 0, 0.8);
-        color: #ffffff;
-        border-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .auto-play-control:hover {
-        background: #ffffff;
-        color: #000000;
-    }
-
-    .indicator {
-        border-color: rgba(255, 255, 255, 0.3);
-    }
-
-    .indicator.active {
-        background: #ffffff;
-        border-color: #ffffff;
-    }
-
-    .slide-counter {
-        color: #cccccc;
-    }
-
-    .current-number {
-        color: #ffffff;
-    }
-
-    .auto-play-progress {
-        background: rgba(255, 255, 255, 0.1);
-    }
-}
-
-/* Améliorations d'accessibilité */
+/* Mode réduit pour l'accessibilité */
 @media (prefers-reduced-motion: reduce) {
-    .progress-bar {
+    .slider-main-image,
+    .slide,
+    .progress-fill {
         animation: none !important;
+        transition: none !important;
     }
 
-    .indicator.active::before {
+    .slider-title,
+    .slider-description,
+    .slider-button {
         animation: none !important;
-    }
-
-    .slide-image:not([src]) {
-        animation: none !important;
-    }
-
-    * {
-        transition-duration: 0.01ms !important;
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-    }
-}
-
-/* Support pour les écrans très larges */
-@media (min-width: 1920px) {
-    .slide-content {
-        padding: 120px 80px 120px 120px;
-    }
-
-    .slide-image-container {
-        padding: 120px 120px 120px 80px;
-    }
-
-    .slide-title {
-        font-size: 3.5rem;
-    }
-
-    .slide-subtitle {
-        font-size: 1.25rem;
-    }
-
-    .content-wrapper {
-        max-width: 680px;
+        opacity: 1 !important;
+        transform: none !important;
     }
 }
