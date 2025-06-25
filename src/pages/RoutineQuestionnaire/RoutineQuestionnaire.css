@@ -1,0 +1,577 @@
+/* Fichier: src/pages/RoutineQuestionnaire/RoutineQuestionnaire.css */
+
+.routine-questionnaire-page {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+/* Section Image - 50% gauche */
+.image-section {
+    width: 50%;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.question-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Indicateur de progression */
+.progress-indicator {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    right: 40px;
+    z-index: 10;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #ffffff;
+    border-radius: 2px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-text {
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Section Questions - 50% droite */
+.question-section {
+    width: 50%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    position: relative;
+}
+
+/* Header avec bouton retour */
+.question-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 40px 20px 40px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    z-index: 10;
+}
+
+.back-button {
+    background: transparent;
+    border: none;
+    color: #525252;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    padding: 8px 0;
+}
+
+.back-button:hover {
+    color: #000000;
+    transform: translateX(-4px);
+}
+
+.routine-type {
+    color: #D4AF37;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* Container de la question */
+.question-container {
+    padding: 40px 40px 30px 40px;
+    background: #ffffff;
+}
+
+.question-title {
+    font-family: 'ABChanel Corpo', 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 400;
+    color: #000000;
+    line-height: 1.3;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+}
+
+.question-description {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #525252;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Container des options avec scroll */
+.options-scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 40px;
+
+    /* Styles de scrollbar personnalisés */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.options-scroll-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.options-scroll-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.options-scroll-container::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.options-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* Container des options */
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px 0 40px 0;
+    min-height: min-content;
+}
+
+/* Item d'option */
+.option-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.option-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.02), transparent);
+    transition: left 0.6s ease;
+}
+
+.option-item:hover::before {
+    left: 100%;
+}
+
+.option-item:hover {
+    border-color: rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.option-item.selected {
+    border-color: #000000;
+    background: rgba(0, 0, 0, 0.02);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Radio button personnalisé */
+.option-radio {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.radio-outer {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.radio-inner {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #000000;
+    transform: scale(0);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.option-item.selected .radio-outer {
+    border-color: #000000;
+}
+
+.option-item.selected .radio-inner {
+    transform: scale(1);
+}
+
+/* Contenu de l'option */
+.option-content {
+    flex: 1;
+}
+
+.option-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #000000;
+    margin: 0 0 8px 0;
+    line-height: 1.3;
+}
+
+.option-description {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: #525252;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Container du bouton continuer */
+.continue-container {
+    padding: 20px 40px 40px 40px;
+    background: #ffffff;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.continue-button {
+    width: 100%;
+    background: #000000;
+    color: #ffffff;
+    border: none;
+    padding: 16px 32px;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.continue-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.continue-button:hover::before {
+    left: 100%;
+}
+
+.continue-button:hover {
+    background: #333333;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.continue-button:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .question-title {
+        font-size: 2rem;
+    }
+
+    .question-description {
+        font-size: 0.95rem;
+    }
+
+    .option-label {
+        font-size: 1rem;
+    }
+
+    .option-description {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .question-header {
+        padding: 25px 30px 15px 30px;
+    }
+
+    .question-container {
+        padding: 30px 30px 25px 30px;
+    }
+
+    .options-scroll-container {
+        padding: 0 30px;
+    }
+
+    .continue-container {
+        padding: 15px 30px 30px 30px;
+    }
+
+    .question-title {
+        font-size: 1.8rem;
+        margin-bottom: 12px;
+    }
+
+    .progress-indicator {
+        bottom: 30px;
+        left: 30px;
+        right: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .routine-questionnaire-page {
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    .image-section {
+        width: 100%;
+        height: 40vh;
+    }
+
+    .question-section {
+        width: 100%;
+        height: 60vh;
+    }
+
+    .question-header {
+        padding: 20px 20px 15px 20px;
+    }
+
+    .question-container {
+        padding: 25px 20px 20px 20px;
+    }
+
+    .options-scroll-container {
+        padding: 0 20px;
+    }
+
+    .continue-container {
+        padding: 15px 20px 25px 20px;
+    }
+
+    .question-title {
+        font-size: 1.6rem;
+        line-height: 1.2;
+    }
+
+    .question-description {
+        font-size: 0.9rem;
+    }
+
+    .option-item {
+        padding: 16px;
+        gap: 12px;
+    }
+
+    .option-label {
+        font-size: 0.95rem;
+    }
+
+    .option-description {
+        font-size: 0.8rem;
+    }
+
+    .continue-button {
+        padding: 14px 24px;
+        font-size: 0.9rem;
+    }
+
+    .progress-indicator {
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+    }
+
+    .progress-text {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .image-section {
+        height: 35vh;
+    }
+
+    .question-section {
+        height: 65vh;
+    }
+
+    .question-header {
+        padding: 15px 15px 10px 15px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .question-container {
+        padding: 20px 15px 15px 15px;
+    }
+
+    .options-scroll-container {
+        padding: 0 15px;
+    }
+
+    .continue-container {
+        padding: 12px 15px 20px 15px;
+    }
+
+    .question-title {
+        font-size: 1.4rem;
+        margin-bottom: 10px;
+    }
+
+    .question-description {
+        font-size: 0.85rem;
+        line-height: 1.5;
+    }
+
+    .option-item {
+        padding: 14px;
+        gap: 10px;
+    }
+
+    .radio-outer {
+        width: 18px;
+        height: 18px;
+    }
+
+    .radio-inner {
+        width: 6px;
+        height: 6px;
+    }
+
+    .option-label {
+        font-size: 0.9rem;
+    }
+
+    .option-description {
+        font-size: 0.75rem;
+    }
+
+    .continue-button {
+        padding: 12px 20px;
+        font-size: 0.85rem;
+    }
+
+    .progress-indicator {
+        bottom: 15px;
+        left: 15px;
+        right: 15px;
+    }
+
+    .routine-type {
+        font-size: 0.7rem;
+    }
+
+    .back-button {
+        font-size: 0.8rem;
+    }
+}
+
+/* Mode réduit pour l'accessibilité */
+@media (prefers-reduced-motion: reduce) {
+    .option-item,
+    .continue-button,
+    .back-button,
+    .progress-fill,
+    .radio-inner,
+    .option-item::before,
+    .continue-button::before {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Amélioration du contraste pour l'accessibilité */
+@media (prefers-contrast: high) {
+    .option-item {
+        border-width: 3px;
+    }
+
+    .radio-outer {
+        border-width: 3px;
+    }
+
+    .continue-button {
+        border: 2px solid #000000;
+    }
+}
+
+/* Focus states pour l'accessibilité */
+.option-item:focus,
+.continue-button:focus,
+.back-button:focus {
+    outline: 3px solid #D4AF37;
+    outline-offset: 2px;
+}
+
+/* Animations d'entrée */
+.question-container > *,
+.options-container > * {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* Styles pour les options avec plus d'espace */
+.options-container {
+    padding-bottom: 60px; /* Plus d'espace en bas pour le scroll */
+}
+
+/* Amélioration du scroll sur mobile */
+@media (hover: none) and (pointer: coarse) {
+    .options-scroll-container {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+}

@@ -1,10 +1,12 @@
 // Fichier: src/pages/MaRoutine/MaRoutine.jsx
 import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './MaRoutine.css';
 
 const MaRoutine = () => {
+  const navigate = useNavigate();
   const pageRef = useRef(null);
   const logoRef = useRef(null);
   const titleRef = useRef(null);
@@ -80,9 +82,7 @@ const MaRoutine = () => {
   }, []);
 
   const handleCreateRoutine = () => {
-    console.log('Redirection vers la page de création de routine');
-    // Ici tu peux ajouter la navigation React Router
-    // navigate('/routine/creation');
+    navigate('/routine/selection');
   };
 
   return (

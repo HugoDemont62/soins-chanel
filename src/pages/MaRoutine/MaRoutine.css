@@ -14,11 +14,11 @@
 
 /* Logo Chanel en haut au centre */
 .routine-logo-header {
-    position: absolute;
-    top: 60px;
+    position: fixed;
+    top: 40px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 10;
+    z-index: 100;
     opacity: 0;
 }
 
@@ -217,7 +217,7 @@
 
 @media (max-width: 1024px) {
     .routine-logo-header {
-        top: 50px;
+        top: 30px;
     }
 
     .routine-logo-img {
@@ -261,7 +261,7 @@
     }
 
     .routine-logo-header {
-        top: 40px;
+        top: 20px;
     }
 
     .routine-logo-img {
@@ -313,7 +313,7 @@
 
 @media (max-width: 480px) {
     .routine-logo-header {
-        top: 30px;
+        top: 15px;
     }
 
     .routine-logo-img {
