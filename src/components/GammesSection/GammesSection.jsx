@@ -152,7 +152,7 @@ const GammesSection = () => {
 
     const currentIndex = currentSliders[gammeId];
     const totalProducts = gamme.products.length;
-    const maxIndex = totalProducts - 2; // Afficher 2 produits à la fois
+    const maxIndex = totalProducts - 1; // Permet de naviguer jusqu'au dernier produit
 
     let newIndex;
     if (direction === 'next') {
@@ -161,8 +161,8 @@ const GammesSection = () => {
       newIndex = currentIndex <= 0 ? maxIndex : currentIndex - 1;
     }
 
-    // Animation plus fluide
-    const cardWidth = 220; // 200px + gap
+    // Animation plus fluide avec un décalage pour voir le produit suivant
+    const cardWidth = 236; // 220px width + 16px gap
     const translateX = -(newIndex * cardWidth);
 
     gsap.to(slider, {
@@ -351,54 +351,56 @@ const GammesSection = () => {
 
               {/* Slider de produits */}
               <div className="products-slider-container">
-                <div
-                  className="products-slider-track"
-                  ref={el => sliderRefs.current[gamme.id] = el}
-                  onMouseDown={(e) => handleSliderDrag(e, gamme.id)}
-                  onTouchStart={(e) => handleSliderDrag(e, gamme.id)}
-                >
-                  {gamme.products.map((product) => (
-                    <div
-                      key={product.id}
-                      className={`product-card ${gamme.cardClass}`}
-                    >
-                      <div className="product-gamme-name">{product.gamme}</div>
+                <div className="products-slider-viewport">
+                  <div
+                    className="products-slider-track"
+                    ref={el => sliderRefs.current[gamme.id] = el}
+                    onMouseDown={(e) => handleSliderDrag(e, gamme.id)}
+                    onTouchStart={(e) => handleSliderDrag(e, gamme.id)}
+                  >
+                    {gamme.products.map((product) => (
+                      <div
+                        key={product.id}
+                        className={`product-card ${gamme.cardClass}`}
+                      >
+                        <div className="product-gamme-name">{product.gamme}</div>
 
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="product-image"
-                        loading="lazy"
-                      />
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="product-image"
+                          loading="lazy"
+                        />
 
-                      <h4 className="product-name">{product.name}</h4>
+                        <h4 className="product-name">{product.name}</h4>
 
-                      <p className="product-utility">{product.utility}</p>
+                        <p className="product-utility">{product.utility}</p>
 
-                      <div className="product-footer">
-                        <button
-                          className="product-cta"
-                          onClick={product.addToCart}
-                          data-cursor="hover"
-                        >
-                          AJOUTER AU PANIER
-                        </button>
-                        <span className="product-price">{product.price}</span>
+                        <div className="product-footer">
+                          <button
+                            className="product-cta"
+                            onClick={product.addToCart}
+                            data-cursor="hover"
+                          >
+                            AJOUTER AU PANIER
+                          </button>
+                          <span className="product-price">{product.price}</span>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
 
                 {/* Navigation dots du slider */}
                 <div className="slider-navigation">
-                  {Array.from({ length: Math.max(1, gamme.products.length - 1) }).map((_, dotIndex) => (
+                  {gamme.products.map((_, dotIndex) => (
                     <div
                       key={dotIndex}
                       className={`slider-nav-dot ${currentSliders[gamme.id] === dotIndex ? 'active' : ''}`}
                       onClick={() => {
                         const slider = sliderRefs.current[gamme.id];
                         if (slider) {
-                          const cardWidth = 220;
+                          const cardWidth = 236;
                           const translateX = -(dotIndex * cardWidth);
                           gsap.to(slider, {
                             x: translateX,
