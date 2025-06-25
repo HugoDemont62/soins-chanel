@@ -147,18 +147,18 @@
     cursor: grabbing;
 }
 
-/* ===== NOUVEAU STYLE MODERNE - Cards avec couleurs par gamme ===== */
+/* ===== NOUVEAU STYLE MODERNE - Cards avec images pleine largeur ===== */
 
-/* Card produit moderne - SANS HOVER */
+/* Card produit moderne - HAUTEUR ADAPTATIVE */
 .product-card-modern {
     min-width: 280px;
     width: 280px;
-    height: 420px;
+    min-height: 420px; /* ← min-height au lieu de height fixe */
+    height: auto; /* ← Hauteur adaptative */
     flex-shrink: 0;
-    border-radius: 16px;
-    padding: 0;
+    border-radius: 0;
+    padding: 16px;
     text-align: left;
-    /* SUPPRIMÉ : transition et hover */
     position: relative;
     display: flex;
     flex-direction: column;
@@ -168,15 +168,14 @@
     overflow: hidden;
     transform: translateZ(0);
     backface-visibility: hidden;
+    gap: 16px;
 }
 
 .product-card-modern:active {
     cursor: grabbing;
 }
 
-/* SUPPRIMÉ : .product-card-modern:hover */
-
-/* Couleurs par gamme - REMISES COMME AVANT */
+/* Couleurs par gamme */
 .product-card-modern.hydra-beauty {
     background: linear-gradient(135deg, #E8F4F8 0%, #D6EDF5 100%);
 }
@@ -189,11 +188,9 @@
     background: linear-gradient(135deg, #F5F2E8 0%, #EDE6D0 100%);
 }
 
-/* Tag gamme en haut à gauche - REPOSITIONNÉ */
+/* Tag gamme - PREMIER ÉLÉMENT FLEX */
 .product-tag {
-    position: absolute;
-    top: 20px; /* Plus bas */
-    left: 20px; /* Plus à droite */
+    /* Plus de position absolute ! */
     width: auto;
     background: rgba(255, 255, 255, 0.95);
     color: #000000;
@@ -203,46 +200,46 @@
     text-transform: uppercase;
     letter-spacing: 0.08em;
     padding: 8px 16px;
-    border-radius: 20px;
+    border-radius: 0;
     margin: 0;
-    text-align: center;
+    text-align: left; /* ← Aligné à gauche naturellement */
     box-sizing: border-box;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    z-index: 10;
+    align-self: flex-start; /* ← Reste à gauche */
+    order: 1; /* ← Premier */
 }
 
-/* Container image centré - CORRIGÉ */
+/* Container image - BIEN DIMENSIONNÉ */
 .product-image-container {
-    flex: 1;
+    /* Plus de flex: 1 qui pose problème ! */
+    height: 200px; /* ← Hauteur fixe pour l'image */
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 40px 0 20px 0; /* Plus d'espace en haut */
-    min-height: 200px; /* Plus de hauteur */
-    padding: 0 20px;
+    padding: 0;
     position: relative;
+    width: 100%;
+    order: 2;
+    flex-shrink: 0; /* ← Ne rétrécit pas */
 }
 
-/* Image produit - TAILLE CORRIGÉE */
+/* Image produit - BIEN POSITIONNÉE */
 .product-image-modern {
-    width: 140px; /* Plus large */
-    height: 180px; /* Plus haute */
+    width: 80%; /* ← 80% de la largeur au lieu de 100% */
+    height: 80%; /* ← 80% de la hauteur du container */
     object-fit: contain;
+    object-position: center;
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
-    /* Centrage parfait */
-    position: relative;
-    z-index: 2;
 }
 
-/* SUPPRIMÉ : .product-card-modern:hover .product-image-modern */
-
-/* Section contenu en bas */
+/* Section contenu en bas - TROISIÈME ÉLÉMENT FLEX */
 .product-content-section {
-    padding: 0 20px 20px 20px;
+    /* Plus de padding ! Il est déjà dans .product-card-modern */
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin-top: auto;
+    /* margin-top: auto supprimé - plus besoin */
+    order: 3; /* ← Troisième */
 }
 
 /* Nom du produit - ALIGNÉ À GAUCHE */
@@ -275,33 +272,30 @@
     justify-content: space-between;
     align-items: center;
     gap: 12px;
-    margin-top: 16px;
+    /* Plus de margin-top ! */
 }
 
-/* Bouton moderne - SANS HOVER EXCESSIF */
+/* Bouton moderne - SANS BORDER RADIUS */
 .product-btn-modern {
     background: #000000;
     color: #ffffff;
     border: none;
     padding: 10px 16px;
-    border-radius: 6px;
+    border-radius: 0; /* ← SUPPRIMÉ */
     font-family: 'Inter', sans-serif;
     font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     cursor: pointer;
-    /* RÉDUIT : transition plus subtile */
     transition: background-color 0.2s ease;
     flex-shrink: 0;
     white-space: nowrap;
     min-height: 36px;
 }
 
-/* RÉDUIT : hover plus subtil */
 .product-btn-modern:hover {
     background: #333333;
-    /* SUPPRIMÉ : transform et box-shadow */
 }
 
 /* Prix - À DROITE */
@@ -490,12 +484,19 @@
     .product-card-modern {
         min-width: 260px;
         width: 260px;
-        height: 400px;
+        min-height: 400px;
+        height: auto;
+        padding: 14px;
+        gap: 14px;
+    }
+
+    .product-image-container {
+        height: 180px;
     }
 
     .product-image-modern {
-        width: 120px; /* Ajusté pour tablette */
-        height: 160px;
+        width: 75%;
+        height: 75%;
     }
 
     .product-name-modern {
@@ -625,24 +626,28 @@
     .product-card-modern {
         min-width: 240px;
         width: 240px;
-        height: 380px;
-    }
-
-    .product-content-section {
-        padding: 0 16px 16px 16px;
-        gap: 10px;
+        min-height: 380px;
+        height: auto;
+        padding: 12px;
+        gap: 12px;
     }
 
     .product-tag {
-        top: 16px;
-        left: 16px;
         padding: 6px 12px;
         font-size: 0.65rem;
     }
 
+    .product-image-container {
+        height: 160px;
+    }
+
     .product-image-modern {
-        width: 110px; /* Ajusté pour mobile */
-        height: 140px;
+        width: 70%;
+        height: 70%;
+    }
+
+    .product-content-section {
+        gap: 10px;
     }
 
     .product-name-modern {
@@ -665,7 +670,6 @@
 
     .product-actions {
         gap: 8px;
-        margin-top: 12px;
     }
 
     .products-slider-viewport {
@@ -713,24 +717,28 @@
     .product-card-modern {
         min-width: 220px;
         width: 220px;
-        height: 360px;
-    }
-
-    .product-content-section {
-        padding: 0 14px 14px 14px;
-        gap: 8px;
+        min-height: 360px;
+        height: auto;
+        padding: 10px;
+        gap: 10px;
     }
 
     .product-tag {
-        top: 14px;
-        left: 14px;
         padding: 5px 10px;
         font-size: 0.6rem;
     }
 
+    .product-image-container {
+        height: 140px;
+    }
+
     .product-image-modern {
-        width: 90px;
-        height: 115px;
+        width: 65%;
+        height: 65%;
+    }
+
+    .product-content-section {
+        gap: 8px;
     }
 
     .product-name-modern {
@@ -753,7 +761,6 @@
 
     .product-actions {
         gap: 6px;
-        margin-top: 10px;
     }
 
     .products-slider-viewport {
