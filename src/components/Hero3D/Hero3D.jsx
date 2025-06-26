@@ -681,11 +681,6 @@ const Hero3D = () => {
         <div ref={mountRef} />
       </div>
 
-      {/* Texte en bas à droite */}
-      <div className="hero-bottom-text">
-        <p>Des formules d'exception. Une expertise sur mesure. Explorez une nouvelle vision du soin du visage, où la science rencontre la sensorialité, et chaque geste sublime l'essentiel.</p>
-      </div>
-
       <div className="scroll-indicator">
         <p className="scroll-text">SCROLL TO DISCOVER</p>
         <div className="scroll-arrow-down">

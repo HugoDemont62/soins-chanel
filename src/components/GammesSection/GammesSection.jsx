@@ -1,9 +1,9 @@
 // Fichier: src/components/GammesSection/GammesSection.jsx
-import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper/modules';
+import {useEffect, useRef, useState} from 'react';
+import {gsap} from 'gsap';
+import {ScrollTrigger} from 'gsap/ScrollTrigger';
+import {Swiper, SwiperSlide} from 'swiper/react';
+import {Navigation} from 'swiper/modules';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -13,6 +13,14 @@ import './GammesSection.css';
 
 const GammesSection = () => {
   const sectionRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Données des gammes AVEC TES VRAIES IMAGES
   const gammes = [
@@ -35,7 +43,7 @@ const GammesSection = () => {
           utility: 'Suprême révélateur repulpant',
           price: '97€',
           image: '/image-2.png',
-          addToCart: () => console.log('Ajout panier Hydra Sérum')
+          addToCart: () => console.log('Ajout panier Hydra Sérum'),
         },
         {
           id: 2,
@@ -44,7 +52,7 @@ const GammesSection = () => {
           utility: 'Hydratant brillance repulpant',
           price: '90€',
           image: '/image-3.png',
-          addToCart: () => console.log('Ajout panier Hydra Crème')
+          addToCart: () => console.log('Ajout panier Hydra Crème'),
         },
         {
           id: 3,
@@ -53,7 +61,7 @@ const GammesSection = () => {
           utility: 'Hydratant revitalisant éclat',
           price: '110€',
           image: '/image-4.png',
-          addToCart: () => console.log('Ajout panier Hydra Camélia')
+          addToCart: () => console.log('Ajout panier Hydra Camélia'),
         },
         {
           id: 4,
@@ -62,9 +70,9 @@ const GammesSection = () => {
           utility: 'Essence hydratante éclat',
           price: '85€',
           image: '/image-5.png',
-          addToCart: () => console.log('Ajout panier Hydra Essence')
-        }
-      ]
+          addToCart: () => console.log('Ajout panier Hydra Essence'),
+        },
+      ],
     },
     {
       id: 'n1',
@@ -85,7 +93,7 @@ const GammesSection = () => {
           utility: 'Sérum revitalisant éclat',
           price: '135€',
           image: '/image-6.png',
-          addToCart: () => console.log('Ajout panier N°1 Sérum')
+          addToCart: () => console.log('Ajout panier N°1 Sérum'),
         },
         {
           id: 5,
@@ -94,7 +102,7 @@ const GammesSection = () => {
           utility: 'Crème revitalisante fermeté',
           price: '120€',
           image: '/image-7.png',
-          addToCart: () => console.log('Ajout panier N°1 Crème')
+          addToCart: () => console.log('Ajout panier N°1 Crème'),
         },
         {
           id: 6,
@@ -103,7 +111,7 @@ const GammesSection = () => {
           utility: 'Fluide revitalisant léger',
           price: '115€',
           image: '/image-8.png',
-          addToCart: () => console.log('Ajout panier N°1 Fluide')
+          addToCart: () => console.log('Ajout panier N°1 Fluide'),
         },
         {
           id: 7,
@@ -112,9 +120,9 @@ const GammesSection = () => {
           utility: 'Baume revitalisant nourrissant',
           price: '95€',
           image: '/image-9.png',
-          addToCart: () => console.log('Ajout panier N°1 Baume')
-        }
-      ]
+          addToCart: () => console.log('Ajout panier N°1 Baume'),
+        },
+      ],
     },
     {
       id: 'sublimage',
@@ -135,7 +143,7 @@ const GammesSection = () => {
           utility: 'Préparation régénération ultime',
           price: '185€',
           image: '/image-1.png',
-          addToCart: () => console.log('Ajout panier Sublimage Essence')
+          addToCart: () => console.log('Ajout panier Sublimage Essence'),
         },
         {
           id: 8,
@@ -144,7 +152,7 @@ const GammesSection = () => {
           utility: 'Régénérant anti-âge exception',
           price: '220€',
           image: '/image-2.png',
-          addToCart: () => console.log('Ajout panier Sublimage Crème')
+          addToCart: () => console.log('Ajout panier Sublimage Crème'),
         },
         {
           id: 9,
@@ -153,7 +161,7 @@ const GammesSection = () => {
           utility: 'Concentré régénération intense',
           price: '260€',
           image: '/image-3.png',
-          addToCart: () => console.log('Ajout panier Sublimage Sérum')
+          addToCart: () => console.log('Ajout panier Sublimage Sérum'),
         },
         {
           id: 10,
@@ -162,10 +170,10 @@ const GammesSection = () => {
           utility: 'Lotion régénérante éclat',
           price: '150€',
           image: '/image-4.png',
-          addToCart: () => console.log('Ajout panier Sublimage Lotion')
-        }
-      ]
-    }
+          addToCart: () => console.log('Ajout panier Sublimage Lotion'),
+        },
+      ],
+    },
   ];
 
   // Setup animations GSAP
@@ -181,36 +189,36 @@ const GammesSection = () => {
 
     if (mainTitle) {
       gsap.fromTo(mainTitle,
-        { opacity: 0, y: 50 },
+        {opacity: 0, y: 50},
         {
           opacity: 1,
           y: 0,
           duration: 1.2,
-          ease: "power3.out",
+          ease: 'power3.out',
           scrollTrigger: {
             trigger: mainTitle,
-            start: "top 80%",
-            once: true
-          }
-        }
+            start: 'top 80%',
+            once: true,
+          },
+        },
       );
     }
 
     if (mainSubtitle) {
       gsap.fromTo(mainSubtitle,
-        { opacity: 0, y: 30 },
+        {opacity: 0, y: 30},
         {
           opacity: 1,
           y: 0,
           duration: 1,
-          ease: "power3.out",
+          ease: 'power3.out',
           delay: 0.3,
           scrollTrigger: {
             trigger: mainSubtitle,
-            start: "top 80%",
-            once: true
-          }
-        }
+            start: 'top 80%',
+            once: true,
+          },
+        },
       );
     }
 
@@ -220,34 +228,32 @@ const GammesSection = () => {
       const title = wrapper.querySelector('.gamme-title');
       const description = wrapper.querySelector('.gamme-description');
       const button = wrapper.querySelector('.gamme-discover-button');
-      const sliderContainer = wrapper.querySelector('.products-slider-container');
+      const sliderContainer = wrapper.querySelector(
+        '.products-slider-container');
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: wrapper,
-          start: "top 70%",
-          once: true
-        }
+          start: 'top 70%',
+          once: true,
+        },
       });
 
       tl.fromTo(title,
-        { opacity: 0, y: 40 },
-        { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
-      )
-      .fromTo(sliderContainer,
-        { opacity: 0, x: index % 2 === 0 ? -50 : 50 },
-        { opacity: 1, x: 0, duration: 1.2, ease: "power3.out" },
-        "-=0.5"
-      )
-      .fromTo(description,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
-        "-=0.8"
-      )
-      .fromTo(button,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
-        "-=0.5"
+        {opacity: 0, y: 40},
+        {opacity: 1, y: 0, duration: 1, ease: 'power3.out'},
+      ).fromTo(sliderContainer,
+        {opacity: 0, x: index % 2 === 0 ? -50 : 50},
+        {opacity: 1, x: 0, duration: 1.2, ease: 'power3.out'},
+        '-=0.5',
+      ).fromTo(description,
+        {opacity: 0, y: 30},
+        {opacity: 1, y: 0, duration: 1, ease: 'power3.out'},
+        '-=0.8',
+      ).fromTo(button,
+        {opacity: 0, y: 20},
+        {opacity: 1, y: 0, duration: 0.8, ease: 'power3.out'},
+        '-=0.5',
       );
     });
 
@@ -277,7 +283,7 @@ const GammesSection = () => {
                 backgroundColor: gamme.backgroundColor,
                 backgroundImage: `url(${gamme.image})`,
                 backgroundSize: 'cover',
-                backgroundPosition: 'center'
+                backgroundPosition: 'center',
               }}
             >
             </div>
@@ -301,7 +307,7 @@ const GammesSection = () => {
                   freeMode={false}
                   autoplay={false}
                   pagination={false}
-                  navigation={true}
+                  navigation={!isMobile}
                   speed={400}
                   effect="slide"
                   resistance={true}
@@ -334,10 +340,12 @@ const GammesSection = () => {
                         <div className="product-content-section">
 
                           {/* Nom du produit - aligné à gauche */}
-                          <h4 className="product-name-modern">{product.name}</h4>
+                          <h4
+                            className="product-name-modern">{product.name}</h4>
 
                           {/* Description - alignée à gauche */}
-                          <p className="product-utility-modern">{product.utility}</p>
+                          <p
+                            className="product-utility-modern">{product.utility}</p>
 
                           {/* Actions : bouton à gauche + prix à droite */}
                           <div className="product-actions">
@@ -348,7 +356,8 @@ const GammesSection = () => {
                             >
                               AJOUTER AU PANIER
                             </button>
-                            <span className="product-price-modern">{product.price}</span>
+                            <span
+                              className="product-price-modern">{product.price}</span>
                           </div>
                         </div>
                       </div>
