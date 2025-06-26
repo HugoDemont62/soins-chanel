@@ -1,4 +1,4 @@
-// Fichier: src/pages/RoutineQuestionnaire/RoutineQuestionnaire.jsx
+// Fichier: src/pages/RoutineQuestionnaire/RoutineQuestionnaire.jsx - MISE À JOUR
 import { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
@@ -74,7 +74,7 @@ const RoutineQuestionnaire = () => {
           id: 1,
           question: "Quel niveau de soin recherchez-vous ?",
           description: "Définissez l'intensité de votre routine beauté quotidienne.",
-          image: "/-image-1.png",
+          image: "/image-1.png",
           multipleChoice: false,
           options: [
             { id: "premium", label: "Soin Premium", description: "Pour une expérience de luxe quotidienne" },
@@ -193,7 +193,7 @@ const RoutineQuestionnaire = () => {
     setAnswers(updatedAnswers);
 
     if (isLastStep) {
-      // Dernière étape - aller aux résultats
+      // Dernière étape - aller aux résultats d'abord ← RETOUR AU FLOW ORIGINAL
       console.log('Réponses finales:', updatedAnswers);
       navigate(`/routine/results/${type}`, {
         state: { answers: updatedAnswers }
@@ -325,7 +325,7 @@ const RoutineQuestionnaire = () => {
               onClick={handleContinue}
               data-cursor="hover"
             >
-              {isLastStep ? 'Voir ma routine' : 'Continuer'}
+              {isLastStep ? 'Voir ma routine' : 'Continuer'} {/* ← RETOUR AU TEXTE ORIGINAL */}
             </button>
           </div>
         )}

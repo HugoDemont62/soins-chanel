@@ -1,4 +1,4 @@
-// Fichier: src/App.jsx
+// Fichier: src/App.jsx - MISE À JOUR avec route révélation personnalité
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
@@ -14,8 +14,8 @@ import Home from './pages/Home/Home.jsx';
 import Products from './pages/Products/Products.jsx';
 import MaRoutine from './pages/MaRoutine/MaRoutine.jsx';
 import RoutineSelection from './pages/RoutineSelection/RoutineSelection.jsx';
-import RoutineQuestionnaire
-  from './pages/RoutineQuestionnaire/RoutineQuestionnaire.jsx';
+import RoutineQuestionnaire from './pages/RoutineQuestionnaire/RoutineQuestionnaire.jsx';
+import PersonalityReveal from './pages/PersonalityReveal/PersonalityReveal.jsx'; // ← NOUVELLE IMPORT
 import RoutineResults from './pages/RoutineResults/RoutineResults.jsx';
 
 // Hook pour détecter les changements de route
@@ -61,6 +61,7 @@ function AppContent() {
           <Route path="/routine/selection" element={<RoutineSelection />} />
           <Route path="/routine/questionnaire/:type" element={<RoutineQuestionnaire />} />
           <Route path="/routine/results/:type" element={<RoutineResults />} />
+          <Route path="/routine/personality/:type" element={<PersonalityReveal />} />
         </Routes>
       </PageTransition>
     </>

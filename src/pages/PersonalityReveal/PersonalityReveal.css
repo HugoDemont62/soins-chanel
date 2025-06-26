@@ -1,0 +1,466 @@
+/* Fichier: src/pages/PersonalityReveal/PersonalityReveal.css */
+
+.personality-reveal-page {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Logo Chanel en haut */
+.personality-logo-header {
+    position: fixed;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 200;
+    opacity: 0;
+}
+
+.personality-logo-img {
+    height: 40px;
+    width: auto;
+    filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.8));
+    transition: all 0.3s ease;
+}
+
+.personality-logo-img:hover {
+    transform: scale(1.05);
+}
+
+/* Mosaïque d'images en arrière-plan */
+.images-mosaic {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 0;
+    z-index: 1;
+}
+
+/* Images individuelles de la mosaïque */
+.mosaic-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
+/* Position spéciale pour l'image centrale (celle du milieu à droite) */
+.mosaic-image.center-image {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+/* Rectangle noir central avec contenu */
+.personality-content-overlay {
+    position: relative;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    padding: 60px 50px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    border-radius: 0;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+/* Logo Chanel dans le rectangle */
+.content-logo {
+    margin-bottom: 40px;
+    opacity: 0;
+}
+
+.content-logo img {
+    height: 35px;
+    width: auto;
+    filter: brightness(0) invert(1);
+}
+
+/* Titre de la personnalité */
+.personality-title {
+    font-family: 'ABChanel Corpo', 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 400;
+    color: #ffffff;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+/* Description de la personnalité */
+.personality-description {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+    margin-bottom: 40px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+/* Texte "Téléchargez ma personnalité" */
+.download-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 24px;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* Bouton pour découvrir la routine */
+.discover-routine-button {
+    background: #ffffff;
+    color: #000000;
+    border: none;
+    padding: 16px 32px;
+    border-radius: 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 250px;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.discover-routine-button:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+}
+
+/* Couleurs par personnalité */
+
+/* INTUITIVE - Tons dorés/beiges */
+.personality-intuitive .mosaic-image:nth-child(1) {
+    background: linear-gradient(45deg, #D4AF37, #F4E4BC);
+}
+
+.personality-intuitive .mosaic-image:nth-child(2) {
+    background: linear-gradient(135deg, #E6D3A3, #F5E6D3);
+}
+
+.personality-intuitive .mosaic-image:nth-child(3) {
+    background: linear-gradient(45deg, #C9A96E, #E8D5B7);
+}
+
+.personality-intuitive .mosaic-image:nth-child(4) {
+    background: linear-gradient(135deg, #B8860B, #DAA520);
+}
+
+.personality-intuitive .mosaic-image:nth-child(5) {
+    background: linear-gradient(45deg, #F5DEB3, #DDD6C0);
+}
+
+.personality-intuitive .mosaic-image:nth-child(6) {
+    background: linear-gradient(135deg, #CD853F, #F4A460);
+}
+
+/* PRÉVENTIVE - Tons roses/corails */
+.personality-preventive .mosaic-image:nth-child(1) {
+    background: linear-gradient(45deg, #F8E8E8, #F0D6D6);
+}
+
+.personality-preventive .mosaic-image:nth-child(2) {
+    background: linear-gradient(135deg, #FFB6C1, #FFC0CB);
+}
+
+.personality-preventive .mosaic-image:nth-child(3) {
+    background: linear-gradient(45deg, #F5B2B2, #F8D7DA);
+}
+
+.personality-preventive .mosaic-image:nth-child(4) {
+    background: linear-gradient(135deg, #E88B8B, #F0A0A0);
+}
+
+.personality-preventive .mosaic-image:nth-child(5) {
+    background: linear-gradient(45deg, #FFE4E6, #FFF0F0);
+}
+
+.personality-preventive .mosaic-image:nth-child(6) {
+    background: linear-gradient(135deg, #F7C8C8, #FADBD8);
+}
+
+/* LUMINEUSE - Tons dorés brillants */
+.personality-luminous .mosaic-image:nth-child(1) {
+    background: linear-gradient(45deg, #FFD700, #FFF8DC);
+}
+
+.personality-luminous .mosaic-image:nth-child(2) {
+    background: linear-gradient(135deg, #F0E68C, #FFFFE0);
+}
+
+.personality-luminous .mosaic-image:nth-child(3) {
+    background: linear-gradient(45deg, #FFEC8C, #FFF5B7);
+}
+
+.personality-luminous .mosaic-image:nth-child(4) {
+    background: linear-gradient(135deg, #DAA520, #FFD700);
+}
+
+.personality-luminous .mosaic-image:nth-child(5) {
+    background: linear-gradient(45deg, #F5F5DC, #FFFACD);
+}
+
+.personality-luminous .mosaic-image:nth-child(6) {
+    background: linear-gradient(135deg, #FFEB3B, #FFF59D);
+}
+
+/* PERFECTIONNISTE - Tons blancs/clairs */
+.personality-perfectionist .mosaic-image:nth-child(1) {
+    background: linear-gradient(45deg, #FFFFFF, #F8F9FA);
+}
+
+.personality-perfectionist .mosaic-image:nth-child(2) {
+    background: linear-gradient(135deg, #F0F8FF, #E6F3FF);
+}
+
+.personality-perfectionist .mosaic-image:nth-child(3) {
+    background: linear-gradient(45deg, #F5F5F5, #FAFAFA);
+}
+
+.personality-perfectionist .mosaic-image:nth-child(4) {
+    background: linear-gradient(135deg, #E8F4F8, #F0F8FF);
+}
+
+.personality-perfectionist .mosaic-image:nth-child(5) {
+    background: linear-gradient(45deg, #FFFAFA, #F8F8FF);
+}
+
+.personality-perfectionist .mosaic-image:nth-child(6) {
+    background: linear-gradient(135deg, #F0F0F0, #F7F7F7);
+}
+
+/* DÉLICATE - Tons pastel doux */
+.personality-delicate .mosaic-image:nth-child(1) {
+    background: linear-gradient(45deg, #FFE4E1, #FFF0F5);
+}
+
+.personality-delicate .mosaic-image:nth-child(2) {
+    background: linear-gradient(135deg, #E6E6FA, #F0E68C);
+}
+
+.personality-delicate .mosaic-image:nth-child(3) {
+    background: linear-gradient(45deg, #F0FFFF, #E0FFFF);
+}
+
+.personality-delicate .mosaic-image:nth-child(4) {
+    background: linear-gradient(135deg, #FFE4E1, #FFEFD5);
+}
+
+.personality-delicate .mosaic-image:nth-child(5) {
+    background: linear-gradient(45deg, #F5FFFA, #F0FFF0);
+}
+
+.personality-delicate .mosaic-image:nth-child(6) {
+    background: linear-gradient(135deg, #FDF5E6, #FFFAF0);
+}
+
+/* EXIGEANTE - Tons sombres/luxe */
+.personality-demanding .mosaic-image:nth-child(1) {
+    background: linear-gradient(45deg, #2C1810, #3D2415);
+}
+
+.personality-demanding .mosaic-image:nth-child(2) {
+    background: linear-gradient(135deg, #4A2C1A, #5C3520);
+}
+
+.personality-demanding .mosaic-image:nth-child(3) {
+    background: linear-gradient(45deg, #8B4513, #A0522D);
+}
+
+.personality-demanding .mosaic-image:nth-child(4) {
+    background: linear-gradient(135deg, #D4AF37, #B8860B);
+}
+
+.personality-demanding .mosaic-image:nth-child(5) {
+    background: linear-gradient(45deg, #1A1A1A, #2F2F2F);
+}
+
+.personality-demanding .mosaic-image:nth-child(6) {
+    background: linear-gradient(135deg, #CD853F, #DEB887);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .personality-content-overlay {
+        padding: 50px 40px;
+        max-width: 450px;
+    }
+
+    .personality-title {
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+
+    .personality-description {
+        font-size: 0.9rem;
+        margin-bottom: 35px;
+    }
+
+    .discover-routine-button {
+        padding: 14px 28px;
+        min-width: 220px;
+    }
+}
+
+@media (max-width: 768px) {
+    .images-mosaic {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+    }
+
+    .personality-logo-header {
+        top: 30px;
+    }
+
+    .personality-logo-img {
+        height: 35px;
+    }
+
+    .personality-content-overlay {
+        padding: 40px 30px;
+        max-width: 400px;
+        width: 95%;
+    }
+
+    .content-logo {
+        margin-bottom: 30px;
+    }
+
+    .content-logo img {
+        height: 30px;
+    }
+
+    .personality-title {
+        font-size: 1.8rem;
+        margin-bottom: 18px;
+    }
+
+    .personality-description {
+        font-size: 0.85rem;
+        margin-bottom: 30px;
+    }
+
+    .download-text {
+        font-size: 0.75rem;
+        margin-bottom: 20px;
+    }
+
+    .discover-routine-button {
+        padding: 12px 24px;
+        font-size: 0.75rem;
+        min-width: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .images-mosaic {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(6, 1fr);
+    }
+
+    .personality-content-overlay {
+        padding: 30px 20px;
+        max-width: 350px;
+    }
+
+    .personality-title {
+        font-size: 1.5rem;
+        line-height: 1.3;
+    }
+
+    .personality-description {
+        font-size: 0.8rem;
+        line-height: 1.5;
+    }
+
+    .discover-routine-button {
+        padding: 10px 20px;
+        font-size: 0.7rem;
+        min-width: 180px;
+    }
+}
+
+/* Animations d'entrée */
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUpFade {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Mode réduit pour l'accessibilité */
+@media (prefers-reduced-motion: reduce) {
+    .mosaic-image,
+    .personality-content-overlay,
+    .personality-title,
+    .personality-description,
+    .download-text,
+    .discover-routine-button,
+    .content-logo,
+    .personality-logo-img {
+        animation: none !important;
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+/* Amélioration du contraste pour l'accessibilité */
+@media (prefers-contrast: high) {
+    .personality-content-overlay {
+        background: rgba(0, 0, 0, 0.95);
+        border: 2px solid #ffffff;
+    }
+
+    .discover-routine-button {
+        border: 2px solid #000000;
+    }
+}
+
+/* Focus states pour l'accessibilité */
+.discover-routine-button:focus,
+.personality-logo-img:focus {
+    outline: 3px solid #D4AF37;
+    outline-offset: 2px;
+}

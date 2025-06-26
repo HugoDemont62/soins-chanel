@@ -336,6 +336,13 @@ const RoutineResults = () => {
     };
   }, []);
 
+  const handleViewPersonality = () => {
+    // Naviguer vers la page révélation de personnalité
+    navigate(`/routine/personality/${type}`, {
+      state: { answers }
+    });
+  };
+
   const handleGoHome = () => {
     navigate('/');
   };
@@ -384,10 +391,10 @@ const RoutineResults = () => {
         <button
           ref={ctaButtonRef}
           className="results-cta-button"
-          onClick={handleViewAllProducts}
+          onClick={handleViewPersonality}
           data-cursor="hover"
         >
-          DÉCOUVRIR MES PRODUITS
+          VOIR MA PERSONNALITÉ
         </button>
       </section>
 
@@ -460,10 +467,10 @@ const RoutineResults = () => {
         <div className="final-cta-buttons">
           <button
             className="final-cta-primary"
-            onClick={handleViewAllProducts}
+            onClick={handleViewPersonality}
             data-cursor="hover"
           >
-            COMMANDER MA ROUTINE
+            VOIR MA PERSONNALITÉ
           </button>
 
           <button
