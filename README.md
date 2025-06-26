@@ -17,10 +17,10 @@
 
 | Rôle | Nom | Spécialité |
 |------|-----|------------|
-| **UX/UI Designer** | [Théo Darre](https://github.com/theo-darre) | Design d'expérience utilisateur |
-| **UX/UI Designer** | [Théo Notias](https://github.com/theo-notias) | Design d'interface utilisateur |
-| **UX/UI Designer** | [Antoine Ferrante](https://github.com/antoine-ferrante) | Direction artistique |
-| **Frontend Developer** | [Hugo Demont](https://github.com/hugo-demont) | Développement React/JavaScript |
+| **UX/UI Designer** | Théo Darre | Design d'expérience utilisateur |
+| **UX/UI Designer** | Théo Notias | Design d'interface utilisateur |
+| **UX/UI Designer** | Antoine Ferrante | Direction artistique |
+| **Frontend Developer** | Hugo Demont | Développement React/JavaScript |
 
 ---
 
