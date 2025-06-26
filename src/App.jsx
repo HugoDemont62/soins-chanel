@@ -17,6 +17,7 @@ import RoutineSelection from './pages/RoutineSelection/RoutineSelection.jsx';
 import RoutineQuestionnaire from './pages/RoutineQuestionnaire/RoutineQuestionnaire.jsx';
 import PersonalityReveal from './pages/PersonalityReveal/PersonalityReveal.jsx'; // ← NOUVELLE IMPORT
 import RoutineResults from './pages/RoutineResults/RoutineResults.jsx';
+import RoutineProducts from './pages/RoutineProducts/RoutineProducts.jsx';
 
 // Hook pour détecter les changements de route
 function RouteChangeHandler({ setIsTransitioning }) {
@@ -62,6 +63,7 @@ function AppContent() {
           <Route path="/routine/questionnaire/:type" element={<RoutineQuestionnaire />} />
           <Route path="/routine/results/:type" element={<RoutineResults />} />
           <Route path="/routine/personality/:type" element={<PersonalityReveal />} />
+          <Route path="/routine/product/:type" element={<RoutineProducts />} />
         </Routes>
       </PageTransition>
     </>

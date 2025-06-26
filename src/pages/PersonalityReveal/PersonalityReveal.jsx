@@ -1,4 +1,4 @@
-// Fichier: src/pages/PersonalityReveal/PersonalityReveal.jsx
+// Fichier: src/pages/PersonalityReveal/PersonalityReveal.jsx - VERSION SIMPLE CLEAN
 import { useEffect, useRef } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
@@ -10,12 +10,10 @@ const PersonalityReveal = () => {
   const navigate = useNavigate();
   const pageRef = useRef(null);
   const logoRef = useRef(null);
-  const overlayRef = useRef(null);
-  const contentLogoRef = useRef(null);
-  const titleRef = useRef(null);
-  const descriptionRef = useRef(null);
-  const downloadTextRef = useRef(null);
-  const buttonRef = useRef(null);
+  const codeCardRef = useRef(null);
+  const leftColumnRef = useRef(null);
+  const centerColumnRef = useRef(null);
+  const rightColumnRef = useRef(null);
 
   // Récupérer les réponses du questionnaire
   const answers = location.state?.answers || {};
@@ -29,74 +27,59 @@ const PersonalityReveal = () => {
         case 'hydration':
           return {
             personality: 'VOUS ÊTES INTUITIVE.',
-            description: 'Ceci vous aide à mieux vous connaître afin de choisir des produits qui répondent à vos besoins spécifiques. L\'hydratation est votre priorité, et votre approche du soin est naturelle et bienveillante.',
+            description: 'Votre approche du soin est naturelle et bienveillante.',
             className: 'personality-intuitive',
-            images: [
-              '/image-1.png', '/image-2.png', '/image-3.png',
-              '/image-4.png', '/image-5.png', '/image-6.png'
-            ]
+            images: {
+              leftColumn: ['/image-1.png', '/image-4.png', '/image-7.png'],
+              centerColumn: ['/image-2.png', '/image-5.png', '/image-8.png'],
+              rightColumn: ['/image-3.png', '/image-6.png', '/image-2.png']
+            }
           };
         case 'anti-age':
           return {
             personality: 'VOUS ÊTES PRÉVENTIVE.',
-            description: 'Ceci vous aide à mieux vous connaître afin de choisir des produits qui répondent à vos besoins spécifiques. Vous anticipez les besoins de votre peau avec sagesse.',
+            description: 'Vous anticipez les besoins de votre peau avec sagesse.',
             className: 'personality-preventive',
-            images: [
-              '/image-2.png', '/image-3.png', '/image-4.png',
-              '/image-5.png', '/image-6.png', '/image-7.png'
-            ]
+            images: {
+              leftColumn: ['/image-2.png', '/image-5.png', '/image-8.png'],
+              centerColumn: ['/image-3.png', '/image-6.png', '/image-2.png'],
+              rightColumn: ['/image-4.png', '/image-7.png', '/image-1.png']
+            }
           };
         case 'eclat':
           return {
             personality: 'VOUS ÊTES LUMINEUSE.',
-            description: 'Ceci vous aide à mieux vous connaître afin de choisir des produits qui répondent à vos besoins spécifiques. Vous recherchez l\'éclat authentique et la beauté rayonnante.',
+            description: 'Vous recherchez l\'éclat authentique et la beauté rayonnante.',
             className: 'personality-luminous',
-            images: [
-              '/image-3.png', '/image-4.png', '/image-5.png',
-              '/image-6.png', '/image-7.png', '/image-8.png'
-            ]
-          };
-        case 'purete':
-          return {
-            personality: 'VOUS ÊTES PERFECTIONNISTE.',
-            description: 'Ceci vous aide à mieux vous connaître afin de choisir des produits qui répondent à vos besoins spécifiques. Vous aspirez à la perfection dans chaque geste de soin.',
-            className: 'personality-perfectionist',
-            images: [
-              '/image-4.png', '/image-5.png', '/image-6.png',
-              '/image-7.png', '/image-8.png', '/image-9.png'
-            ]
-          };
-        case 'sensibilite':
-          return {
-            personality: 'VOUS ÊTES DÉLICATE.',
-            description: 'Ceci vous aide à mieux vous connaître afin de choisir des produits qui répondent à vos besoins spécifiques. Vous choisissez la douceur et le respect de votre peau sensible.',
-            className: 'personality-delicate',
-            images: [
-              '/image-5.png', '/image-6.png', '/image-7.png',
-              '/image-8.png', '/image-9.png', '/image-1.png'
-            ]
+            images: {
+              leftColumn: ['/image-3.png', '/image-6.png', '/image-2.png'],
+              centerColumn: ['/image-4.png', '/image-7.png', '/image-1.png'],
+              rightColumn: ['/image-5.png', '/image-8.png', '/image-2.png']
+            }
           };
         default:
           return {
             personality: 'VOUS ÊTES INTUITIVE.',
-            description: 'Ceci vous aide à mieux vous connaître afin de choisir des produits qui répondent à vos besoins spécifiques.',
+            description: 'Votre approche du soin est naturelle et bienveillante.',
             className: 'personality-intuitive',
-            images: [
-              '/image-1.png', '/image-2.png', '/image-3.png',
-              '/image-4.png', '/image-5.png', '/image-6.png'
-            ]
+            images: {
+              leftColumn: ['/image-1.png', '/image-4.png', '/image-7.png'],
+              centerColumn: ['/image-2.png', '/image-5.png', '/image-8.png'],
+              rightColumn: ['/image-3.png', '/image-6.png', '/image-2.png']
+            }
           };
       }
     } else {
       // Logique pour routine d'exception
       return {
         personality: 'VOUS ÊTES EXIGEANTE.',
-        description: 'Ceci vous aide à mieux vous connaître afin de choisir des produits qui répondent à vos besoins spécifiques. Vous ne transigez jamais sur la qualité.',
+        description: 'Vous ne transigez jamais sur la qualité.',
         className: 'personality-demanding',
-        images: [
-          '/image-6.png', '/image-7.png', '/image-8.png',
-          '/image-9.png', '/image-1.png', '/image-2.png'
-        ]
+        images: {
+          leftColumn: ['/image-6.png', '/image-2.png', '/image-3.png'],
+          centerColumn: ['/image-7.png', '/image-1.png', '/image-4.png'],
+          rightColumn: ['/image-8.png', '/image-2.png', '/image-5.png']
+        }
       };
     }
   };
@@ -110,19 +93,10 @@ const PersonalityReveal = () => {
     // Ajouter la classe CSS pour la personnalité
     page.className = `personality-reveal-page ${personalityData.className}`;
 
-    // Animation d'entrée spectaculaire
-    const tl = gsap.timeline({ delay: 0.2 });
+    // Animation d'entrée
+    const tl = gsap.timeline({ delay: 0.5 });
 
-    // 1. Images apparaissent en stagger
-    const images = page.querySelectorAll('.mosaic-image');
-    tl.to(images, {
-      opacity: 1,
-      duration: 0.8,
-      stagger: 0.1,
-      ease: "power2.out"
-    });
-
-    // 2. Logo en haut
+    // 1. Logo en haut
     tl.fromTo(logoRef.current,
       { opacity: 0, y: -30 },
       {
@@ -130,77 +104,36 @@ const PersonalityReveal = () => {
         y: 0,
         duration: 1,
         ease: "power3.out"
+      }
+    );
+
+    // 2. Images apparaissent en cascade
+    const leftImages = leftColumnRef.current?.querySelectorAll('.image-wrapper');
+    const centerImages = centerColumnRef.current?.querySelectorAll('.image-wrapper');
+    const rightImages = rightColumnRef.current?.querySelectorAll('.image-wrapper');
+
+    tl.fromTo([...leftImages, ...centerImages, ...rightImages],
+      { opacity: 0, scale: 0.8 },
+      {
+        opacity: 1,
+        scale: 1,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: "power3.out"
       },
       "-=0.5"
     );
 
-    // 3. Rectangle central avec scale
-    tl.fromTo(overlayRef.current,
-      { opacity: 0, scale: 0.8 },
+    // 3. Card de code au centre
+    tl.fromTo(codeCardRef.current,
+      { opacity: 0, scale: 0.9 },
       {
         opacity: 1,
         scale: 1,
         duration: 1.2,
         ease: "power3.out"
       },
-      "-=0.8"
-    );
-
-    // 4. Contenu du rectangle en cascade
-    tl.fromTo(contentLogoRef.current,
-      { opacity: 0, y: 20 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "power3.out"
-      },
       "-=0.6"
-    );
-
-    tl.fromTo(titleRef.current,
-      { opacity: 0, y: 30 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: "power3.out"
-      },
-      "-=0.6"
-    );
-
-    tl.fromTo(descriptionRef.current,
-      { opacity: 0, y: 20 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "power3.out"
-      },
-      "-=0.8"
-    );
-
-    tl.fromTo(downloadTextRef.current,
-      { opacity: 0, y: 15 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.6,
-        ease: "power3.out"
-      },
-      "-=0.6"
-    );
-
-    tl.fromTo(buttonRef.current,
-      { opacity: 0, y: 20, scale: 0.9 },
-      {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.8,
-        ease: "power3.out"
-      },
-      "-=0.4"
     );
 
     // Cleanup
@@ -214,8 +147,8 @@ const PersonalityReveal = () => {
   };
 
   const handleDiscoverRoutine = () => {
-    // Naviguer vers la page des produits recommandés avec les données
-    navigate(`/routine/results/${type}`, {
+    // Naviguer vers la page des produits recommandés
+    navigate(`/routine/product/${type}`, {
       state: { answers }
     });
   };
@@ -233,52 +166,82 @@ const PersonalityReveal = () => {
         />
       </div>
 
-      {/* Mosaïque d'images en arrière-plan */}
-      <div className="images-mosaic">
-        {personalityData.images.map((imageSrc, index) => (
-          <div
-            key={index}
-            className={`mosaic-image ${index === 1 ? 'center-image' : ''}`}
-            style={{
-              backgroundImage: `url(${imageSrc})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center'
-            }}
-          />
-        ))}
+      {/* Layout en 3 colonnes PLEINE LARGEUR */}
+      <div className="personality-images-container">
+
+        {/* Colonne GAUCHE */}
+        <div ref={leftColumnRef} className="personality-column left-column">
+          {personalityData.images.leftColumn.map((imageSrc, index) => (
+            <div key={`left-${index}`} className="image-wrapper">
+              <img
+                src={imageSrc}
+                alt={`Image ${index + 1}`}
+                className="personality-image"
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Colonne CENTRE */}
+        <div ref={centerColumnRef} className="personality-column center-column">
+          {personalityData.images.centerColumn.map((imageSrc, index) => (
+            <div key={`center-${index}`} className="image-wrapper">
+              <img
+                src={imageSrc}
+                alt={`Image ${index + 1}`}
+                className="personality-image center-image"
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Colonne DROITE */}
+        <div ref={rightColumnRef} className="personality-column right-column">
+          {personalityData.images.rightColumn.map((imageSrc, index) => (
+            <div key={`right-${index}`} className="image-wrapper">
+              <img
+                src={imageSrc}
+                alt={`Image ${index + 1}`}
+                className="personality-image"
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Rectangle noir central avec contenu */}
-      <div ref={overlayRef} className="personality-content-overlay">
-        {/* Logo Chanel dans le rectangle */}
-        <div ref={contentLogoRef} className="content-logo">
+      {/* Card simple au centre pour ton code */}
+      <div ref={codeCardRef} className="code-card">
+        {/* Logo Chanel dans la card */}
+        <div className="card-logo">
           <img src="/Chanel-Logo.png" alt="CHANEL" />
         </div>
 
         {/* Titre de la personnalité */}
-        <h1 ref={titleRef} className="personality-title">
+        <h1 className="card-title">
           {personalityData.personality}
         </h1>
 
         {/* Description */}
-        <p ref={descriptionRef} className="personality-description">
+        <p className="card-description">
           {personalityData.description}
         </p>
 
-        {/* Texte téléchargement */}
-        <p ref={downloadTextRef} className="download-text">
-          TÉLÉCHARGEZ MA PERSONNALITÉ
-        </p>
+        {/* Exemple - Tu peux remplacer par ce que tu veux */}
+        <div className="custom-content">
+          <p>Ici tu peux mettre tout ton code personnalisé !</p>
 
-        {/* Bouton découvrir routine */}
-        <button
-          ref={buttonRef}
-          className="discover-routine-button"
-          onClick={handleDiscoverRoutine}
-          data-cursor="hover"
-        >
-          DÉCOUVRIR VOTRE ROUTINE
-        </button>
+          {/* Bouton exemple */}
+          <button
+            className="custom-button"
+            onClick={handleDiscoverRoutine}
+            data-cursor="hover"
+          >
+            DÉCOUVRIR VOTRE ROUTINE
+          </button>
+        </div>
       </div>
     </div>
   );

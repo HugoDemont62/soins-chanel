@@ -1,13 +1,11 @@
-/* Fichier: src/pages/PersonalityReveal/PersonalityReveal.css */
+/* Fichier: src/pages/PersonalityReveal/PersonalityReveal.css - VERSION CLEAN PLEINE LARGEUR */
 
 .personality-reveal-page {
     width: 100vw;
     height: 100vh;
     position: relative;
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: linear-gradient(135deg, #87ceeb 0%, #e0f6ff 50%, #ffffff 100%);
 }
 
 /* Logo Chanel en haut */
@@ -31,107 +29,137 @@
     transform: scale(1.05);
 }
 
-/* Mosaïque d'images en arrière-plan */
-.images-mosaic {
-    position: fixed;
-    top: 0;
+/* Container des images ENCORE PLUS GRAND */
+.personality-images-container {
+    position: absolute;
+    top: -400px; /* ← Encore plus haut pour déborder plus */
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: calc(100vh + 800px); /* ← Encore plus haut */
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 0;
+    gap: 30px; /* ← GAP ENTRE LES COLONNES */
+    padding: 0 20px; /* ← Petit padding sur les côtés */
     z-index: 1;
 }
 
-/* Images individuelles de la mosaïque */
-.mosaic-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0;
-    transition: opacity 0.8s ease;
-}
-
-/* Position spéciale pour l'image centrale (celle du milieu à droite) */
-.mosaic-image.center-image {
-    grid-column: 2;
-    grid-row: 1;
-}
-
-/* Rectangle noir central avec contenu */
-.personality-content-overlay {
+/* Styles des colonnes */
+.personality-column {
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* ← GAP ENTRE LES IMAGES */
     position: relative;
+    height: calc(100vh + 800px); /* ← Encore plus haut */
+    overflow: hidden;
+}
+
+/* Décalage vertical pour créer l'effet */
+.left-column {
+    padding-top: 200px;
+}
+
+.center-column {
+    padding-top: 150px;
+}
+
+.right-column {
+    padding-top: 250px;
+}
+
+/* Wrapper des images - BEAUCOUP PLUS GRANDES */
+.image-wrapper {
+    border-radius: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 450px; /* ← BEAUCOUP PLUS GRAND (était 350px) */
+    flex-shrink: 0; /* ← Empêche le rétrécissement */
+}
+
+.image-wrapper:hover {
+    transform: scale(1.02);
+    z-index: 2;
+}
+
+/* Images BEAUCOUP PLUS GRANDES */
+.personality-image {
+    width: 100%;
+    height: 100%; /* ← Prend toute la hauteur du wrapper (450px) */
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.8) contrast(1.1);
+}
+
+.center-image {
+    /* Même taille que les autres maintenant */
+    filter: brightness(0.85) contrast(1.05);
+}
+
+/* Card simple au centre */
+.code-card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 100;
     background: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(10px);
-    padding: 60px 50px;
-    max-width: 500px;
-    width: 90%;
+    padding: 40px;
+    max-width: 450px;
+    width: 85%;
     text-align: center;
     border-radius: 0;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
     opacity: 0;
-    transform: scale(0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Logo Chanel dans le rectangle */
-.content-logo {
-    margin-bottom: 40px;
-    opacity: 0;
+/* Logo Chanel dans la card */
+.card-logo {
+    margin-bottom: 25px;
 }
 
-.content-logo img {
-    height: 35px;
+.card-logo img {
+    height: 30px;
     width: auto;
     filter: brightness(0) invert(1);
 }
 
 /* Titre de la personnalité */
-.personality-title {
+.card-title {
     font-family: 'ABChanel Corpo', 'Playfair Display', serif;
-    font-size: 2.2rem;
+    font-size: 1.8rem;
     font-weight: 400;
     color: #ffffff;
     line-height: 1.2;
     letter-spacing: 0.02em;
     text-transform: uppercase;
-    margin-bottom: 24px;
-    opacity: 0;
-    transform: translateY(30px);
+    margin-bottom: 20px;
 }
 
-/* Description de la personnalité */
-.personality-description {
+/* Description */
+.card-description {
     font-family: 'Inter', sans-serif;
     font-size: 0.95rem;
     font-weight: 400;
     color: rgba(255, 255, 255, 0.9);
-    line-height: 1.6;
-    margin-bottom: 40px;
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-    opacity: 0;
-    transform: translateY(30px);
+    line-height: 1.5;
+    margin-bottom: 30px;
 }
 
-/* Texte "Téléchargez ma personnalité" */
-.download-text {
+/* Zone pour ton code personnalisé */
+.custom-content {
+    margin-bottom: 25px;
+}
+
+.custom-content p {
     font-family: 'Inter', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.7);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 24px;
-    opacity: 0;
-    transform: translateY(20px);
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 20px;
 }
 
-/* Bouton pour découvrir la routine */
-.discover-routine-button {
+/* Bouton exemple */
+.custom-button {
     background: #ffffff;
     color: #000000;
     border: none;
@@ -144,198 +172,78 @@
     letter-spacing: 0.1em;
     cursor: pointer;
     transition: all 0.3s ease;
-    min-width: 250px;
-    opacity: 0;
-    transform: translateY(20px);
+    width: 100%;
 }
 
-.discover-routine-button:hover {
+.custom-button:hover {
     background: rgba(255, 255, 255, 0.9);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
     box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
 }
 
-/* Couleurs par personnalité */
-
-/* INTUITIVE - Tons dorés/beiges */
-.personality-intuitive .mosaic-image:nth-child(1) {
-    background: linear-gradient(45deg, #D4AF37, #F4E4BC);
+/* Couleurs par personnalité pour le titre */
+.personality-intuitive .card-title {
+    color: #D4AF37;
 }
 
-.personality-intuitive .mosaic-image:nth-child(2) {
-    background: linear-gradient(135deg, #E6D3A3, #F5E6D3);
+.personality-preventive .card-title {
+    color: #FFB6C1;
 }
 
-.personality-intuitive .mosaic-image:nth-child(3) {
-    background: linear-gradient(45deg, #C9A96E, #E8D5B7);
+.personality-luminous .card-title {
+    color: #FFD700;
 }
 
-.personality-intuitive .mosaic-image:nth-child(4) {
-    background: linear-gradient(135deg, #B8860B, #DAA520);
+.personality-perfectionist .card-title {
+    color: #E0FFFF;
 }
 
-.personality-intuitive .mosaic-image:nth-child(5) {
-    background: linear-gradient(45deg, #F5DEB3, #DDD6C0);
+.personality-delicate .card-title {
+    color: #FFE4E1;
 }
 
-.personality-intuitive .mosaic-image:nth-child(6) {
-    background: linear-gradient(135deg, #CD853F, #F4A460);
-}
-
-/* PRÉVENTIVE - Tons roses/corails */
-.personality-preventive .mosaic-image:nth-child(1) {
-    background: linear-gradient(45deg, #F8E8E8, #F0D6D6);
-}
-
-.personality-preventive .mosaic-image:nth-child(2) {
-    background: linear-gradient(135deg, #FFB6C1, #FFC0CB);
-}
-
-.personality-preventive .mosaic-image:nth-child(3) {
-    background: linear-gradient(45deg, #F5B2B2, #F8D7DA);
-}
-
-.personality-preventive .mosaic-image:nth-child(4) {
-    background: linear-gradient(135deg, #E88B8B, #F0A0A0);
-}
-
-.personality-preventive .mosaic-image:nth-child(5) {
-    background: linear-gradient(45deg, #FFE4E6, #FFF0F0);
-}
-
-.personality-preventive .mosaic-image:nth-child(6) {
-    background: linear-gradient(135deg, #F7C8C8, #FADBD8);
-}
-
-/* LUMINEUSE - Tons dorés brillants */
-.personality-luminous .mosaic-image:nth-child(1) {
-    background: linear-gradient(45deg, #FFD700, #FFF8DC);
-}
-
-.personality-luminous .mosaic-image:nth-child(2) {
-    background: linear-gradient(135deg, #F0E68C, #FFFFE0);
-}
-
-.personality-luminous .mosaic-image:nth-child(3) {
-    background: linear-gradient(45deg, #FFEC8C, #FFF5B7);
-}
-
-.personality-luminous .mosaic-image:nth-child(4) {
-    background: linear-gradient(135deg, #DAA520, #FFD700);
-}
-
-.personality-luminous .mosaic-image:nth-child(5) {
-    background: linear-gradient(45deg, #F5F5DC, #FFFACD);
-}
-
-.personality-luminous .mosaic-image:nth-child(6) {
-    background: linear-gradient(135deg, #FFEB3B, #FFF59D);
-}
-
-/* PERFECTIONNISTE - Tons blancs/clairs */
-.personality-perfectionist .mosaic-image:nth-child(1) {
-    background: linear-gradient(45deg, #FFFFFF, #F8F9FA);
-}
-
-.personality-perfectionist .mosaic-image:nth-child(2) {
-    background: linear-gradient(135deg, #F0F8FF, #E6F3FF);
-}
-
-.personality-perfectionist .mosaic-image:nth-child(3) {
-    background: linear-gradient(45deg, #F5F5F5, #FAFAFA);
-}
-
-.personality-perfectionist .mosaic-image:nth-child(4) {
-    background: linear-gradient(135deg, #E8F4F8, #F0F8FF);
-}
-
-.personality-perfectionist .mosaic-image:nth-child(5) {
-    background: linear-gradient(45deg, #FFFAFA, #F8F8FF);
-}
-
-.personality-perfectionist .mosaic-image:nth-child(6) {
-    background: linear-gradient(135deg, #F0F0F0, #F7F7F7);
-}
-
-/* DÉLICATE - Tons pastel doux */
-.personality-delicate .mosaic-image:nth-child(1) {
-    background: linear-gradient(45deg, #FFE4E1, #FFF0F5);
-}
-
-.personality-delicate .mosaic-image:nth-child(2) {
-    background: linear-gradient(135deg, #E6E6FA, #F0E68C);
-}
-
-.personality-delicate .mosaic-image:nth-child(3) {
-    background: linear-gradient(45deg, #F0FFFF, #E0FFFF);
-}
-
-.personality-delicate .mosaic-image:nth-child(4) {
-    background: linear-gradient(135deg, #FFE4E1, #FFEFD5);
-}
-
-.personality-delicate .mosaic-image:nth-child(5) {
-    background: linear-gradient(45deg, #F5FFFA, #F0FFF0);
-}
-
-.personality-delicate .mosaic-image:nth-child(6) {
-    background: linear-gradient(135deg, #FDF5E6, #FFFAF0);
-}
-
-/* EXIGEANTE - Tons sombres/luxe */
-.personality-demanding .mosaic-image:nth-child(1) {
-    background: linear-gradient(45deg, #2C1810, #3D2415);
-}
-
-.personality-demanding .mosaic-image:nth-child(2) {
-    background: linear-gradient(135deg, #4A2C1A, #5C3520);
-}
-
-.personality-demanding .mosaic-image:nth-child(3) {
-    background: linear-gradient(45deg, #8B4513, #A0522D);
-}
-
-.personality-demanding .mosaic-image:nth-child(4) {
-    background: linear-gradient(135deg, #D4AF37, #B8860B);
-}
-
-.personality-demanding .mosaic-image:nth-child(5) {
-    background: linear-gradient(45deg, #1A1A1A, #2F2F2F);
-}
-
-.personality-demanding .mosaic-image:nth-child(6) {
-    background: linear-gradient(135deg, #CD853F, #DEB887);
+.personality-demanding .card-title {
+    color: #CD853F;
 }
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-    .personality-content-overlay {
-        padding: 50px 40px;
-        max-width: 450px;
+    .personality-images-container {
+        top: -350px;
+        height: calc(100vh + 700px);
+        gap: 25px;
+        padding: 0 15px;
     }
 
-    .personality-title {
-        font-size: 2rem;
-        margin-bottom: 20px;
+    .personality-column {
+        height: calc(100vh + 700px);
+        gap: 25px;
     }
 
-    .personality-description {
+    .image-wrapper {
+        height: 400px; /* ← Plus grand (était 300px) */
+    }
+
+    .code-card {
+        padding: 35px;
+        max-width: 400px;
+    }
+
+    .card-title {
+        font-size: 1.6rem;
+    }
+
+    .card-description {
         font-size: 0.9rem;
-        margin-bottom: 35px;
     }
 
-    .discover-routine-button {
+    .custom-button {
         padding: 14px 28px;
-        min-width: 220px;
+        font-size: 0.75rem;
     }
 }
 
 @media (max-width: 768px) {
-    .images-mosaic {
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr 1fr;
-    }
-
     .personality-logo-header {
         top: 30px;
     }
@@ -344,100 +252,143 @@
         height: 35px;
     }
 
-    .personality-content-overlay {
-        padding: 40px 30px;
-        max-width: 400px;
-        width: 95%;
+    .personality-images-container {
+        top: -300px;
+        height: calc(100vh + 600px);
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        padding: 0 10px;
     }
 
-    .content-logo {
-        margin-bottom: 30px;
+    .personality-column {
+        height: calc(100vh + 600px);
+        gap: 20px;
     }
 
-    .content-logo img {
-        height: 30px;
+    .left-column {
+        padding-top: 150px;
     }
 
-    .personality-title {
-        font-size: 1.8rem;
+    .center-column {
+        padding-top: 100px;
+    }
+
+    .right-column {
+        padding-top: 200px;
+    }
+
+    .image-wrapper {
+        height: 350px; /* ← Plus grand (était 250px) */
+    }
+
+    .code-card {
+        padding: 30px;
+        max-width: 350px;
+        width: 90%;
+    }
+
+    .card-logo img {
+        height: 25px;
+    }
+
+    .card-title {
+        font-size: 1.4rem;
         margin-bottom: 18px;
     }
 
-    .personality-description {
+    .card-description {
         font-size: 0.85rem;
-        margin-bottom: 30px;
+        margin-bottom: 25px;
     }
 
-    .download-text {
-        font-size: 0.75rem;
-        margin-bottom: 20px;
-    }
-
-    .discover-routine-button {
+    .custom-button {
         padding: 12px 24px;
-        font-size: 0.75rem;
-        min-width: 200px;
+        font-size: 0.7rem;
+    }
+
+    .custom-content p {
+        font-size: 0.8rem;
     }
 }
 
 @media (max-width: 480px) {
-    .images-mosaic {
+    .personality-logo-header {
+        top: 20px;
+    }
+
+    .personality-logo-img {
+        height: 30px;
+    }
+
+    .personality-images-container {
+        top: -250px;
+        height: calc(100vh + 500px);
         grid-template-columns: 1fr;
-        grid-template-rows: repeat(6, 1fr);
+        gap: 15px;
+        padding: 0 5px;
     }
 
-    .personality-content-overlay {
-        padding: 30px 20px;
-        max-width: 350px;
+    .personality-column {
+        height: calc(100vh + 500px);
+        gap: 15px;
     }
 
-    .personality-title {
-        font-size: 1.5rem;
+    .left-column,
+    .center-column,
+    .right-column {
+        padding-top: 150px;
+    }
+
+    .image-wrapper {
+        height: 300px; /* ← Plus grand (était 200px) */
+    }
+
+    .code-card {
+        padding: 25px;
+        max-width: 300px;
+        width: 95%;
+    }
+
+    .card-logo img {
+        height: 20px;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
         line-height: 1.3;
+        margin-bottom: 15px;
     }
 
-    .personality-description {
+    .card-description {
         font-size: 0.8rem;
-        line-height: 1.5;
+        line-height: 1.4;
+        margin-bottom: 20px;
     }
 
-    .discover-routine-button {
+    .custom-button {
         padding: 10px 20px;
-        font-size: 0.7rem;
-        min-width: 180px;
+        font-size: 0.65rem;
     }
-}
 
-/* Animations d'entrée */
-@keyframes fadeIn {
-    to {
-        opacity: 1;
+    .custom-content {
+        margin-bottom: 20px;
     }
-}
 
-@keyframes slideUpFade {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes scaleIn {
-    to {
-        opacity: 1;
-        transform: scale(1);
+    .custom-content p {
+        font-size: 0.75rem;
+        margin-bottom: 15px;
     }
 }
 
 /* Mode réduit pour l'accessibilité */
 @media (prefers-reduced-motion: reduce) {
-    .mosaic-image,
-    .personality-content-overlay,
-    .personality-title,
-    .personality-description,
-    .download-text,
-    .discover-routine-button,
-    .content-logo,
+    .personality-image,
+    .image-wrapper,
+    .code-card,
+    .card-title,
+    .card-description,
+    .custom-button,
+    .card-logo,
     .personality-logo-img {
         animation: none !important;
         transition: none !important;
@@ -448,19 +399,75 @@
 
 /* Amélioration du contraste pour l'accessibilité */
 @media (prefers-contrast: high) {
-    .personality-content-overlay {
+    .code-card {
         background: rgba(0, 0, 0, 0.95);
         border: 2px solid #ffffff;
     }
 
-    .discover-routine-button {
+    .custom-button {
         border: 2px solid #000000;
     }
 }
 
 /* Focus states pour l'accessibilité */
-.discover-routine-button:focus,
+.custom-button:focus,
 .personality-logo-img:focus {
     outline: 3px solid #D4AF37;
     outline-offset: 2px;
+}
+
+/* Optimisations pour les performances */
+.personality-images-container,
+.personality-column,
+.personality-image {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+.code-card {
+    contain: layout style paint;
+}
+
+/* Amélioration de la lisibilité */
+.card-title,
+.card-description {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Animation des éléments de la card */
+.card-logo,
+.card-title,
+.card-description,
+.custom-content {
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+.card-logo {
+    animation-delay: 0.2s;
+}
+
+.card-title {
+    animation-delay: 0.4s;
+}
+
+.card-description {
+    animation-delay: 0.6s;
+}
+
+.custom-content {
+    animation-delay: 0.8s;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

@@ -1,12 +1,13 @@
-/* Fichier: src/pages/RoutineResults/RoutineResults.css */
+/* Fichier: src/pages/RoutineResults/RoutineResults.css - STYLE CHANEL */
 
 .routine-results-page {
     min-height: 100vh;
     background: #ffffff;
     position: relative;
+    overflow-x: hidden;
 }
 
-/* Logo Chanel en haut */
+/* Logo Chanel en haut - Style cohérent avec tes autres pages */
 .results-logo-header {
     position: fixed;
     top: 40px;
@@ -21,6 +22,7 @@
     width: auto;
     filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.05));
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .results-logo-img:hover {
@@ -28,7 +30,7 @@
     filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.1));
 }
 
-/* Section hero avec titre principal */
+/* Section hero avec titre principal - Style cohérent avec PersonalityReveal */
 .results-hero-section {
     min-height: 100vh;
     display: flex;
@@ -41,7 +43,7 @@
     background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
 }
 
-/* Titre principal */
+/* Titre principal - Style signature Chanel */
 .results-main-title {
     font-family: 'ABChanel Corpo', 'Playfair Display', serif;
     font-size: 4.5rem;
@@ -52,14 +54,16 @@
     margin-bottom: 32px;
     opacity: 0;
     text-align: center;
+    text-transform: uppercase;
 }
 
 .results-main-title .highlight {
     display: block;
     margin-top: 8px;
+    color: #000000;
 }
 
-/* Sous-titre */
+/* Sous-titre - Style description élégant */
 .results-subtitle {
     font-family: 'Inter', sans-serif;
     font-size: 1.25rem;
@@ -71,13 +75,13 @@
     opacity: 0;
 }
 
-/* Bouton CTA principal */
+/* Bouton CTA principal - Style cohérent avec tes autres boutons */
 .results-cta-button {
     background: #000000;
     color: #ffffff;
     border: none;
     padding: 18px 40px;
-    border-radius: 0;
+    border-radius: 0; /* Style CHANEL sans border-radius */
     font-family: 'Inter', sans-serif;
     font-size: 0.875rem;
     font-weight: 600;
@@ -89,6 +93,21 @@
     overflow: hidden;
     opacity: 0;
     min-width: 280px;
+}
+
+.results-cta-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.results-cta-button:hover::before {
+    left: 100%;
 }
 
 .results-cta-button:hover {
@@ -132,31 +151,33 @@
     opacity: 0;
 }
 
-/* Grid des produits recommandés */
+/* Grid des produits recommandés - Style moderne */
 .recommended-products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 40px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-/* Card produit recommandé */
+/* Card produit recommandé - Style CHANEL épuré */
 .recommended-product-card {
     background: #ffffff;
-    border-radius: 0;
-    padding: 32px;
+    border-radius: 0; /* Style CHANEL sans border-radius */
+    padding: 40px 32px;
     text-align: center;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
     position: relative;
     opacity: 0;
     transform: translateY(30px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .recommended-product-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+    border-color: rgba(0, 0, 0, 0.1);
 }
 
 /* Image produit recommandé */
@@ -167,6 +188,11 @@
     object-fit: contain;
     margin: 0 auto 32px auto;
     filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.1));
+    transition: transform 0.3s ease;
+}
+
+.recommended-product-card:hover .recommended-product-image {
+    transform: scale(1.02);
 }
 
 /* Nom du produit recommandé */
@@ -177,6 +203,8 @@
     color: #000000;
     margin-bottom: 16px;
     line-height: 1.3;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
 }
 
 /* Description du produit recommandé */
@@ -189,7 +217,7 @@
     margin-bottom: 24px;
 }
 
-/* Avantages du produit */
+/* Avantages du produit - Style avec checkmarks */
 .product-benefits {
     margin-bottom: 32px;
 }
@@ -208,8 +236,9 @@
 
 .benefit-item::before {
     content: '✓';
-    color: #D4AF37;
+    color: #D4AF37; /* Or CHANEL */
     font-weight: 700;
+    font-size: 0.9rem;
 }
 
 /* Prix et actions */
@@ -233,7 +262,7 @@
     color: #ffffff;
     border: none;
     padding: 14px 32px;
-    border-radius: 0;
+    border-radius: 0; /* Style CHANEL sans border-radius */
     font-family: 'Inter', sans-serif;
     font-size: 0.8rem;
     font-weight: 600;
@@ -243,6 +272,23 @@
     transition: all 0.3s ease;
     width: 100%;
     max-width: 240px;
+    position: relative;
+    overflow: hidden;
+}
+
+.recommended-product-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.recommended-product-button:hover::before {
+    left: 100%;
 }
 
 .recommended-product-button:hover {
@@ -266,6 +312,8 @@
     line-height: 1.2;
     margin-bottom: 24px;
     opacity: 0;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
 }
 
 .final-section-description {
@@ -290,7 +338,7 @@
 .final-cta-primary,
 .final-cta-secondary {
     padding: 16px 32px;
-    border-radius: 0;
+    border-radius: 0; /* Style CHANEL sans border-radius */
     font-family: 'Inter', sans-serif;
     font-size: 0.875rem;
     font-weight: 600;
@@ -299,12 +347,29 @@
     cursor: pointer;
     transition: all 0.3s ease;
     min-width: 200px;
+    position: relative;
+    overflow: hidden;
 }
 
 .final-cta-primary {
     background: #000000;
     color: #ffffff;
     border: none;
+}
+
+.final-cta-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.final-cta-primary:hover::before {
+    left: 100%;
 }
 
 .final-cta-primary:hover {
@@ -325,7 +390,7 @@
     transform: translateY(-2px);
 }
 
-/* Éléments décoratifs */
+/* Éléments décoratifs - Style minimaliste CHANEL */
 .decorative-element {
     position: absolute;
     opacity: 0.03;
@@ -361,7 +426,7 @@
     }
 
     .recommended-products-grid {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
         gap: 32px;
     }
 }
@@ -385,12 +450,12 @@
     }
 
     .recommended-products-grid {
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 24px;
     }
 
     .recommended-product-card {
-        padding: 24px;
+        padding: 32px 24px;
     }
 
     .results-final-section {
@@ -451,7 +516,7 @@
     }
 
     .recommended-product-card {
-        padding: 20px;
+        padding: 28px 20px;
     }
 
     .recommended-product-image {
@@ -520,6 +585,10 @@
         line-height: 1.6;
     }
 
+    .recommended-product-card {
+        padding: 24px 16px;
+    }
+
     .recommended-product-image {
         max-width: 140px;
         height: 180px;
@@ -561,7 +630,8 @@
     .recommended-product-card,
     .results-cta-button,
     .final-cta-primary,
-    .final-cta-secondary {
+    .final-cta-secondary,
+    .recommended-product-image {
         animation: none !important;
         transition: none !important;
     }
@@ -592,6 +662,10 @@
     .final-cta-primary {
         border: 2px solid #000000;
     }
+
+    .final-cta-secondary {
+        border-width: 3px;
+    }
 }
 
 /* Focus states pour l'accessibilité */
@@ -602,4 +676,33 @@
 .results-logo-img:focus {
     outline: 3px solid #D4AF37;
     outline-offset: 2px;
+}
+
+/* États de chargement de l'image */
+.recommended-product-image[src=""] {
+    background: linear-gradient(45deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 20px 20px;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -20px 0;
+    }
+    100% {
+        background-position: 20px 0;
+    }
+}
+
+/* Optimisations pour les performances */
+.recommended-product-card {
+    contain: layout style paint;
+    content-visibility: auto;
+    contain-intrinsic-size: 350px 600px;
+}
+
+.recommended-product-image {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }

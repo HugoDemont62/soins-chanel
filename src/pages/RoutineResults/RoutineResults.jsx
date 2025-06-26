@@ -1,4 +1,4 @@
-// Fichier: src/pages/RoutineResults/RoutineResults.jsx
+// Fichier: src/pages/RoutineResults/RoutineResults.jsx - ADAPTÉ POUR VITE
 import { useEffect, useRef } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
@@ -21,7 +21,7 @@ const RoutineResults = () => {
   // Données des résultats selon le type et les réponses
   const getPersonalityType = () => {
     if (type === 'targeted') {
-      // Logique pour routine ciblée
+      // Logique pour routine ciblée basée sur les réponses
       const primaryNeed = answers[1]; // Première question
 
       switch (primaryNeed) {
@@ -133,6 +133,28 @@ const RoutineResults = () => {
             }
           ];
 
+        case 'eclat':
+          return [
+            {
+              id: 'sublimage-serum',
+              name: 'SUBLIMAGE LE SÉRUM',
+              description: 'Concentré de régénération pour une peau sublimée et lumineuse.',
+              benefits: ['Éclat instantané', 'Peau sublimée', 'Texture précieuse'],
+              price: '260€',
+              image: '/image-3.png',
+              addToCart: () => console.log('Ajout Sublimage Sérum')
+            },
+            {
+              id: 'hydra-fluide',
+              name: 'HYDRA BEAUTY FLUIDE ÉCLAT',
+              description: 'Fluide léger qui révèle la luminosité naturelle de la peau.',
+              benefits: ['Éclat immédiat', 'Texture fraîche', 'Luminosité durable'],
+              price: '88€',
+              image: '/image-4.png',
+              addToCart: () => console.log('Ajout Hydra Fluide')
+            }
+          ];
+
         default:
           return [
             {
@@ -147,7 +169,7 @@ const RoutineResults = () => {
           ];
       }
     } else {
-      // Produits d'exception
+      // Produits d'exception SUBLIMAGE
       return [
         {
           id: 'sublimage-essence',
@@ -188,10 +210,10 @@ const RoutineResults = () => {
     const page = pageRef.current;
     if (!page) return;
 
-    // Animation d'entrée de page
+    // Animation d'entrée de page avec style Chanel
     const tl = gsap.timeline({ delay: 0.3 });
 
-    // Logo apparaît en premier
+    // Logo apparaît en premier avec élégance
     tl.fromTo(logoRef.current,
       { opacity: 0, y: -30, scale: 0.8 },
       {
@@ -216,7 +238,7 @@ const RoutineResults = () => {
       "-=0.8"
     );
 
-    // Sous-titre
+    // Sous-titre avec douceur
     tl.fromTo(subtitleRef.current,
       { opacity: 0, y: 40 },
       {
@@ -228,7 +250,7 @@ const RoutineResults = () => {
       "-=1.2"
     );
 
-    // Bouton CTA
+    // Bouton CTA avec finesse
     tl.fromTo(ctaButtonRef.current,
       { opacity: 0, y: 30, scale: 0.9 },
       {
@@ -282,7 +304,7 @@ const RoutineResults = () => {
         );
       }
 
-      // Animation des cards produits
+      // Animation des cards produits avec stagger élégant
       const productCards = page.querySelectorAll('.recommended-product-card');
       productCards.forEach((card, index) => {
         gsap.fromTo(card,
@@ -347,14 +369,6 @@ const RoutineResults = () => {
     navigate('/');
   };
 
-  const handleRestartQuestionnaire = () => {
-    navigate('/routine/selection');
-  };
-
-  const handleViewAllProducts = () => {
-    navigate('/products');
-  };
-
   return (
     <div ref={pageRef} className="routine-results-page">
       {/* Logo Chanel en haut au centre */}
@@ -396,92 +410,19 @@ const RoutineResults = () => {
         >
           VOIR MA PERSONNALITÉ
         </button>
+
+        {/* Bouton pour voir les produits */}
+        <button
+          className="results-cta-button"
+          onClick={() => navigate(`/routine/products/${type}`, { state: { answers } })}
+          data-cursor="hover"
+          style={{ marginTop: '20px', backgroundColor: 'transparent', color: '#000000', border: '2px solid #000000' }}
+        >
+          VOIR MES PRODUITS
+        </button>
       </section>
 
-      {/* Section des produits recommandés */}
-      <section className="results-products-section">
-        <div className="products-section-header">
-          <h2 className="products-section-title">
-            VOTRE ROUTINE PERSONNALISÉE
-          </h2>
-          <p className="products-section-description">
-            Basée sur vos réponses, nous avons sélectionné ces soins d'exception
-            qui correspondent parfaitement à votre profil et vos besoins.
-          </p>
-        </div>
 
-        <div className="recommended-products-grid">
-          {recommendedProducts.map((product, index) => (
-            <div key={product.id} className="recommended-product-card">
-              <img
-                src={product.image}
-                alt={product.name}
-                className="recommended-product-image"
-                loading="lazy"
-              />
-
-              <h3 className="recommended-product-name">
-                {product.name}
-              </h3>
-
-              <p className="recommended-product-description">
-                {product.description}
-              </p>
-
-              <div className="product-benefits">
-                {product.benefits.map((benefit, benefitIndex) => (
-                  <div key={benefitIndex} className="benefit-item">
-                    {benefit}
-                  </div>
-                ))}
-              </div>
-
-              <div className="recommended-product-actions">
-                <div className="recommended-product-price">
-                  {product.price}
-                </div>
-                <button
-                  className="recommended-product-button"
-                  onClick={product.addToCart}
-                  data-cursor="hover"
-                >
-                  AJOUTER AU PANIER
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Section finale avec CTA */}
-      <section className="results-final-section">
-        <h2 className="final-section-title">
-          PRÊTE POUR VOTRE NOUVELLE ROUTINE ?
-        </h2>
-
-        <p className="final-section-description">
-          Commencez dès aujourd'hui votre rituel beauté personnalisé
-          et découvrez une peau sublimée jour après jour.
-        </p>
-
-        <div className="final-cta-buttons">
-          <button
-            className="final-cta-primary"
-            onClick={handleViewPersonality}
-            data-cursor="hover"
-          >
-            VOIR MA PERSONNALITÉ
-          </button>
-
-          <button
-            className="final-cta-secondary"
-            onClick={handleRestartQuestionnaire}
-            data-cursor="hover"
-          >
-            REFAIRE LE TEST
-          </button>
-        </div>
-      </section>
     </div>
   );
 };
