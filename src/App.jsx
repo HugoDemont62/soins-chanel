@@ -1,4 +1,4 @@
-// Fichier: src/App.jsx - MISE À JOUR avec route révélation personnalité
+// Fichier: src/App.jsx - AVEC SOUNDCONTROL STICKY GLOBAL
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
@@ -8,6 +8,7 @@ import { useLenis } from './hooks/useLenis';
 import Loader from './components/Loader/Loader.jsx';
 import PageTransition from './components/CustomPages/PageTransition.jsx';
 import CustomCursor from './components/CustomPages/CustomCursor.jsx';
+import SoundControl from './components/SoundControl/SoundControl.jsx'; // ← AJOUTÉ
 
 // Pages
 import Home from './pages/Home/Home.jsx';
@@ -15,7 +16,7 @@ import Products from './pages/Products/Products.jsx';
 import MaRoutine from './pages/MaRoutine/MaRoutine.jsx';
 import RoutineSelection from './pages/RoutineSelection/RoutineSelection.jsx';
 import RoutineQuestionnaire from './pages/RoutineQuestionnaire/RoutineQuestionnaire.jsx';
-import PersonalityReveal from './pages/PersonalityReveal/PersonalityReveal.jsx'; // ← NOUVELLE IMPORT
+import PersonalityReveal from './pages/PersonalityReveal/PersonalityReveal.jsx';
 import RoutineResults from './pages/RoutineResults/RoutineResults.jsx';
 import RoutineProducts from './pages/RoutineProducts/RoutineProducts.jsx';
 
@@ -52,6 +53,9 @@ function AppContent() {
     <>
       {/* Curseur personnalisé */}
       <CustomCursor />
+
+      {/* CONTRÔLE DU SON STICKY - GLOBAL SUR TOUTE L'APP */}
+      <SoundControl />
 
       {/* Contenu principal avec transitions */}
       <PageTransition pathname={location.pathname}>

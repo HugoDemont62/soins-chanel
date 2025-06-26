@@ -1,8 +1,8 @@
-// Fichier: src/components/Hero3D/Hero3D.jsx
+// Fichier: src/components/Hero3D/Hero3D.jsx - SANS SOUNDCONTROL
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import SoundControl from '../SoundControl/SoundControl.jsx';
+// import SoundControl from '../SoundControl/SoundControl.jsx'; ← SUPPRIMÉ
 import './Hero3D.css';
 
 const Hero3D = () => {
@@ -695,7 +695,7 @@ const Hero3D = () => {
         </div>
       </div>
 
-      <SoundControl />
+      {/* SUPPRIMÉ : <SoundControl /> */}
     </section>
   );
 };
