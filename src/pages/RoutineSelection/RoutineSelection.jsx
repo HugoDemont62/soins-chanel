@@ -1,4 +1,4 @@
-// Fichier: src/pages/RoutineSelection/RoutineSelection.jsx
+// Fichier: src/pages/RoutineSelection/RoutineSelection.jsx - DESIGN ADAPTÉ À L'IMAGE
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
@@ -7,13 +7,16 @@ import './RoutineSelection.css';
 
 const RoutineSelection = () => {
   const pageRef = useRef(null);
+  const logoRef = useRef(null);
   const blueContainerRef = useRef(null);
-  const blackContainerRef = useRef(null);
+  const beigeContainerRef = useRef(null);
 
   // Refs pour les nuages
   const cloud1Ref = useRef(null);
   const cloud2Ref = useRef(null);
   const cloud3Ref = useRef(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -21,36 +24,52 @@ const RoutineSelection = () => {
     const page = pageRef.current;
     if (!page) return;
 
-    // Animation d'entrée des sections
-    const tl = gsap.timeline({ delay: 0.3 });
+    // Animation d'entrée de page
+    const tl = gsap.timeline({ delay: 0.2 });
 
-    // Animation des deux sections qui entrent en même temps
-    tl.fromTo([blueContainerRef.current, blackContainerRef.current],
-      { opacity: 0, x: (index) => index === 0 ? -50 : 50 },
-      {
-        opacity: 1,
-        x: 0,
-        duration: 1.5,
-        ease: "power3.out",
-        stagger: 0.1
-      }
-    );
-
-    // Animation des éléments internes
-    const blueElements = blueContainerRef.current?.querySelectorAll('.animate-element');
-    const blackElements = blackContainerRef.current?.querySelectorAll('.animate-element');
-
-    tl.fromTo([...blueElements, ...blackElements],
-      { opacity: 0, y: 40 },
+    // Logo apparaît en premier
+    tl.fromTo(logoRef.current,
+      { opacity: 0, y: -30, scale: 0.8 },
       {
         opacity: 1,
         y: 0,
+        scale: 1,
         duration: 1.2,
-        ease: "power3.out",
-        stagger: 0.15
-      },
-      "-=1"
+        ease: "power3.out"
+      }
     );
+
+    // Animation des deux sections qui entrent en même temps
+    tl.fromTo([blueContainerRef.current, beigeContainerRef.current],
+      { opacity: 0, scale: 0.9 },
+      {
+        opacity: 1,
+        scale: 1,
+        duration: 1.5,
+        ease: "power3.out",
+        stagger: 0.1
+      },
+      "-=0.8"
+    );
+
+    // Animation des éléments internes avec délais
+    const setupElementAnimations = () => {
+      const allElements = page.querySelectorAll('.animate-element');
+      allElements.forEach((element, index) => {
+        gsap.fromTo(element,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: "power3.out",
+            delay: 0.8 + (index * 0.15)
+          }
+        );
+      });
+    };
+
+    setupElementAnimations();
 
     // Animation des nuages
     const setupCloudsAnimation = () => {
@@ -81,8 +100,6 @@ const RoutineSelection = () => {
     };
   }, []);
 
-  const navigate = useNavigate();
-
   const handleSelectTargeted = () => {
     navigate('/routine/questionnaire/targeted');
   };
@@ -91,10 +108,25 @@ const RoutineSelection = () => {
     navigate('/routine/questionnaire/exception');
   };
 
+  const handleGoHome = () => {
+    navigate('/');
+  };
+
   return (
     <div ref={pageRef} className="routine-selection-page">
 
-      {/* Section Bleue - Routine Ciblée */}
+      {/* Logo Chanel en haut au centre */}
+      <div ref={logoRef} className="selection-logo-header">
+        <img
+          src="/Chanel-Logo.png"
+          alt="CHANEL"
+          className="selection-logo-img"
+          data-cursor="hover"
+          onClick={handleGoHome}
+        />
+      </div>
+
+      {/* Section Bleue - Routine Ciblée (GAUCHE) */}
       <div
         ref={blueContainerRef}
         className="routine-section blue-section"
@@ -106,83 +138,70 @@ const RoutineSelection = () => {
           ref={cloud1Ref}
           className="floating-cloud cloud-1"
           style={{
-            position: 'absolute',
-            top: '10%',
-            left: '5%',
-            zIndex: 2,
-            opacity: 0.8,
-            transition: 'transform 0.1s ease-out',
-            pointerEvents: 'none'
+            top: '15%',
+            left: '10%',
           }}
         >
-          <img src="/cloud.png" alt="" style={{ width: '200px', height: 'auto' }} />
+          <img src="/cloud.png" alt="" style={{ width: '180px', height: 'auto' }} />
         </div>
 
         <div
           ref={cloud2Ref}
           className="floating-cloud cloud-2"
           style={{
-            position: 'absolute',
-            top: '60%',
-            right: '10%',
-            zIndex: 2,
-            opacity: 0.6,
-            transition: 'transform 0.15s ease-out',
-            pointerEvents: 'none'
+            top: '65%',
+            right: '15%',
           }}
         >
-          <img src="/cloud.png" alt="" style={{ width: '150px', height: 'auto' }} />
+          <img src="/cloud.png" alt="" style={{ width: '140px', height: 'auto' }} />
         </div>
 
         <div
           ref={cloud3Ref}
           className="floating-cloud cloud-3"
           style={{
-            position: 'absolute',
-            top: '30%',
+            top: '40%',
             left: '70%',
-            zIndex: 2,
-            opacity: 0.5,
-            transition: 'transform 0.12s ease-out',
-            pointerEvents: 'none'
           }}
         >
-          <img src="/cloud.png" alt="" style={{ width: '120px', height: 'auto' }} />
+          <img src="/cloud.png" alt="" style={{ width: '100px', height: 'auto' }} />
         </div>
 
         {/* Contenu de la section bleue */}
         <div className="section-content">
 
-          {/* Image de produits en bas */}
-          <div className="product-image-container animate-element">
-            <img
-              src="/image-1.png"
-              alt="Produit 1"
-              className="product-image"
-            />
-          </div>
+          {/* Image principale centrée */}
+          <img
+            src="/image-1.png"
+            alt="Routine de soins ciblés"
+            className="main-product-image animate-element"
+            loading="lazy"
+          />
 
-          {/* Texte en bas à gauche */}
+          {/* Texte centré */}
           <div className="section-text-container blue-text">
             <h2 className="section-title animate-element">
               UNE ROUTINE DE<br />
               SOINS CIBLÉS
             </h2>
+            <p className="section-subtitle animate-element">
+              POUR RÉPONDRE À DES BESOINS SPÉCIFIQUES
+            </p>
             <p className="section-description animate-element">
-              Pour répondre à des besoins spécifiques<br />
-              correspondant à vos attentes.
+              CORRESPONDANT À VOS ATTENTES.
             </p>
           </div>
 
-          {/* Prix et bouton en bas à droite avec bande */}
-          <div className="section-footer gold-footer">
+          {/* Bouton centré en bas */}
+          <div className="section-cta-container">
             <button
-              className="section-arrow-button animate-element"
+              className="section-arrow-button blue-button animate-element"
               onClick={(e) => {
                 e.stopPropagation();
-                handleSelectException();
+                handleSelectTargeted();
               }}
               data-cursor="hover"
+              aria-label="Choisir la routine de soins ciblés"
             >
               →
             </button>
@@ -190,56 +209,53 @@ const RoutineSelection = () => {
         </div>
       </div>
 
-      {/* Section Noire/Marron - Routine d'Exception */}
+      {/* Section Beige - Routine d'Exception (DROITE) */}
       <div
-        ref={blackContainerRef}
-        className="routine-section black-section"
+        ref={beigeContainerRef}
+        className="routine-section beige-section"
         onClick={handleSelectException}
         data-cursor="hover"
       >
-        {/* Contenu de la section noire */}
+        {/* Contenu de la section beige */}
         <div className="section-content">
 
-          {/* Image de produits en bas */}
-          <div className="product-image-container animate-element">
-            <img
-              src="/image-1.png"
-              alt="Produit Sublimage 1"
-              className="product-image"
-            />
-          </div>
+          {/* Image principale centrée */}
+          <img
+            src="/image-2.png"
+            alt="Routine de soins d'exception"
+            className="main-product-image animate-element"
+            loading="lazy"
+          />
 
-          {/* Texte en bas à gauche */}
-          <div className="section-text-container gold-text">
+          {/* Texte centré */}
+          <div className="section-text-container beige-text">
             <h2 className="section-title animate-element">
               UNE ROUTINE DE<br />
               SOINS D'EXCEPTION
             </h2>
+            <p className="section-subtitle animate-element">
+              POUR UNE PRISE EN CHARGE GLOBALE AVEC DES
+            </p>
             <p className="section-description animate-element">
-              Pour une prise en charge globale avec des<br />
-              formules iconiques.
+              FORMULES ICONIQUES.
             </p>
           </div>
 
-          {/* Bouton en bas à droite avec bande */}
-          <div className="section-footer gold-footer">
+          {/* Bouton centré en bas */}
+          <div className="section-cta-container">
             <button
-              className="section-arrow-button animate-element"
+              className="section-arrow-button beige-button animate-element"
               onClick={(e) => {
                 e.stopPropagation();
                 handleSelectException();
               }}
               data-cursor="hover"
+              aria-label="Choisir la routine de soins d'exception"
             >
               →
             </button>
           </div>
         </div>
-
-        {/* Effets de lueur dorée */}
-        <div className="golden-glow glow-1"></div>
-        <div className="golden-glow glow-2"></div>
-        <div className="golden-glow glow-3"></div>
       </div>
     </div>
   );
