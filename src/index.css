@@ -438,3 +438,11 @@ body[data-cursor-state="dragging"] .hero-content {
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
+
+@media (hover: none) and (pointer: coarse) {
+  /* Cache le curseur custom sur mobile */
+  .custom-cursor,
+  .custom-cursor-dot {
+    display: none !important;
+  }
+}

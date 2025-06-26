@@ -226,6 +226,7 @@ const CustomCursor = () => {
       {/* Curseur principal - Style Chanel discret */}
       <div
         ref={cursorRef}
+        className="custom-cursor"
         style={{
           position: 'fixed',
           top: 0,
@@ -268,6 +269,7 @@ const CustomCursor = () => {
       {/* Point central précis - Plus discret */}
       <div
         ref={cursorDotRef}
+        className="custom-cursor-dot"
         style={{
           position: 'fixed',
           top: 0,
