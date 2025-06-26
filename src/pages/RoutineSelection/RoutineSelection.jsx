@@ -172,7 +172,7 @@ const RoutineSelection = () => {
 
           {/* Image principale centrée */}
           <img
-            src="/image-1.png"
+            src="/image 3-2.png"
             alt="Routine de soins ciblés"
             className="main-product-image animate-element"
             loading="lazy"
@@ -221,7 +221,7 @@ const RoutineSelection = () => {
 
           {/* Image principale centrée */}
           <img
-            src="/image-2.png"
+            src="/image 3-1.png"
             alt="Routine de soins d'exception"
             className="main-product-image animate-element"
             loading="lazy"
