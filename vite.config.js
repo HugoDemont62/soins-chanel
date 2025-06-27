@@ -6,19 +6,14 @@ export default defineConfig({
   server: {
     port: 3000,
     open: true,
-    // Configuration pour SPA - redirige toutes les routes vers index.html
-    historyApiFallback: {
-      // Redirige toutes les routes vers index.html sauf les fichiers statiques
-      rewrites: [
-        { from: /^\/(?!api|assets|public).*/, to: '/index.html' }
-      ]
-    }
+    // Configuration pour SPA en local
+    historyApiFallback: true
   },
   build: {
     outDir: 'dist',
     sourcemap: true
   },
-  // Configuration pour le mode preview aussi
+  // Configuration pour le mode preview
   preview: {
     port: 4173,
     open: true,
