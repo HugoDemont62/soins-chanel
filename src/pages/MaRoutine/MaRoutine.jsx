@@ -85,6 +85,10 @@ const MaRoutine = () => {
     navigate('/routine/selection');
   };
 
+  const handleGoHome = () => {
+    navigate('/');
+  };
+
   return (
     <div ref={pageRef} className="ma-routine-page">
       {/* Logo Chanel en haut au centre */}
@@ -94,6 +98,8 @@ const MaRoutine = () => {
           alt="CHANEL"
           className="routine-logo-img"
           data-cursor="hover"
+          onClick={handleGoHome}  // ← AJOUTÉ
+          style={{ cursor: 'pointer' }}  // ← AJOUTÉ pour indiquer que c'est cliquable
         />
       </div>
 
